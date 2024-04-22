@@ -45,7 +45,7 @@
         HTML;
     }
 
-    /*if(!empty($resProd)){
+    if(!empty($resProd)){
         while($rowProd = $resProd->fetch_array()){
             if($rowProd['moneda'] == 'soles'){
                 $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
@@ -65,7 +65,7 @@
                 $output['dolares'] += $subtotal_und;
             }
         }
-    }*/
+    }
 
     if ($num_rows > 0 ){//Verificamos que haya algun resultado
         while($row = $resultado->fetch_array()){ 

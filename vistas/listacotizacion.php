@@ -22,7 +22,7 @@
     </nav>
     <?php
       if($_SESSION["tipo"] == 'admin'){
-        echo'
+        echo <<<HTML
           <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
               <a class="navbar-brand" href="#">Filtrar</a>
@@ -46,12 +46,12 @@
                     <li class="nav-item">
                       <input type="button" onclick="filtrarCoti()" value="Filtrar" class="form-control">
                     </li>
-                    <!--<li class="nav-item">
+                    <li class="nav-item">
                       <div class="input-group mb-3">
                           <span class="input-group-text" id="basic-addon1"  data-bs-toggle="modal" data-bs-target="#nuevoCli">
                               S/
                           </span>
-                          <input type="text" onclick="" id="solesFil" value="" class="form-control">
+                          <input type="text" onclick="" id="solesFil" value="" class="form-control" readonly>
                       </div>
                     </li>
                     <li class="nav-item">
@@ -59,15 +59,15 @@
                           <span class="input-group-text" id="basic-addon1"  data-bs-toggle="modal" data-bs-target="#nuevoCli">
                               $ 
                           </span>
-                          <input type="text" onclick="" id="dolarFil" value="" class="form-control">
+                          <input type="text" onclick="" id="dolarFil" value="" class="form-control" readonly>
                       </div>
-                    </li>-->
+                    </li>
                   </ul>
                 </form>
               </div>
             </div>
           </nav>
-        ';
+        HTML;
       }
     ?>
       <br>

@@ -176,10 +176,10 @@ function mostrarProducto(producto, iditem){
         descripcion.value = data.descripcion
         inputProd.value = data.nombre
         precio.value = data.precio;
+        console.log(iditem);
         total_producto(iditem)
-    }).catch(err => console.log(err)) //Capturamos un posible error   
+    }).catch(err => console.log(err)) //Capturamos un posible error
 
-    
 }
 
 function total_producto(iditem){

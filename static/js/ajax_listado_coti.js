@@ -52,8 +52,8 @@ function getListadoCoti() {
     .then(data => {
         if(selectUser != null){
             selectUser.innerHTML = data.optionList;
-            solesFil.value = parseFloat(data.solesFil);
-            dolarFil.value = parseFloat(data.dolarFil);
+            solesFil.value = parseFloat(data.soles);
+            dolarFil.value = parseFloat(data.dolares);
         }
         content.innerHTML = data.data;
         document.getElementById("lbl-total").innerHTML = `Mostrando ${data.totalFiltro} de ${data.totalRegistros} registros`;
