@@ -1,0 +1,46 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+    text-align: center;
+    color: #007bff;
+}
+
+.login-form {
+    margin-top: 20px;
+}
+
+.login-form label {
+    color: #007bff;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.form-check-input {
+    width: 10%; /* Ajusta el ancho según sea necesario */
+    margin-right: 5px; /* Espaciado entre el checkbox y la etiqueta */
+}
+
+@media (max-width: 576px) {
+    .login-container {
+        margin-top: 50px;
+    }
+}
