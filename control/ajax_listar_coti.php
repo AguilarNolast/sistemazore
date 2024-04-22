@@ -45,25 +45,27 @@
         HTML;
     }
 
-    while($rowProd = $resProd->fetch_array()){
-        if($rowProd['moneda'] == 'soles'){
-            $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
-
-            $descuento = $rowProd['descuento'] / 100;
-
-            $subtotal_und = $subtotal - ($subtotal * $descuento);
-
-            $output['soles'] += $subtotal_und;
-        }else{
-            $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
-
-            $descuento = $rowProd['descuento'] / 100;
-
-            $subtotal_und = $subtotal - ($subtotal * $descuento);
-
-            $output['dolares'] += $subtotal_und;
+    /*if(!empty($resProd)){
+        while($rowProd = $resProd->fetch_array()){
+            if($rowProd['moneda'] == 'soles'){
+                $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
+    
+                $descuento = $rowProd['descuento'] / 100;
+    
+                $subtotal_und = $subtotal - ($subtotal * $descuento);
+    
+                $output['soles'] += $subtotal_und;
+            }else{
+                $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
+    
+                $descuento = $rowProd['descuento'] / 100;
+    
+                $subtotal_und = $subtotal - ($subtotal * $descuento);
+    
+                $output['dolares'] += $subtotal_und;
+            }
         }
-    }
+    }*/
 
     if ($num_rows > 0 ){//Verificamos que haya algun resultado
         while($row = $resultado->fetch_array()){ 

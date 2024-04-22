@@ -20,52 +20,56 @@
         <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="Search"  name="campo" id="campo">
       </form>
     </nav>
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Filtrar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFilter" aria-controls="navbarFilter" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarFilter">
-          <form id="formFilterCoti" method="POST" action="../control/ajax_filtrar_coti.php">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
-              <li class="nav-item">
-                <input type="date" class="form-control" id="dateIn" name="dateIn" require>
-              </li>
-              <li class="nav-item">
-                <input type="date" class="form-control" id="dateOut" name="dateOut" require>
-              </li>
-              <li class="nav-item">
-                <select class="form-select" name="selectUser" id="selectUser" require>
-                  
-                </select>
-              </li>
-              <li class="nav-item">
-                <input type="button" onclick="filtrarCoti()" value="Filtrar" class="form-control">
-              </li>
-              <li class="nav-item">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1"  data-bs-toggle="modal" data-bs-target="#nuevoCli">
-                        S/
-                    </span>
-                    <input type="text" onclick="" id="solesFil" value="" class="form-control">
-                </div>
-              </li>
-              <li class="nav-item">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="basic-addon1"  data-bs-toggle="modal" data-bs-target="#nuevoCli">
-                        $ 
-                    </span>
-                    <input type="text" onclick="" id="dolarFil" value="" class="form-control">
-                </div>
-              </li>
-            </ul>
-          </form>
-        </div>
-      </div>
-    </nav>
-
+    <?php
+      if($_SESSION["tipo"] == 'admin'){
+        echo'
+          <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Filtrar</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFilter" aria-controls="navbarFilter" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarFilter">
+                <form id="formFilterCoti" method="POST" action="../control/ajax_filtrar_coti.php">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
+                    <li class="nav-item">
+                      <input type="date" class="form-control" id="dateIn" name="dateIn" require>
+                    </li>
+                    <li class="nav-item">
+                      <input type="date" class="form-control" id="dateOut" name="dateOut" require>
+                    </li>
+                    <li class="nav-item">
+                      <select class="form-select" name="selectUser" id="selectUser" require>
+                        
+                      </select>
+                    </li>
+                    <li class="nav-item">
+                      <input type="button" onclick="filtrarCoti()" value="Filtrar" class="form-control">
+                    </li>
+                    <!--<li class="nav-item">
+                      <div class="input-group mb-3">
+                          <span class="input-group-text" id="basic-addon1"  data-bs-toggle="modal" data-bs-target="#nuevoCli">
+                              S/
+                          </span>
+                          <input type="text" onclick="" id="solesFil" value="" class="form-control">
+                      </div>
+                    </li>
+                    <li class="nav-item">
+                      <div class="input-group mb-3">
+                          <span class="input-group-text" id="basic-addon1"  data-bs-toggle="modal" data-bs-target="#nuevoCli">
+                              $ 
+                          </span>
+                          <input type="text" onclick="" id="dolarFil" value="" class="form-control">
+                      </div>
+                    </li>-->
+                  </ul>
+                </form>
+              </div>
+            </div>
+          </nav>
+        ';
+      }
+    ?>
       <br>
   <div class="table-responsive">
     <table class="table table-striped text-center">

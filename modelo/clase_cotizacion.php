@@ -111,18 +111,25 @@
 
             //-----Datos de precio de la cotizacion
 
-            $prod_temporal = $this->conexion->query($sql_producto_temporal);
+            if(empty($id_usuario)){
 
-            $columnsProd = ["id_coti","cantidad", "descuento", "precio", "moneda"]; //Array con todas las columnas de la tabla            
-            $tabla = "lista_producto_tmp"; 
+                $prod_temporal = $this->conexion->query($sql_producto_temporal);
+    
+                $columnsProd = ["id_coti","cantidad", "descuento", "precio", "moneda"]; //Array con todas las columnas de la tabla            
+                $tabla = "lista_producto_tmp"; 
+    
+                // Consulta SQL 
+                $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
+                        FROM $tabla";
 
-            // Consulta SQL 
-            $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
-                    FROM $tabla";
+            }
 
             try {
                 $resultado = $this->conexion->query($sql);
-                $resProd = $this->conexion->query($sqlProd);
+                $resProd='';
+                if(empty($id_usuario)){
+                    $resProd = $this->conexion->query($sqlProd);
+                }
 
                 // Consulta de cantidad de registros filtrados
                 $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");

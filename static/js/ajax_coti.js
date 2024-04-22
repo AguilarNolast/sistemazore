@@ -882,6 +882,13 @@ function nextPageFilter(pagina){
     filtroCoti()
 }
 
+function isValidDate(dateString) {
+    var dateObject = new Date(dateString);
+    
+    return !isNaN(dateObject.getTime()) && 
+           dateObject.toISOString().slice(0,10) === dateString;
+}
+
 function filtrarCoti() {
     let dateIn = new Date(document.getElementById("dateIn").value);//Fecha de inicio para el filtro
     let dateOut = new Date(document.getElementById("dateOut").value);//Fecha final para el filtro
@@ -890,6 +897,14 @@ function filtrarCoti() {
     let pagina = document.getElementById("pagina").value; // Obtengo el numero de pagina
     let orderCol = document.getElementById("orderCol").value; // Obtengo el numero de pagina
     let orderType = document.getElementById("orderType").value; // Obtengo el numero de pagina
+
+    if(isNaN(Date.parse(dateIn)) || isNaN(Date.parse(dateOut))){
+        mostrarAlerta('danger', 'Seleccione una fecha valida');
+        
+        removeAlert();
+
+        return;
+    }
 
     if (dateIn >= dateOut) {
         mostrarAlerta('danger', 'Debe seleccionar una fecha de inicio menor a la final');
