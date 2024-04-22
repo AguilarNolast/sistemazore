@@ -50,10 +50,12 @@ function getListadoCoti() {
     })
     .then(response => response.json()) // Recibimos el JSON que viene desde el archivo PHP
     .then(data => {
-        selectUser.innerHTML = data.optionList;
+        if(selectUser != null){
+            selectUser.innerHTML = data.optionList;
+            solesFil.value = parseFloat(data.solesFil);
+            dolarFil.value = parseFloat(data.dolarFil);
+        }
         content.innerHTML = data.data;
-        solesFil.value = parseFloat(data.solesFil);
-        dolarFil.value = parseFloat(data.dolarFil);
         document.getElementById("lbl-total").innerHTML = `Mostrando ${data.totalFiltro} de ${data.totalRegistros} registros`;
         document.getElementById("nav-paginacion").innerHTML = data.paginacion;
         
