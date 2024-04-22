@@ -89,13 +89,13 @@
         // Destinatario
         // Agregar destinatario principal
         //$mail->addAddress('petteraac@gmail.com', 'Pedro Aguilera');
-        /*$mail->addAddress($correopri, $nombrepri);
+        $mail->addAddress($correopri, $nombrepri);
 
         // Agregar destinatarios con copia
         foreach ($correosConNombres as $correo => $nombre) {
             // $correo contendrá el correo y $nombre contendrá el nombre
             $mail->addCC($correo, $nombre);
-        }*/
+        }
 
         // Asunto del correo
         $mail->Subject = 'Pedido anulado - ' . $nombrecliente;
