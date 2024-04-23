@@ -62,6 +62,11 @@
                           <input type="text" onclick="" id="dolarFil" value="" class="form-control" readonly>
                       </div>
                     </li>
+                    <li class="nav-item">
+                      <button type="button" class="btn btn-info mb-3" onclick="eliminarFiltro()">
+                        Borrar
+                      </button>
+                    </li>
                   </ul>
                 </form>
               </div>

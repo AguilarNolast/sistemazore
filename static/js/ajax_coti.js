@@ -877,11 +877,6 @@ function anularPedido(arrayId, generatePdfCoti){
 
 }
 
-function nextPageFilter(pagina){
-    document.getElementById('pagina').value = pagina
-    filtroCoti()
-}
-
 function isValidDate(dateString) {
     var dateObject = new Date(dateString);
     
@@ -967,18 +962,16 @@ function filtrarCoti() {
     });
 }
 
-/*document.getElementById('formularioCorreo').addEventListener('submit', function(event) {
-    // Obtener todos los checkboxes con la clase 'form-check-input'
-    var checkboxes = document.querySelectorAll('.form-check-input');
-    
-    // Verificar si al menos uno está marcado
-    var alMenosUnoMarcado = Array.from(checkboxes).some(function(checkbox) {
-        return checkbox.checked;
-    });
+function nextPageFilter(pagina){
+    document.getElementById('pagina').value = pagina
+    filtrarCoti()
+}
 
-    // Si no hay ningún checkbox marcado, prevenir el envío del formulario
-    if (!alMenosUnoMarcado) {
-        alert('Debes marcar al menos una opción antes de enviar el formulario');
-        event.preventDefault();
-    }
-});*/
+function eliminarFiltro(){
+    let dateIn = new Date(document.getElementById("dateIn").value);//Fecha de inicio para el filtro
+    let dateOut = new Date(document.getElementById("dateOut").value);//Fecha final para el filtro
+    let selectUser = new Date(document.getElementById("selectUser").value);
+    const formFilterCoti = document.getElementById('formFilterCoti');
+    formFilterCoti.reset();
+    getListadoCoti();
+}

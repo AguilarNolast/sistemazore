@@ -436,7 +436,7 @@
             if($pagina == $i){
                 $output['paginacion'] .= '<li class="page-item active"><a class="page-link" href="#" </a></li>'; 
             }else{
-                $output['paginacion'] .= '<li class="page-item"><a class="page-link" href="#" onclick="nextPage(' . $i . ')">' . $i . '</a></li>'; 
+                $output['paginacion'] .= '<li class="page-item"><a class="page-link" href="#" onclick="nextPageFilter(' . $i . ')">' . $i . '</a></li>'; 
             }
         }
 
