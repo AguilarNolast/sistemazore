@@ -130,14 +130,14 @@
     
         // Destinatario
         // Agregar destinatario principal
-        $mail->addAddress($correopri, $nombrepri);
-        //$mail->addAddress('petteraac@gmail.com', 'Pedro');
+        //$mail->addAddress($correopri, $nombrepri);
+        $mail->addAddress('petteraac@gmail.com', 'Pedro');
 
         // Agregar destinatarios con copia
-        foreach ($correosConNombres as $correo => $nombre) {
+        /*foreach ($correosConNombres as $correo => $nombre) {
             // $correo contendrá el correo y $nombre contendrá el nombre
             $mail->addCC($correo, $nombre);
-        }
+        }*/
 
         // Asunto del correo
         $mail->Subject = 'Orden de Pedido - ' . $nombrecliente;

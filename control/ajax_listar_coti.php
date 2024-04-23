@@ -47,7 +47,7 @@
 
     if(!empty($resProd)){
         while($rowProd = $resProd->fetch_array()){
-            if($rowProd['moneda'] == 'soles'){
+            if($rowProd['moneda'] == 'Soles'){
                 $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
     
                 $descuento = $rowProd['descuento'] / 100;
