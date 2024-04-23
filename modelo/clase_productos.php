@@ -46,9 +46,6 @@
         
                     $stmt->execute();
                     $resultado = $stmt->get_result();
-                    
-                    // Cierra la conexión
-                    $this->conexion->close();
         
                     return $resultado; // Devuelve el resultado
                 } else {
