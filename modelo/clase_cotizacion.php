@@ -180,8 +180,11 @@
             
                 $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut' AND id_usuario = $selectUser";
 
+                $whereProd = "WHERE cot.id_usuario = '$selectUser'";
+
             }else{
                 $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut'";
+                $whereProd = "";
             }
 
             $pagina = max(1, (int)$pagina);
@@ -206,8 +209,39 @@
                     $sqlOrder
                     $sqlLimit";
 
+            //------------- Datos de montos de la cotizacion
+            
+            // Crear la tabla temporal de los productos
+            $sql_producto_temporal = "CREATE TEMPORARY TABLE lista_producto_tmp AS
+            SELECT
+                cpro.cantidad,
+                cpro.descuento,
+                cpro.precio,
+                cot.moneda,
+                cot.id_coti
+            FROM
+                cotizaciones cot
+            JOIN coti_producto cpro ON cot.id_coti = cpro.id_coti";
+
+            $whereProd = "WHERE cot.id_usuario = '$selectUser'";
+
+            $prod_temporal = $this->conexion->query($sql_producto_temporal);
+
+            $columnsProd = ["id_coti","cantidad", "descuento", "precio", "moneda"]; //Array con todas las columnas de la tabla            
+            $tabla = "lista_producto_tmp"; 
+
+            // Consulta SQL 
+            $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
+                    FROM $tabla
+                    $where";
+
             try {
+
                 $resultado = $this->conexion->query($sql);
+                $resProd='';
+                if($selectUser != 'todos'){
+                    $resProd = $this->conexion->query($sqlProd);
+                }
 
                 // Consulta de cantidad de registros filtrados
                 $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
@@ -217,7 +251,7 @@
                 $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
                 $totalRegistros = $resTotal->fetch_array()[0];
 
-                return [$resultado, $totalFiltro, $totalRegistros, $columns];
+                return [$resultado, $resProd, $totalFiltro, $totalRegistros, $columns];
             } catch (Exception $e) {
                 // Manejo de errores
                 echo "Error en la consulta: " . $e->getMessage();

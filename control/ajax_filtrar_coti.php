@@ -13,7 +13,7 @@
     require_once "../modelo/clase_ficha.php"; //Llamo a la clase 
 
     $coti = new Cotizacion();
-    list($resultado, $totalFiltro, $totalRegistros, $columns) = $coti->filtro_coti($limit, $pagina, $dateIn, $dateOut, $selectUser);
+    list($resultado, $resProd, $totalFiltro, $totalRegistros, $columns) = $coti->filtro_coti($limit, $pagina, $dateIn, $dateOut, $selectUser);
 
     $num_rows = $resultado->num_rows; 
 
@@ -25,6 +25,30 @@
     $output['totalFiltro'] = $totalFiltro;
     $output['data'] = '';
     $output['paginacion'] = '';
+    $output['soles'] = 0;
+    $output['dolares'] = 0;
+
+    if(!empty($resProd)){
+        while($rowProd = $resProd->fetch_array()){
+            if($rowProd['moneda'] == 'Soles'){
+                $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
+    
+                $descuento = $rowProd['descuento'] / 100;
+    
+                $subtotal_und = $subtotal - ($subtotal * $descuento);
+    
+                $output['soles'] += $subtotal_und;
+            }else{
+                $subtotal = $rowProd['cantidad'] * $rowProd['precio'];
+    
+                $descuento = $rowProd['descuento'] / 100;
+    
+                $subtotal_und = $subtotal - ($subtotal * $descuento);
+    
+                $output['dolares'] += $subtotal_und;
+            }
+        }
+    }
 
     if ($num_rows > 0 ){//Verificamos que haya algun resultado
         while($row = $resultado->fetch_array()){ 
