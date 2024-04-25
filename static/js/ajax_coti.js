@@ -413,7 +413,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
         style: 'table1',
         table: {
             dontBreakRows: true,
-            widths: ['auto', 'auto', 225, 60, 'auto', 80],
+            widths: ['auto', 'auto', 225, 60, 'auto', 95],
             body: contenidoTablaPrincipal
         },
         layout: {
@@ -438,6 +438,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                 [   
                     {
                         text: 'Términos y Condiciones', 
+                        dontBreakRows: true,
                         color: fourth,
                         bold: true,
                         margin:[40, 0, 0, 0],
@@ -446,6 +447,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                         style: 'smallText',
                         table:{
                             widths: [70, 150],
+                            dontBreakRows: true,
                             body:[
                                 [{text: 'Moneda', fillColor: fifth}, {text: arrayCoti['moneda'], fillColor: fifth}], // titulo de las columnas de la tabla
                                 [{text: 'Forma de pago'}, {text: arrayCoti['metodo_pago']}], 
@@ -465,6 +467,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                     style: 'tableTotal',
                     table: {
                         widths: [60, 10, 80],
+                        dontBreakRows: true,
                         body:[
                         
                             [{text: 'Sub total', alignment: 'right', border:[false, true, true, false]},{text: `${simbolo}`, border:[false, true, false, true]}, {text: `${(subtotal_todo.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}`, alignment: 'right', border:[false, true, true, true]}, ],
@@ -889,6 +892,8 @@ function filtrarCoti() {
     let dateOut = new Date(document.getElementById("dateOut").value);//Fecha final para el filtro
     let num_registros = document.getElementById("num_registros").value; // Obtengo la cantidad de registro que desea mostrar
     let content = document.getElementById("contenido"); // Obtengo el contenedor donde estarán los datos de la BD
+    let solesFil = document.getElementById("solesFil"); // Obtengo el contenedor donde estarán los datos de la BD
+    let dolarFil = document.getElementById("dolarFil"); // Obtengo el contenedor donde estarán los datos de la BD
     let pagina = document.getElementById("pagina").value; // Obtengo el numero de pagina
     let orderCol = document.getElementById("orderCol").value; // Obtengo el numero de pagina
     let orderType = document.getElementById("orderType").value; // Obtengo el numero de pagina
@@ -928,6 +933,8 @@ function filtrarCoti() {
     })
     .then(response => response.json()) // Recibimos el JSON que viene desde el archivo PHP
     .then(data => {
+        solesFil.value = (parseFloat(data.soles)).toFixed(2);
+        dolarFil.value = (parseFloat(data.dolares)).toFixed(2);
         content.innerHTML = data.data;
         document.getElementById("lbl-total").innerHTML = `Mostrando ${data.totalFiltro} de ${data.totalRegistros} registros`;
         document.getElementById("nav-paginacion").innerHTML = data.paginacion;
