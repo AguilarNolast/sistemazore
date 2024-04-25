@@ -109,10 +109,6 @@ function editarUsuario(id_usuario) {
         formaData.append("telefono", telefono);
         formaData.append("correo", correo);
 
-        formaData.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
-
         fetch(formUserEdit.action, {
             method: formUserEdit.method,
             body: formaData,

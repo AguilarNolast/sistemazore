@@ -180,11 +180,11 @@
             
                 $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut' AND id_usuario = $selectUser";
 
-                $whereProd = "WHERE cot.id_usuario = '$selectUser'";
+                $whereProd = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut' AND cot.id_usuario = '$selectUser'";
 
             }else{
                 $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut'";
-                $whereProd = "";
+                $whereProd = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut'";
             }
 
             $pagina = max(1, (int)$pagina);
@@ -218,30 +218,27 @@
                 cpro.descuento,
                 cpro.precio,
                 cot.moneda,
-                cot.id_coti
+                cot.fecha,
+                cot.id_coti,
+                cot.id_usuario
             FROM
                 cotizaciones cot
-            JOIN coti_producto cpro ON cot.id_coti = cpro.id_coti";
-
-            $whereProd = "WHERE cot.id_usuario = '$selectUser'";
+            JOIN coti_producto cpro ON cot.id_coti = cpro.id_coti
+            $whereProd";
 
             $prod_temporal = $this->conexion->query($sql_producto_temporal);
 
             $columnsProd = ["id_coti","cantidad", "descuento", "precio", "moneda"]; //Array con todas las columnas de la tabla            
-            $tabla = "lista_producto_tmp"; 
+            $tablaProd = "lista_producto_tmp"; 
 
             // Consulta SQL 
             $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
-                    FROM $tabla
-                    $where";
+                    FROM $tablaProd";
 
             try {
 
                 $resultado = $this->conexion->query($sql);
-                $resProd='';
-                if($selectUser != 'todos'){
-                    $resProd = $this->conexion->query($sqlProd);
-                }
+                $resProd = $this->conexion->query($sqlProd);
 
                 // Consulta de cantidad de registros filtrados
                 $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
@@ -258,7 +255,7 @@
                 return false;
             }
         }
-
+        
         public function registrar_coti(
             $idcliente,
             $input_id_contacto,

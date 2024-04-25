@@ -413,7 +413,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
         style: 'table1',
         table: {
             dontBreakRows: true,
-            widths: ['auto', 'auto', 225, 60, 'auto', 80],
+            widths: ['auto', 'auto', 225, 60, 'auto', 95],
             body: contenidoTablaPrincipal
         },
         layout: {
@@ -438,6 +438,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                 [   
                     {
                         text: 'Términos y Condiciones', 
+                        dontBreakRows: true,
                         color: fourth,
                         bold: true,
                         margin:[40, 0, 0, 0],
