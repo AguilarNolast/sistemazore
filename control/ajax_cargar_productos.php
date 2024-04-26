@@ -4,7 +4,7 @@
     require_once "../modelo/clase_productos.php"; //Llamo a la clase
 
     $input_producto = isset($_POST['producto']) ? $_POST['producto'] : null; //Dato que viene de la vista para hacer la busqueda
-    $iditem = $_POST['idproducto'];
+    //$iditem = $_POST['idproducto'];
     //Funcion real_escape para evitar inyeccion de codigo HTML
 
     $producto = new Productos();
@@ -20,7 +20,7 @@
     if(!empty($input_producto)){
         if ($num_rows > 0){//Verificamos que haya algun resultado
             while($row = $resultado->fetch_assoc()){ 
-                $output['data'] .= '<div class="lista-item" onclick="mostrarProducto('. $row['id_productos'] .', '. $iditem .')">' . $row['nombre'] . '</div>';
+                $output['data'] .= '<div class="lista-item" onclick="mostrarProducto('. $row['id_productos'] .', this)">' . $row['nombre'] . '</div>';
             }
         }else{
             $output['data'] .= '<div class="lista-item">Sin resultados</div>';

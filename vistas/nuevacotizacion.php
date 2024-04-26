@@ -267,35 +267,31 @@
 
         <div  id="cont_items">
             <div class="form-row" id="item1">
-                <!--<div class="form-group col-md-1">
-                    <label  class="form-control num_item" for="">1</label>
-                </div>-->
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" min="1" class="form-control" oninput="formatearNumero(this)" onkeyup="total_producto(this.id)" value="1" id="cantidad1" name="cantidad[]" placeholder="Cant" required>
-                    
+                    <input type="number" min="1" class="cantidad form-control" oninput="formatearNumero(this)" onkeyup="total_producto(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-3">
-                    <input type="text" class="prod form-control" onkeyup="getProducto(this.id)" onchange="getProducto(this.id)" id="pro1" placeholder="Producto" autocomplete="off" required>
-                    <input type="hidden" name="idproducto[]" id="idproducto1">
+                    <input type="text" class="prod form-control" onkeyup="getProducto(this)" onchange="getProducto(this)" id="pro" placeholder="Producto" autocomplete="off" required>
+                    <input type="hidden" class="idproducto" name="idproducto[]" id="idproducto">
                     <div class="contenedor row">
-                        <div class="lista-overlayPro" id="producto_lista1">
+                        <div class="producto_lista lista-overlayPro" id="producto_lista">
                         </div>
                     </div>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-4">
-                    <textarea class="form-control" id="descripcion1" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
+                    <textarea class="descripcion form-control" id="descripcion" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="form-control" id="precio1"name="precio[]" onkeyup="total_producto(this.id)" placeholder="Precio unitario" required>
+                    <input type="number" class="precio form-control" id="precio"name="precio[]" onkeyup="total_producto(this)" placeholder="Precio unitario" required>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="form-control" onkeyup="total_producto(this.id)" value="0" id="descuento1" name="descuento[]" placeholder="Descuento">
+                    <input type="number" class="descuento form-control" onkeyup="total_producto(this)" value="0" id="descuento" name="descuento[]" placeholder="Descuento">
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="form-control" id="total_producto1" readonly placeholder="Total">
+                    <input type="number" class="total_producto form-control" id="total_producto" readonly placeholder="Total">
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this.id)" id="btnitem1">
+                    <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this)" id="btnitem">
                         X
                     </button>
                 </div>
