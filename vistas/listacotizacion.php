@@ -11,7 +11,7 @@
  <h3 class="text-center">Listado de Cotizaciónes</h3>
  <br>
     <nav class="navbar navbar-light navbar-dark bg-white">
-
+    
       <button type="button" class="btn btn-primary col-xs-12 btn-sm">
         <a class="nav-link active" aria-current="page" href="nuevacotizacion.php">Nueva cotizacion</a>
       </button>
@@ -76,6 +76,11 @@
       }
     ?>
       <br>
+      
+        
+  <div id="progressContainer">
+
+  </div>  
   <div class="table-responsive">
     <table class="table table-striped text-center">
       <label for="num_registros">Mostrar: </label>
