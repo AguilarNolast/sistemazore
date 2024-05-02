@@ -228,8 +228,8 @@
                 // Devolver un mensaje de error
                 return '
 
-                    <div class="alert alert-success" id="miAlert" role="alert">
-                        Error al editar usuario
+                    <div class="alert alert-danger" id="miAlert" role="alert">
+                        Error al editar usuario '.$e.'
                     </div>
                 
                 ';

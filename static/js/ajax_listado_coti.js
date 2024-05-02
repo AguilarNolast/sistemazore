@@ -22,6 +22,7 @@ document.getElementById("num_registros").addEventListener("change", function(){
 },false)
 
 function getListadoCoti() {
+    //eliminarFiltro();
     let input = document.getElementById("campo").value; // Obtengo el valor escrito en el buscador
     let num_registros = document.getElementById("num_registros").value; // Obtengo la cantidad de registro que desea mostrar
     let content = document.getElementById("contenido"); // Obtengo el contenedor donde estarán los datos de la BD

@@ -268,7 +268,7 @@
         <div  id="cont_items">
             <div class="form-row" id="item1">
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" min="1" class="cantidad form-control" oninput="formatearNumero(this)" onkeyup="total_producto(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
+                    <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-3">
                     <input type="text" class="prod form-control" onkeyup="getProducto(this)" onchange="getProducto(this)" id="pro" placeholder="Producto" autocomplete="off" required>
@@ -282,10 +282,10 @@
                     <textarea class="descripcion form-control" id="descripcion" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="precio form-control" id="precio"name="precio[]" onkeyup="total_producto(this)" placeholder="Precio unitario" required>
+                    <input type="number" class="precio form-control" id="precio"name="precio[]" onkeyup="totalP(this)" placeholder="Precio unitario" required>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="descuento form-control" onkeyup="total_producto(this)" value="0" id="descuento" name="descuento[]" placeholder="Descuento">
+                    <input type="number" class="descuento form-control" onkeyup="totalP(this)" value="0" id="descuento" name="descuento[]" placeholder="Descuento">
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-1">
                     <input type="number" class="total_producto form-control" id="total_producto" readonly placeholder="Total">
