@@ -157,7 +157,7 @@
     </div>
    </div>
 
-  <script src='../static/js/ajax_listado_cliente.js?v=1.0' async></script>
+  <script src='../static/js/ajax_listado_cliente.js?v=1.9' async></script>
 <?php
 
   include 'footer.php';

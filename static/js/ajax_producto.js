@@ -30,116 +30,61 @@ function cerrarLista(event){
 }
 
 function addItem(){
+
     let contItems = document.getElementById("cont_items")
-    
-    items = contItems.querySelectorAll('[id^="item"]').length;
+    var newItems = document.createElement('div');
+    newItems.classList.add('form-row');
 
-    let numeroItem = parseInt(items) + 1
-
-    let nuevoItem = `
-                <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" min="1" class="form-control" onkeyup="total_producto(this.id)" value="1" id="cantidad${numeroItem}" name="cantidad[]" placeholder="Cant" required>
+    newItems.innerHTML = `
+        <div class="form-group col-sm-12 col-md-12 col-lg-1">
+            <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
+        </div>
+        <div class="form-group col-sm-12 col-md-12 col-lg-3">
+            <input type="text" class="prod form-control" onkeyup="getProducto(this)" id="pro" placeholder="Producto" autocomplete="off" required>
+            <input type="hidden" class="idproducto" name="idproducto[]" id="idproducto">
+            <div class="contenedor">
+                <div class="producto_lista lista-overlayPro" id="producto_lista">
                 </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-3">
-                    <input type="text" class="prod form-control" onkeyup="getProducto(this.id)" id="pro${numeroItem}" placeholder="Producto" autocomplete="off" required>
-                    <input type="hidden" name="idproducto[]" id="idproducto${numeroItem}">
-                    <div class="contenedor">
-                        <div class="lista-overlayPro" id="producto_lista${numeroItem}">
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-4">
-                    <textarea class="form-control" id="descripcion${numeroItem}" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
-                </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="form-control" onkeyup="total_producto(this.id)" id="precio${numeroItem}" name="precio[]" placeholder="Precio unitario" required>
-                </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="form-control" onkeyup="total_producto(this.id)" value="0" id="descuento${numeroItem}" name="descuento[]" placeholder="Descuento">
-                </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <input type="number" class="form-control"id="total_producto${numeroItem}" readonly placeholder="Total" required>
-                </div>
-                <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                    <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this.id)" id="btnitem${numeroItem}">
-                        X
-                    </button>
-                </div>
-    `
-    document.getElementById("sig_item").value = numeroItem;
-     
-    let divTotal = document.createElement('div');
-    divTotal.setAttribute("id", "item"+numeroItem);
-    divTotal.setAttribute("class", "form-row");
-    divTotal.innerHTML = nuevoItem;
-    cont_items.append(divTotal);    
+            </div>
+        </div>
+        <div class="form-group col-sm-12 col-md-12 col-lg-4">
+            <textarea class="descripcion form-control" id="descripcion" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
+        </div>
+        <div class="form-group col-sm-12 col-md-12 col-lg-1">
+            <input type="number" class="precio form-control" onkeyup="totalP(this)" id="precio" name="precio[]" placeholder="Precio unitario" required>
+        </div>
+        <div class="form-group col-sm-12 col-md-12 col-lg-1">
+            <input type="number" class="descuento form-control" onkeyup="totalP(this)" value="0" id="descuento" name="descuento[]" placeholder="Descuento">
+        </div>
+        <div class="form-group col-sm-12 col-md-12 col-lg-1">
+            <input type="number" class="total_producto form-control" id="total_producto" readonly placeholder="Total" required>
+        </div>
+        <div class="form-group col-sm-12 col-md-12 col-lg-1">
+            <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this)" id="btnitem">
+                X
+            </button>
+        </div>
+    `;
+    contItems.appendChild(newItems);
 
 }
 
-function eliminar_Item(id_item){
-    
-    id_item = id_item.replace("btn", "");
-    
-    var itemRemover = document.getElementById(id_item);
-
-    // Verifica si el elemento existe antes de intentar eliminarlo
-    if (itemRemover) {
-        // Obtén el padre del elemento y luego elimina el elemento hijo
-        var contenedorItems = document.getElementById("cont_items");
-        contenedorItems.removeChild(itemRemover);
-        
-        // Obtener el contenedor principal
-        let contItems = document.getElementById("cont_items");
-        
-        items = contItems.querySelectorAll('[id^="item"]');
-        
-        for (let i = 0; i < items.length; i++) {
-            numeroActual = items[i].id.match(/\d+/)[0];
-            numeroProx = i + 1;
-            
-            num_item = items[i].querySelector(".num_item");
-            cantidad = items[i].querySelector("#cantidad"+numeroActual);
-            producto = items[i].querySelector("#pro"+numeroActual);
-            idproducto = items[i].querySelector("#idproducto"+numeroActual);
-            producto_lista = items[i].querySelector("#producto_lista"+numeroActual);
-            descripcion = items[i].querySelector("#descripcion"+numeroActual);
-            precio = items[i].querySelector("#precio"+numeroActual);
-            descuento = items[i].querySelector("#descuento"+numeroActual);
-            total_producto = items[i].querySelector("#total_producto"+numeroActual);
-            btnitem = items[i].querySelector("#btnitem"+numeroActual);
-            
-            items[i].id = "item" + numeroProx;
-            //num_item.innerHTML = numeroProx;
-            cantidad.id = "cantidad" + numeroProx;
-            producto.id = "pro" + numeroProx;
-            idproducto.id = "idproducto" + numeroProx;
-            producto_lista.id = "producto_lista" + numeroProx;
-            descripcion.id = "descripcion" + numeroProx;
-            precio.id = "precio" + numeroProx;
-            descuento.id = "descuento" + numeroProx;
-            total_producto.id = "total_producto" + numeroProx;
-            btnitem.id = "btnitem" + numeroProx;
-            
-        }
-        
-        calcular_total()
-    } else {
-        console.log("El elemento no existe.");
-    }
-
+function eliminar_Item(button){
+    var divContainer = button.closest('.form-row');
+    divContainer.remove();
+    calcular_total();
 }
 
-function getProducto(id_pro){
+function getProducto(producto){
     
-    id_pro = id_pro.replace("pro", "");
-    
-    let producto = document.getElementById("pro"+id_pro).value //Obtengo el valor escrito en el buscador
-    let producto_lista = document.getElementById("producto_lista"+id_pro) //Obtengo el contenedor donde estaran los datos de la BD
+    var div = producto.parentNode;
+    let producto_lista = div.querySelector('.producto_lista');
+    //let producto_lista = document.getElementById("producto_lista"+id_pro) //Obtengo el contenedor donde estaran los datos de la BD
 
     let url = "../control/ajax_cargar_productos.php" // Archivo donde se ejecutara la consulta a la BD
     let formaData = new FormData() // Creamos un form data para poder enviar los datos
-    formaData.append('producto', producto) //Agregamos los datos del input del buscador al Formdata
-    formaData.append('idproducto', id_pro) //Agregamos los datos del input del buscador al Formdata
+    formaData.append('producto', producto.value) //Agregamos los datos del input del buscador al Formdata
+    //formaData.append('idproducto', id_pro) //Agregamos los datos del input del buscador al Formdata
 
     fetch(url, { // Generamos la peticion con fetch
         method: "POST",
@@ -151,18 +96,36 @@ function getProducto(id_pro){
     }).catch(err => console.log(err)) //Capturamos un posible error
 }
 
-function mostrarProducto(producto, iditem){
-    let moneda = document.getElementById("moneda").value;
+function totalP(item){
+    //item.value = item.value.replace(/[^0-9.]/g, '');
+    var divContainer = item.closest('.form-row');
+    var cantidad = divContainer.querySelector('.cantidad').value;
+    var precio = divContainer.querySelector('.precio').value;
+    var descuento = divContainer.querySelector('.descuento').value;
+    
+    let total_prod = divContainer.querySelector('.total_producto');
 
-    let descripcion = document.getElementById("descripcion"+iditem) //Obtengo el contenedor donde estaran los datos de la BD
-    let precio = document.getElementById("precio"+iditem) //Obtengo el contenedor donde estaran los datos de la BD
-    let idproducto = document.getElementById("idproducto"+iditem) //Obtengo el contenedor donde estaran los datos de la BD
-    let inputProd = document.getElementById("pro"+iditem);
+    let subtotal = cantidad * precio
 
+    let porcentaje = descuento / 100
+
+    total = subtotal - (subtotal * porcentaje)
+
+    total_prod.value = total;
+
+    calcular_total()
+}
+
+function mostrarProducto(producto, item){
+    var divContainer = item.closest('.form-row');
+    
+    let inputProd = divContainer.querySelector('.prod');
+    let descripcion = divContainer.querySelector('.descripcion'); //Obtengo el contenedor donde estaran los datos de la BD
+    let precio = divContainer.querySelector('.precio'); //Obtengo el contenedor donde estaran los datos de la BD
+    let idproducto = divContainer.querySelector('.idproducto'); //Obtengo el contenedor donde estaran los datos de la BD
     idproducto.value = producto
 
-    var producto_lista = document.getElementById('producto_lista'+iditem);
-
+    var producto_lista = divContainer.querySelector('.producto_lista');
     let url = "../control/ajax_mostrar_productos.php" // Archivo donde se ejecutara la consulta a la BD
     let formaData = new FormData() // Creamos un form data para poder enviar los datos
     formaData.append('producto', producto) //Agregamos los datos del input del buscador al Formdata
@@ -176,67 +139,53 @@ function mostrarProducto(producto, iditem){
         descripcion.value = data.descripcion
         inputProd.value = data.nombre
         precio.value = data.precio;
-        console.log(iditem);
-        total_producto(iditem)
+        totalP(divContainer);
     }).catch(err => console.log(err)) //Capturamos un posible error
 
-}
-
-function total_producto(iditem){
-    
-    if(typeof(iditem) == 'string'){
-        iditem = iditem.replace(/[^0-9]+/g, "");
-    }
-    let cantidad = document.getElementById("cantidad"+iditem).value
-    let precio = document.getElementById("precio"+iditem).value
-    let descuento = document.getElementById("descuento"+iditem).value
-    
-    let total_producto = document.getElementById("total_producto"+iditem)
-
-    let subtotal = cantidad * precio
-
-    let porcentaje = descuento / 100
-
-    total = subtotal - (subtotal * porcentaje)
-
-    total_producto.value = total;
-
-    calcular_total()
 }
 
 function calcular_total(){
     let td_subtotal = document.getElementById("subtotal")
     let td_igv = document.getElementById("igv")
     let td_total = document.getElementById("totalgeneral")
-    let cont_items = document.getElementById("cont_items")
+    let divContainer = document.getElementById("cont_items")
     let porcentaje_igv =  18 / 100
 
-    let cantidad_item = cont_items.querySelectorAll('div[id*="item"]').length
-    let subtotal = 0
+    let cantidad_item = divContainer.querySelectorAll('.cantidad');
+    let precio = divContainer.querySelectorAll('.precio');
+    let descuento = divContainer.querySelectorAll('.descuento');
+    //let cantidad_item = cont_items.querySelectorAll('div[id*="item"]').length
+    let subtotal_completo = 0
     td_subtotal.value = ''
+    // Verificar si los tres NodeList tienen la misma longitud
+    if (cantidad_item.length === precio.length && cantidad_item.length === descuento.length) {
+        for (let i = 0; i < cantidad_item.length; i++) {
+            let cantidad = cantidad_item[i].value;
+            let precio_unitario = precio[i].value;
+            let descuento_unitario = descuento[i].value;
+            subtotal = cantidad * precio_unitario;
+            
+            desc = parseInt(descuento_unitario) / 100;
+            subtotal_und = subtotal - (subtotal * desc);
 
-    for(let i=1; i <= cantidad_item; i++){
-        let elemento = document.getElementById("total_producto" + i);
-        
-        if(elemento.value != false){
-            subtotal = subtotal + parseFloat((elemento.value).replace(/,/g, ''));
+            subtotal_completo += subtotal_und;
         }
-        
+    } else {
+        console.error("Los NodeList no tienen la misma longitud.");
     }
 
-    subtotal = parseFloat(subtotal.toFixed(2));
-
-    if(Number.isNaN(subtotal) == false){
+    subtotal_completo = parseFloat(subtotal_completo.toFixed(2));
+    if(Number.isNaN(subtotal_completo) == false){
         
-        td_subtotal.value = subtotal.toLocaleString('en-US');
+        td_subtotal.value = subtotal_completo.toLocaleString('en-US');
 
-        let igv = subtotal * porcentaje_igv
+        let igv = subtotal_completo * porcentaje_igv
 
         igv = parseFloat(igv.toFixed(2))
 
         td_igv.value = igv.toLocaleString('en-US');
 
-        totalTotal = subtotal + igv;
+        totalTotal = subtotal_completo + igv;
 
         td_total.value = parseFloat(totalTotal.toFixed(2)).toLocaleString('en-US');
         

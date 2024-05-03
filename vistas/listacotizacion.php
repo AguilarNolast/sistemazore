@@ -11,7 +11,7 @@
  <h3 class="text-center">Listado de Cotizaciónes</h3>
  <br>
     <nav class="navbar navbar-light navbar-dark bg-white">
-
+    
       <button type="button" class="btn btn-primary col-xs-12 btn-sm">
         <a class="nav-link active" aria-current="page" href="nuevacotizacion.php">Nueva cotizacion</a>
       </button>
@@ -76,6 +76,11 @@
       }
     ?>
       <br>
+      
+        
+  <div id="progressContainer">
+
+  </div>  
   <div class="table-responsive">
     <table class="table table-striped text-center">
       <label for="num_registros">Mostrar: </label>
@@ -113,7 +118,7 @@
         <input type="hidden" id="queListado" value="productos">
     </div>
    </div>
-    <script src='../static/js/ajax_listado_coti.js?v=1.0' async></script>
+    <script src='../static/js/ajax_listado_coti.js?v=1.9' async></script>
 
     <?php
 

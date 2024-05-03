@@ -136,11 +136,32 @@
         
 
         public function listado_clientes($campo, $limit, $pagina, $orderCol, $orderType){
-            $columns = ["id_clientes", "ruc", "razon_social", "direccion", "distrito", "departamento", "id_usuario", "tipocliente", "pagocliente"];
+
+            // Crear la tabla temporal
+            $sql_tabla_temporal = "CREATE TEMPORARY TABLE lista_clientes_tmp AS
+            SELECT
+                cli.id_clientes,
+                cli.ruc,
+                cli.razon_social,
+                cli.direccion,
+                cli.distrito,
+                cli.departamento,
+                cli.id_usuario,
+                cli.tipocliente,
+                cli.pagocliente,
+                usr.nombres,
+                usr.apellidos
+            FROM
+                clientes cli
+            JOIN usuarios usr ON usr.id_usuario = cli.id_usuario";
+
+            $tabla_temporal = $this->conexion->query($sql_tabla_temporal);
+
+            $columns = ["id_clientes", "ruc", "razon_social", "direccion", "distrito", "departamento", "id_usuario", "tipocliente", "pagocliente", "nombres", "apellidos"];
             $columnsOrder = ["ruc", "razon_social", "direccion", "id_usuario"];
             $id = 'id_clientes';
-            $columnsWhere = ["ruc", "razon_social", "direccion", "distrito", "departamento"];
-            $tabla = "clientes";
+            $columnsWhere = ["ruc", "razon_social", "direccion", "distrito", "departamento", "nombres", "apellidos"];
+            $tabla = "lista_clientes_tmp";
         
             $where = '';
         

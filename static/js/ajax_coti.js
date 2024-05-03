@@ -108,26 +108,32 @@ function registrarCoti(){
 
     const formaData = new FormData(document.getElementById('formCoti'));
 
-    fetch(document.getElementById('formCoti').action, {
-        method: document.getElementById('formCoti').method,
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            mostrarAlerta(data.tipo, data.mensaje);
-
-            if(data.redir == true){
-                window.location.href = "../vistas/listacotizacion.php";
-            }else{
-                // Volver a habilitar el botón de enviar después de la consulta
-                document.getElementById('btnEnviar').disabled = false;
-            }
+    const existeCampo = formaData.has('idproducto[]');
+    if(existeCampo){
+        fetch(document.getElementById('formCoti').action, {
+            method: document.getElementById('formCoti').method,
+            body: formaData,
         })
-        .catch(error => {
-            mostrarAlerta('danger', error);
-        });
-        
-        removeAlert();
+            .then(response => response.json())
+            .then(data => {
+                mostrarAlerta(data.tipo, data.mensaje);
+    
+                if(data.redir == true){
+                    window.location.href = "../vistas/listacotizacion.php";
+                }else{
+                    // Volver a habilitar el botón de enviar después de la consulta
+                    document.getElementById('btnEnviar').disabled = false;
+                }
+            })
+            .catch(error => {
+                mostrarAlerta('danger', error);
+            });
+            
+            removeAlert();
+    }else{
+        document.getElementById('btnEnviar').disabled = false;
+        mostrarAlerta('danger', 'Debe seleccionar al menos un producto');
+    }
 }
 
 function editarCoti(){
@@ -234,6 +240,10 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
     // Definir la estructura del documento
     const documentDefinition = {
 
+    info: {
+        title: arrayCoti['correlativo'] + ' ' + arrayCoti['razon_social'],
+    },
+
     footer: function(currentPage, pageCount) {
         return { text: '¡Gracias por contactarse con nosotros!', alignment: 'center', style: 'footer' };
     }, 
@@ -261,13 +271,13 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
             
         },
         {
-            absolutePosition: { x: 450, y: 50 },  // Ajusta las coordenadas
+            absolutePosition: { x: 425, y: 50 },  // Ajusta las coordenadas
             style: 'header',
             table: {
                 //headerRows: 1,
                 body: [
-                    [{text: arrayUser['telefono'], margin: [10, 5,0,10]}],
-                    [{text: arrayUser['correo'], margin: [10, 5,0,10]}]
+                    [{text: arrayUser['telefono'], margin: [10, 5,0,10], alignment: 'right'}],
+                    [{text: arrayUser['correo'], margin: [10, 5,0,10], alignment: 'right'}]
                 ]
             },
             layout: 'headerLineOnly',
@@ -975,9 +985,6 @@ function nextPageFilter(pagina){
 }
 
 function eliminarFiltro(){
-    let dateIn = new Date(document.getElementById("dateIn").value);//Fecha de inicio para el filtro
-    let dateOut = new Date(document.getElementById("dateOut").value);//Fecha final para el filtro
-    let selectUser = new Date(document.getElementById("selectUser").value);
     const formFilterCoti = document.getElementById('formFilterCoti');
     formFilterCoti.reset();
     getListadoCoti();

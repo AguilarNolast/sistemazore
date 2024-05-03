@@ -22,6 +22,7 @@ document.getElementById("num_registros").addEventListener("change", function(){
 },false)
 
 function getListadoCoti() {
+    //eliminarFiltro();
     let input = document.getElementById("campo").value; // Obtengo el valor escrito en el buscador
     let num_registros = document.getElementById("num_registros").value; // Obtengo la cantidad de registro que desea mostrar
     let content = document.getElementById("contenido"); // Obtengo el contenedor donde estarán los datos de la BD
@@ -31,6 +32,7 @@ function getListadoCoti() {
     let pagina = document.getElementById("pagina").value; // Obtengo el numero de pagina
     let orderCol = document.getElementById("orderCol").value; // Obtengo el numero de pagina
     let orderType = document.getElementById("orderType").value; // Obtengo el numero de pagina
+    const progressContainer = document.getElementById("progressContainer");//Contenedor de la barra de progreso
     
     if (pagina == null) {
         pagina = 1;
@@ -48,14 +50,55 @@ function getListadoCoti() {
         method: "POST",
         body: formData
     })
-    .then(response => response.json()) // Recibimos el JSON que viene desde el archivo PHP
-    .then(data => {
+    .then(response => {
+        // Almacenar el cuerpo de la respuesta en una variable
+        return response.clone().text().then(text => {
+            return { response, text };
+        });
+    })
+    .then(({ response, text }) => {
+        progressContainer.innerHTML = `
+            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-bar"></div>
+            </div>
+        `;
+        // Actualizar la barra de progreso durante la carga
+        const totalBytes = parseInt(response.headers.get('Content-Length'));
+        let loadedBytes = 0;
+    
+        const reader = response.body.getReader();
+    
+        function read() {
+            reader.read().then(({ done, value }) => {
+                if (done) {
+                    // Ocultar la barra de progreso cuando la carga haya finalizado
+                    progressContainer.style.display = "none";
+                    return;
+                }
+    
+                loadedBytes += value.byteLength;
+                const progress = Math.round((loadedBytes / totalBytes) * 100);
+                updateProgressBar(progress);
+    
+                // Continuar leyendo el cuerpo de la respuesta
+                read();
+            });
+        }
+    
+        read();
+
+        // Parsear el cuerpo de la respuesta y procesar los datos
+        const data = JSON.parse(text); // Recibimos el JSON que viene desde el archivo PHP
+        content.innerHTML = data.data;
+        
         if(selectUser != null){
             selectUser.innerHTML = data.optionList;
-            solesFil.value = (parseFloat(data.soles)).toFixed(2);
-            dolarFil.value = (parseFloat(data.dolares)).toFixed(2);
+            montosolesFil = (parseFloat(data.soles)).toFixed(2);
+            montodolarFil = (parseFloat(data.dolares)).toFixed(2);
+
+            solesFil.value = montosolesFil.toLocaleString('en-US');
+            dolarFil.value = montodolarFil.toLocaleString('en-US');
         }
-        content.innerHTML = data.data;
         document.getElementById("lbl-total").innerHTML = `Mostrando ${data.totalFiltro} de ${data.totalRegistros} registros`;
         document.getElementById("nav-paginacion").innerHTML = data.paginacion;
         
@@ -88,6 +131,14 @@ function getListadoCoti() {
         console.error(err);
         // Aquí podrías mostrar un mensaje de error al usuario o realizar alguna acción específica.
     });
+
+    // Función para actualizar la barra de progreso
+    const updateProgressBar = (progress) => {
+        const progressBar = document.getElementById("progress-bar");//Barra de progreso
+        progressBar.style.width = `${progress}%`;
+        progressBar.setAttribute("aria-valuenow", progress);
+        progressBar.textContent = `${progress}%`;
+    };
 }
 
 function nextPage(pagina){

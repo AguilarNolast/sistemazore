@@ -747,6 +747,7 @@ function editFicha(id_ficha){
     pesoficha = document.getElementById('pesofichaEdit'+id_ficha).value;
 
     var arrayFicha = {
+        tipoequipo: document.getElementById('tipoequipo'+id_ficha).value,
         marca: document.getElementById('marcaEdit'+id_ficha).value,
         potencia: document.getElementById('potenciaEdit'+id_ficha).value,
         unipotencia: document.getElementById('unipotenciaEdit'+id_ficha).value,
