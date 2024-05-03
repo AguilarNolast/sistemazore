@@ -187,7 +187,12 @@
                 // Cierra la conexión
                 $this->conexion->close();
         
-                return $arrayFicha['conpri'];
+                $output = array(
+                    'tipo' => 'success',
+                    'mensaje' => 'Ficha actualizada',
+                    'redir' => true,
+                );
+                return $output;
             } catch (Exception $e) {
                 // En caso de error, revierte la transacción
                 $this->conexion->rollback();

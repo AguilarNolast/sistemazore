@@ -93,8 +93,11 @@ function getListadoCoti() {
         
         if(selectUser != null){
             selectUser.innerHTML = data.optionList;
-            solesFil.value = (parseFloat(data.soles)).toFixed(2);
-            dolarFil.value = (parseFloat(data.dolares)).toFixed(2);
+            montosolesFil = (parseFloat(data.soles)).toFixed(2);
+            montodolarFil = (parseFloat(data.dolares)).toFixed(2);
+
+            solesFil.value = montosolesFil.toLocaleString('en-US');
+            dolarFil.value = montodolarFil.toLocaleString('en-US');
         }
         document.getElementById("lbl-total").innerHTML = `Mostrando ${data.totalFiltro} de ${data.totalRegistros} registros`;
         document.getElementById("nav-paginacion").innerHTML = data.paginacion;

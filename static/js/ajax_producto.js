@@ -97,7 +97,7 @@ function getProducto(producto){
 }
 
 function totalP(item){
-    item.value = item.value.replace(/[^0-9.]/g, '');
+    //item.value = item.value.replace(/[^0-9.]/g, '');
     var divContainer = item.closest('.form-row');
     var cantidad = divContainer.querySelector('.cantidad').value;
     var precio = divContainer.querySelector('.precio').value;

@@ -240,6 +240,10 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
     // Definir la estructura del documento
     const documentDefinition = {
 
+    info: {
+        title: arrayCoti['correlativo'] + ' ' + arrayCoti['razon_social'],
+    },
+
     footer: function(currentPage, pageCount) {
         return { text: '¡Gracias por contactarse con nosotros!', alignment: 'center', style: 'footer' };
     }, 
