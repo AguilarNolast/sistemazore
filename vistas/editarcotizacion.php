@@ -313,7 +313,7 @@
     </form>
     <br>
 </div>
-<script src='../static/js/createCoti.js?v=1.0' async></script>
+<script src='../static/js/createCoti.js?v=1.9' async></script>
 
 <?php
 
