@@ -34,6 +34,20 @@
                 JOIN cotizaciones cot ON cot.id_coti = ped.id_coti
                 JOIN usuarios usu ON cot.id_usuario = usu.id_usuario
                 JOIN clientes cli ON cot.id_cliente = cli.id_clientes";
+
+                // Crear la tabla temporal de los productos
+                $sql_producto_temporal = "CREATE TEMPORARY TABLE lista_producto_tmp AS
+                SELECT
+                ped.id_pedidos,
+                cpro.cantidad,
+                cpro.descuento,
+                cpro.precio,
+                cot.moneda
+                FROM
+                    pedidos ped
+                JOIN items_pedido iped ON iped.id_pedido = ped.id_pedidos
+                JOIN coti_producto cpro ON cpro.id_coti_prod = iped.id_item
+                JOIN cotizaciones cot ON cot.id_coti = ped.id_coti";
             }else{
                 // Crear la tabla temporal
                 $sql_tabla_temporal = "CREATE TEMPORARY TABLE lista_pedido_tmp AS
@@ -88,9 +102,28 @@
                     $where 
                     $sqlOrder
                     $sqlLimit";
+
+            //-----Datos de precio de la cotizacion
+
+            if(empty($id_usuario)){
+
+                $prod_temporal = $this->conexion->query($sql_producto_temporal);
+    
+                $columnsProd = ["id_pedidos","cantidad", "descuento", "precio", "moneda"]; //Array con todas las columnas de la tabla            
+                $tabla = "lista_producto_tmp";
+    
+                // Consulta SQL 
+                $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
+                        FROM $tabla";
+
+            }
         
             try {
                 $resultado = $this->conexion->query($sql);
+                $resProd='';
+                if(empty($id_usuario)){
+                    $resProd = $this->conexion->query($sqlProd);
+                }
         
                 // Consulta de cantidad de registros filtrados
                 $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
@@ -100,19 +133,123 @@
                 $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
                 $totalRegistros = $resTotal->fetch_array()[0];  
 
-                
-                    
                 // Cierra la conexión
                 $this->conexion->close();
         
-                return [$resultado, $totalFiltro, $totalRegistros, $columns];
+                return [$resultado, $resProd, $totalFiltro, $totalRegistros, $columns];
             } catch (Exception $e) {
                 // Manejo de errores
                 echo "Error en la consulta: " . $e->getMessage();
                 return false;
             }
         }
+
+        public function filtro_pedidos($limit, $pagina, $dateIn, $dateOut, $selectUser){
+
+            // Crear la tabla temporal
+            $sql_tabla_temporal = "CREATE TEMPORARY TABLE lista_pedido_tmp AS
+            SELECT
+                ped.id_pedidos,
+                ped.estado,
+                usu.nombres,
+                usu.apellidos,
+                cli.id_usuario,
+                cli.ruc,
+                cli.razon_social,
+                cot.fecha,
+                cot.id_coti,
+                cot.moneda
+            FROM
+                pedidos ped
+            JOIN cotizaciones cot ON cot.id_coti = ped.id_coti
+            JOIN usuarios usu ON cot.id_usuario = usu.id_usuario
+            JOIN clientes cli ON cot.id_cliente = cli.id_clientes";
+            
+            $tabla_temporal = $this->conexion->query($sql_tabla_temporal);
+
+            $columns = ["nombres", "apellidos", "ruc", "razon_social", "fecha", "id_pedidos","estado", "id_coti", "moneda"];
+            $id = 'id_pedidos';
+            $columnsWhere = ["nombres", "apellidos", "ruc", "razon_social", "fecha"];
+            $tabla = "lista_pedido_tmp";
         
+            if($selectUser != 'todos'){
+            
+                $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut' AND id_usuario = $selectUser";
+
+                $whereProd = "WHERE ped.fecha BETWEEN '$dateIn' AND '$dateOut' AND cot.id_usuario = '$selectUser'";
+
+            }else{
+                $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut'";
+                $whereProd = "WHERE ped.fecha BETWEEN '$dateIn' AND '$dateOut'";
+            }
+        
+            $pagina = max(1, (int)$pagina);
+            $inicio = ($pagina - 1) * $limit;
+        
+            $sqlLimit = "LIMIT $inicio, $limit";
+        
+            // Ordenamiento
+            $orderType = 'desc';
+    
+            $sqlOrder = "ORDER BY fecha " . $orderType;
+        
+            // Consulta SQL 
+            $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
+                    FROM $tabla 
+                    $where 
+                    $sqlOrder
+                    $sqlLimit";
+
+            //------------- Datos de montos de la cotizacion
+            
+            // Crear la tabla temporal de los productos
+            $sql_producto_temporal = "CREATE TEMPORARY TABLE lista_producto_tmp AS
+             SELECT
+                ped.fecha,
+                ped.id_pedidos,
+                cpro.cantidad,
+                cpro.descuento,
+                cpro.precio,
+                cot.moneda,
+                cot.id_usuario
+             FROM
+                 pedidos ped
+             JOIN items_pedido iped ON iped.id_pedido = ped.id_pedidos
+             JOIN coti_producto cpro ON cpro.id_coti_prod = iped.id_item
+             JOIN cotizaciones cot ON cot.id_coti = ped.id_coti
+             $whereProd";
+
+            $prod_temporal = $this->conexion->query($sql_producto_temporal);
+
+            $columnsProd = ["fecha","id_pedidos", "cantidad", "descuento", "precio", "moneda", "id_usuario"]; //Array con todas las columnas de la tabla            
+            $tablaProd = "lista_producto_tmp"; 
+
+            // Consulta SQL 
+            $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
+                    FROM $tablaProd";
+        
+            try {
+                $resultado = $this->conexion->query($sql);
+                $resProd = $this->conexion->query($sqlProd);
+        
+                // Consulta de cantidad de registros filtrados
+                $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
+                $totalFiltro = $resFiltro->fetch_array()[0];
+        
+                // Consulta para total de registros filtrados
+                $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
+                $totalRegistros = $resTotal->fetch_array()[0];  
+
+                // Cierra la conexión
+                $this->conexion->close();
+        
+                return [$resultado, $resProd, $totalFiltro, $totalRegistros, $columns];
+            } catch (Exception $e) {
+                // Manejo de errores
+                echo "Error en la consulta: " . $e->getMessage();
+                return false;
+            }
+        }
 
         public function registrar_pedido(
             $id_coti,

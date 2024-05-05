@@ -40,8 +40,7 @@ function getListadoCalidad() {
         document.getElementById("nav-paginacion").innerHTML = data.paginacion;
     })
     .catch(err => {
-        console.error(err);
-        // Aquí podrías mostrar un mensaje de error al usuario o realizar alguna acción específica.
+        mostrarAlerta('danger', "Error al cargar listado");
     });
 }
 

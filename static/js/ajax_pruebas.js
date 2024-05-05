@@ -59,7 +59,7 @@ function registrarPrueba(){
             document.getElementById('btnPruebas').disabled = false;
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al registrar certificado');
         });
         
         removeAlert();
@@ -186,11 +186,7 @@ function editarPruebas(id_pruebas) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al editar certificado");
         });
 }
 
@@ -222,11 +218,7 @@ function eliminarPruebas(id_pruebas) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al eliminar certificado");
         });
 }
 
@@ -261,403 +253,409 @@ function getPruebas(id_pruebas){
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al cargar certificado");
         });
 }
 
 function activarResis() {
-    checkResis = document.getElementById("checkResis");
+    try{
+        checkResis = document.getElementById("checkResis");
 
-    const pruebaResis = document.getElementById("pruebaResis");
+        const pruebaResis = document.getElementById("pruebaResis");
 
-    if(checkResis.checked){
-        
+        if(checkResis.checked){
+            
 
-        const nuevoItem = `
-            <div class="row modal-body mx-4">
-                <div class="col-md-12">
-                    PRUEBA DE RESISTENCIA DE ARROLLAMIENTO
-                </div>
-            </div>
-            <div class="row modal-body mx-4">
-                <div class="col-md-12 col-lg-6">
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Arrollamiento en BT</i>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_tension_u_v" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_tension_v_w" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_tension_w_u" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_intensidad_u_v" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_intensidad_v_w" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_intensidad_w_u" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_resistencia_u_v" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_resistencia_v_w" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_resistencia_w_u" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
-                        </div>
+            const nuevoItem = `
+                <div class="row modal-body mx-4">
+                    <div class="col-md-12">
+                        PRUEBA DE RESISTENCIA DE ARROLLAMIENTO
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-6">
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Arrollamiento en AT</i>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_tension_u_v" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
+                <div class="row modal-body mx-4">
+                    <div class="col-md-12 col-lg-6">
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Arrollamiento en BT</i>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_tension_u_v" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_tension_v_w" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_tension_w_u" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_intensidad_u_v" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_intensidad_v_w" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_intensidad_w_u" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_resistencia_u_v" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_resistencia_v_w" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_resistencia_w_u" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_tension_v_w" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
+                    <div class="col-md-12 col-lg-6">
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Arrollamiento en AT</i>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_tension_w_u" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_tension_u_v" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_intensidad_u_v" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_tension_v_w" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_intensidad_v_w" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_tension_w_u" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_intensidad_w_u" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_intensidad_u_v" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_resistencia_u_v" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_intensidad_v_w" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_resistencia_v_w" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_intensidad_w_u" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_resistencia_w_u" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_resistencia_u_v" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_resistencia_v_w" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_resistencia_w_u" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        pruebaResis.innerHTML = nuevoItem;
-    }else{
-        pruebaResis.innerHTML = '';
+            pruebaResis.innerHTML = nuevoItem;
+        }else{
+            pruebaResis.innerHTML = '';
+        }
+            
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
     }
 }
 
 function activarResisEdit(id_pruebas) {
-    checkResis = document.getElementById("checkResis"+id_pruebas);
+    try{
+        checkResis = document.getElementById("checkResis"+id_pruebas);
 
-    const pruebaResis = document.getElementById("pruebaResis"+id_pruebas);
+        const pruebaResis = document.getElementById("pruebaResis"+id_pruebas);
 
-    if(checkResis.checked){
-        
+        if(checkResis.checked){
+            
 
-        const nuevoItem = `
-            <div class="row modal-body mx-4">
-                <div class="col-md-12">
-                    PRUEBA DE RESISTENCIA DE ARROLLAMIENTO
-                </div>
-            </div>
-            <div class="row modal-body mx-4">
-                <div class="col-md-12 col-lg-6">
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Arrollamiento en BT</i>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_tension_u_v" id="bt_tension_u_v${id_pruebas}" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_tension_v_w" id="bt_tension_v_w${id_pruebas}" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_tension_w_u" id="bt_tension_w_u${id_pruebas}" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_intensidad_u_v" id="bt_intensidad_u_v${id_pruebas}" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_intensidad_v_w" id="bt_intensidad_v_w${id_pruebas}" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_intensidad_w_u" id="bt_intensidad_w_u${id_pruebas}" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_resistencia_u_v" id="bt_resistencia_u_v${id_pruebas}" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_resistencia_v_w" id="bt_resistencia_v_w${id_pruebas}" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
-                        </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="bt_resistencia_w_u" id="bt_resistencia_w_u${id_pruebas}" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
-                        </div>
+            const nuevoItem = `
+                <div class="row modal-body mx-4">
+                    <div class="col-md-12">
+                        PRUEBA DE RESISTENCIA DE ARROLLAMIENTO
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-6">
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Arrollamiento en AT</i>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_tension_u_v" id="at_tension_u_v${id_pruebas}" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
+                <div class="row modal-body mx-4">
+                    <div class="col-md-12 col-lg-6">
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Arrollamiento en BT</i>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_tension_u_v" id="bt_tension_u_v${id_pruebas}" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_tension_v_w" id="bt_tension_v_w${id_pruebas}" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_tension_w_u" id="bt_tension_w_u${id_pruebas}" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_intensidad_u_v" id="bt_intensidad_u_v${id_pruebas}" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_intensidad_v_w" id="bt_intensidad_v_w${id_pruebas}" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_intensidad_w_u" id="bt_intensidad_w_u${id_pruebas}" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_resistencia_u_v" id="bt_resistencia_u_v${id_pruebas}" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_resistencia_v_w" id="bt_resistencia_v_w${id_pruebas}" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="bt_resistencia_w_u" id="bt_resistencia_w_u${id_pruebas}" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_tension_v_w" id="at_tension_v_w${id_pruebas}" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
+                    <div class="col-md-12 col-lg-6">
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Arrollamiento en AT</i>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Tension w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_tension_w_u" id="at_tension_w_u${id_pruebas}" placeholder="Tension u - v" required>
-                            <span class="input-group-text">
-                                mV
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_tension_u_v" id="at_tension_u_v${id_pruebas}" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_intensidad_u_v" id="at_intensidad_u_v${id_pruebas}" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_tension_v_w" id="at_tension_v_w${id_pruebas}" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_intensidad_v_w" id="at_intensidad_v_w${id_pruebas}" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Tension w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_tension_w_u" id="at_tension_w_u${id_pruebas}" placeholder="Tension u - v" required>
+                                <span class="input-group-text">
+                                    mV
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Intensidad w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_intensidad_w_u" id="at_intensidad_w_u${id_pruebas}" placeholder="Intensidad u - v" required>
-                            <span class="input-group-text">
-                                mA
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_intensidad_u_v" id="at_intensidad_u_v${id_pruebas}" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia u - v:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_resistencia_u_v" id="at_resistencia_u_v${id_pruebas}" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_intensidad_v_w" id="at_intensidad_v_w${id_pruebas}" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia v - w:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_resistencia_v_w" id="at_resistencia_v_w${id_pruebas}" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Intensidad w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_intensidad_w_u" id="at_intensidad_w_u${id_pruebas}" placeholder="Intensidad u - v" required>
+                                <span class="input-group-text">
+                                    mA
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md-form mb-2">
-                        <i class="grey-text">Resistencia w - u:</i>
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_resistencia_w_u" id="at_resistencia_w_u${id_pruebas}" placeholder="Resistencia u - v" required>
-                            <span class="input-group-text">
-                                mΩ
-                            </span>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia u - v:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_resistencia_u_v" id="at_resistencia_u_v${id_pruebas}" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia v - w:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_resistencia_v_w" id="at_resistencia_v_w${id_pruebas}" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
+                        </div>
+                        <div class="md-form mb-2">
+                            <i class="grey-text">Resistencia w - u:</i>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="at_resistencia_w_u" id="at_resistencia_w_u${id_pruebas}" placeholder="Resistencia u - v" required>
+                                <span class="input-group-text">
+                                    mΩ
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
 
-        pruebaResis.innerHTML = nuevoItem;
-    }else{
-        pruebaResis.innerHTML = '';
+            pruebaResis.innerHTML = nuevoItem;
+        }else{
+            pruebaResis.innerHTML = '';
+        }
+            
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
     }
 }
 

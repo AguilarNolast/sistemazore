@@ -558,6 +558,89 @@
                 $this->conexion->close();
             }
         }
+        
+        public function filtro_asistencia($limit, $pagina, $dateIn, $dateOut, $selectUser){
+
+            $columns = ["id_usuario", "entrada", "salida", "fecha"];
+            $id = 'id_usuario';
+            $columnsWhere = ["entrada", "salida", "fecha"];
+            $tabla = "asistencia";         
+
+            if($dateIn == false && $dateOut == false){
+                if($selectUser != 'todos'){
+                    $where = "WHERE id_usuario = $selectUser";
+                }else{
+                    $where = "";
+                }
+            }else{
+                if($selectUser != 'todos'){
+                    $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut' AND id_usuario = $selectUser";
+                }else{
+                    $where = "WHERE fecha BETWEEN '$dateIn' AND '$dateOut'";
+                }
+            }
+
+            $sqlParams = [];
+
+            if($limit != null){
+                
+                $pagina = max(1, (int) $pagina);
+                $inicio = ($pagina - 1) * $limit;
+            
+                $sqlLimit = "LIMIT ?, ?";
+                $sqlParams[] = $inicio;
+                $sqlParams[] = $limit;
+        
+            }else{
+                $sqlLimit = '';
+            }
+        
+            // Ordenamiento
+            $orderType = 'desc';
+    
+            $sqlOrder = "ORDER BY fecha " . $orderType;
+        
+            // Consulta SQL 
+            $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
+                    FROM $tabla 
+                    $where 
+                    $sqlOrder
+                    $sqlLimit";
+        
+            try {
+                $stmt = $this->conexion->prepare($sql);
+        
+                if ($stmt) {
+                    // Asignar los parámetros necesarios
+                    if($limit != null){
+                        $stmt->bind_param(str_repeat('s', count($sqlParams)), ...$sqlParams);
+                    }
+        
+                    $stmt->execute();
+                    $resultado = $stmt->get_result();
+        
+                    // Consulta de cantidad de registros filtrados
+                    $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
+                    $totalFiltro = $resFiltro->fetch_array()[0];
+        
+                    // Consulta para total de registros filtrados
+                    $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
+                    $totalRegistros = $resTotal->fetch_array()[0];
+        
+                    return [$resultado, $totalFiltro, $totalRegistros, $columns];
+                } else {
+                    // Manejo de errores
+                    throw new Exception("Error en la preparación de la consulta: " . $this->conexion->error);
+                }
+            } catch (Exception $e) {
+                // Manejo de errores
+                echo "Error en la consulta: " . $e->getMessage();
+                return false;
+            } finally {
+                // Cierra la conexión
+                $this->conexion->close();
+            }
+        }
 
         public function registrar_entrada(
             $id_usuario,
@@ -673,8 +756,6 @@
                 throw new Exception("Error al registrar: " . $e->getMessage());
             }
         }
-        
-        
         
     }
 

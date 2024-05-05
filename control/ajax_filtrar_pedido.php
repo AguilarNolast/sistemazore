@@ -5,27 +5,17 @@
     $limit = isset($_POST['registros']) ? $_POST['registros'] : 10; //Dato que viene de la vista para hacer el limite
     $pagina = isset($_POST['pagina']) ? $_POST['pagina'] : 0; 
 
-    $campo = isset($_POST['campo']) ? $_POST['campo'] : null; //Dato que viene de la vista para hacer la busqueda
+    $dateIn = $_POST["dateIn"] ?? null;
+    $dateOut = $_POST["dateOut"] ?? null;
+    $selectUser = $_POST["selectUser"] ?? null;
 
-    session_start();
-
-    if($_SESSION["tipo"] == 'asesor'){
-        $id_usuario = $_SESSION["id_usuario"];
-    }else{
-        $id_usuario = "";
-    }
-    
     require_once "../modelo/clase_pedidos.php"; //Llamo a la clase
     require_once "../modelo/clase_cotizacion.php"; //Llamo a la clase
-    require_once "../modelo/clase_usuario.php"; //Llamo a la clase 
 
     $pedido = new Pedidos();
-    list($resultado, $resProd, $totalFiltro, $totalRegistros, $columns) = $pedido->listado_pedidos($campo, $limit, $pagina, $id_usuario);
+    list($resultado, $resProd, $totalFiltro, $totalRegistros, $columns) = $pedido->filtro_pedidos($limit, $pagina, $dateIn, $dateOut, $selectUser);
 
     $num_rows = $resultado->num_rows; 
-
-    $user = new Usuario();
-    list($resUser, $nonuse1, $nonuse2, $nonuse3) = $user->listado_usuarios('', 100, 0, 0, 'desc');
 
     //Mostrar resultados
     $output = [];
@@ -35,14 +25,6 @@
     $output['paginacion'] = '';
     $output['soles'] = 0;
     $output['dolares'] = 0;
-    $output['optionList'] = <<<HTML
-        <option value="todos">Todos</option>
-    HTML;
-    while($rowUser = $resUser->fetch_array()){
-        $output['optionList'] .= <<<HTML
-            <option value="{$rowUser['id_usuario']}">{$rowUser['nombres']} {$rowUser['apellidos']}</option>
-        HTML;
-    }
 
     if(!empty($resProd)){
         while($rowProd = $resProd->fetch_array()){
@@ -154,10 +136,10 @@
         }
     }else{
         $output['data'] .= <<<HTML
-            <tr>
-                <td colspan="6">Sin resultados</td>
-            </tr>
-        HTML;
+                <tr>
+                    <td colspan="6">Sin resultados</td>
+                </tr>
+            HTML;
     }
 
     if($output['totalRegistros'] > 0){
@@ -182,7 +164,7 @@
             if($pagina == $i){
                 $output['paginacion'] .= '<li class="page-item active"><a class="page-link" href="#" </a></li>'; 
             }else{
-                $output['paginacion'] .= '<li class="page-item"><a class="page-link" href="#" onclick="nextPage(' . $i . ')">' . $i . '</a></li>'; 
+                $output['paginacion'] .= '<li class="page-item"><a class="page-link" href="#" onclick="nextPageFilterPedido(' . $i . ')">' . $i . '</a></li>'; 
             }
         }
 

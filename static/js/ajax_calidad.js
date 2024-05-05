@@ -19,7 +19,7 @@ function registrarCalidad(){
 
     // Si hay campos vacíos, mostrar una alerta y asignar el foco al primer campo vacío
     if (camposVacios) {
-        mostrarAlerta('danger', 'Por favor, complete todos los campos requeridos.');
+        mostrarAlerta('warning', 'Por favor, complete todos los campos requeridos.');
         
         if (primerInputVacio) {
             primerInputVacio.focus();
@@ -44,8 +44,10 @@ function registrarCalidad(){
             mostrarAlerta(data.tipo, data.mensaje);
         })
         .then(() => {
+            //Cargar listado
             getListadoCalidad();
                 
+            //Cerrar modal
             $('#nuevaCalidad').modal('hide');
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
@@ -57,7 +59,7 @@ function registrarCalidad(){
             document.getElementById('btnCalidad').disabled = false;
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al registrar el certificado');
         });
         
         removeAlert();
@@ -84,7 +86,7 @@ function editarCalidad(id_calidad) {
 
     // Si hay campos vacíos, mostrar una alerta y asignar el foco al primer campo vacío
     if (camposVacios) {
-        mostrarAlerta('danger', 'Por favor, complete todos los campos requeridos.');
+        mostrarAlerta('warning', 'Por favor, complete todos los campos requeridos.');
         
         if (primerInputVacio) {
             primerInputVacio.focus();
@@ -121,11 +123,7 @@ function editarCalidad(id_calidad) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', 'Error al editar el certificado');
         });
 }
 
@@ -157,11 +155,7 @@ function eliminarCalidad(id_calidad) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', 'Error al eliminar el certificado');
         });
 }
 
@@ -196,11 +190,7 @@ function getCalidad(id_calidad){
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', 'Error al cargar certificado');
         });
 }
 

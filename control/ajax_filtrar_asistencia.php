@@ -7,23 +7,16 @@
     $limit = isset($_POST['registros']) ? $_POST['registros'] : 10; //Dato que viene de la vista para hacer el limite
     $pagina = isset($_POST['pagina']) ? $_POST['pagina'] : 0; 
 
-    $campo = isset($_POST['campo']) ? $_POST['campo'] : null; //Dato que viene de la vista para hacer la busqueda
-
-    if($_SESSION["tipo"] == 'asesor'){
-        $id_usuario = $_SESSION["id_usuario"];
-    }else{
-        $id_usuario = "";
-    }
+    $dateIn = $_POST["dateIn"] ?? null;
+    $dateOut = $_POST["dateOut"] ?? null;
+    $selectUser = $_POST["selectUser"] ?? null;
 
     require_once "../modelo/clase_usuario.php"; //Llamo a la clase
 
     $usuario = new Usuario();
-    list($resultado, $totalFiltro, $totalRegistros, $columns) = $usuario->listado_asistencia($campo, $limit, $pagina, $id_usuario);
+    list($resultado, $totalFiltro, $totalRegistros, $columns) = $usuario->filtro_asistencia($limit, $pagina, $dateIn, $dateOut, $selectUser);
 
     $num_rows = $resultado->num_rows; 
-
-    $usuario = new Usuario();
-    list($resUser, $nonuse1, $nonuse2, $nonuse3) = $usuario->listado_usuarios('', 100, 0, 0, 'desc');
 
     //Mostrar resultados
     $output = [];
@@ -31,14 +24,6 @@
     $output['totalFiltro'] = $totalFiltro;
     $output['data'] = '';
     $output['paginacion'] = '';
-    $output['optionList'] = <<<HTML
-        <option value="todos">Todos</option>
-    HTML;
-    while($rowUser = $resUser->fetch_array()){
-        $output['optionList'] .= <<<HTML
-            <option value="{$rowUser['id_usuario']}">{$rowUser['nombres']} {$rowUser['apellidos']}</option>
-        HTML;
-    }
 
     if ($num_rows > 0){//Verificamos que haya algun resultado
         while($row = $resultado->fetch_array()){ 
@@ -119,7 +104,7 @@
             if($pagina == $i){
                 $output['paginacion'] .= '<li class="page-item active"><a class="page-link" href="#" </a></li>'; 
             }else{
-                $output['paginacion'] .= '<li class="page-item"><a class="page-link" href="#" onclick="nextPage(' . $i . ')">' . $i . '</a></li>'; 
+                $output['paginacion'] .= '<li class="page-item"><a class="page-link" href="#" onclick="nextPageFilterAsistencia(' . $i . ')">' . $i . '</a></li>'; 
             }
         }
 

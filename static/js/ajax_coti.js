@@ -18,8 +18,7 @@ function eliminarCoti(id_coti) {
             location.reload();
         })
         .catch(err => {
-            console.error("Error al eliminar el cliente:", err);
-            // Maneja el error de manera explícita (puedes mostrar un mensaje de error o realizar otras acciones necesarias)
+            mostrarAlerta('danger', 'Error al eliminar el cliente');
         });
 }
 
@@ -48,27 +47,38 @@ function redirectToPageWithData(url, postData) {
     form.submit();
 }
 
+//Funcion que redirige a una pagina para enviar el pedido
 function pedidoCoti($id_coti){
-    
-    // Ejemplo de uso
-    var postData = {
-        id_coti: $id_coti,
-    };
 
-    // Redirige a la página deseada y envía datos por POST
-    redirectToPageWithData('../vistas/pedido.php', postData);
+    try{
+        // Ejemplo de uso
+        var postData = {
+            id_coti: $id_coti,
+        };
+
+        // Redirige a la página deseada y envía datos por POST
+        redirectToPageWithData('../vistas/pedido.php', postData);
+    } catch (error) {
+        mostrarAlerta('danger', 'Error al cargar pedido');
+    }
 
 }
 
+//Funcion que redirige a una pagina para editar la cotizacion
 function linkCoti($id_coti){
-    
-    // Ejemplo de uso
-    var postData = {
-        id_coti: $id_coti,
-    };
 
-    // Redirige a la página deseada y envía datos por POST
-    redirectToPageWithData('../vistas/editarcotizacion.php', postData);
+    try {
+        // Ejemplo de uso
+        var postData = {
+            id_coti: $id_coti,
+        };
+    
+        // Redirige a la página deseada y envía datos por POST
+        redirectToPageWithData('../vistas/editarcotizacion.php', postData);
+    } catch (error) {
+        // Manejo de errores
+        mostrarAlerta('danger', 'Error al cargar cotizacion');
+    }
 
 }
 
@@ -108,6 +118,37 @@ function registrarCoti(){
 
     const formaData = new FormData(document.getElementById('formCoti'));
 
+    //-----Verificar que la cantidad o el precio sean negativos
+
+    var cantidadInputs = document.getElementById('formCoti').querySelectorAll('.cantidad');
+    precioInputs = document.getElementById('formCoti').querySelectorAll('.precio')
+
+    for (var i = 0; i < cantidadInputs.length; i++) {
+        var cantidad = cantidadInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (cantidad <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa una cantidad correcta');
+            cantidadInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    for (var i = 0; i < precioInputs.length; i++) {
+        var precio = precioInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (precio <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa un monto correcto');
+            precioInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    //-----
+
     const existeCampo = formaData.has('idproducto[]');
     if(existeCampo){
         fetch(document.getElementById('formCoti').action, {
@@ -126,7 +167,7 @@ function registrarCoti(){
                 }
             })
             .catch(error => {
-                mostrarAlerta('danger', error);
+                mostrarAlerta('danger', 'Error al registrar la cotizacion');
             });
             
             removeAlert();
@@ -141,6 +182,37 @@ function editarCoti(){
     document.getElementById('btnEnviar').disabled = true;
 
     const formaData = new FormData(document.getElementById('formCoti'));
+
+    //-----Verificar que la cantidad o el precio sean negativos
+
+    var cantidadInputs = document.getElementById('formCoti').querySelectorAll('.cantidad');
+    precioInputs = document.getElementById('formCoti').querySelectorAll('.precio')
+
+    for (var i = 0; i < cantidadInputs.length; i++) {
+        var cantidad = cantidadInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (cantidad <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa una cantidad correcta');
+            cantidadInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    for (var i = 0; i < precioInputs.length; i++) {
+        var precio = precioInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (precio <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa un monto correcto');
+            precioInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    //-----
 
     fetch(document.getElementById('formCoti').action, {
         method: document.getElementById('formCoti').method,
@@ -160,7 +232,7 @@ function editarCoti(){
             }
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al editar la cotizacion');
         });
         
         removeAlert();
@@ -549,352 +621,123 @@ function getDataPDF(id_coti, generatePdfCoti){//Generar PDF coti
                     pdfMake.createPdf(documentDefinition).open();
                 }
             }catch{
-                mostrarAlerta('danger', 'Error al generar el PDF:' + error)
+                mostrarAlerta('danger', 'Error al generar el PDF')
             }
         })
         .catch(err => {
-            console.error("Error al generar PDF", err);
-            // Maneja el error de manera explícita (puedes mostrar un mensaje de error o realizar otras acciones necesarias)
+            mostrarAlerta('danger', 'Error al generar el PDF')
         });
-}
-
-//Funcion que registra un pedido especifico de una coti, carga la cotizacion y la envia por correo
-function registrarPedido(id_coti, generatePdfCoti){
-
-    const resultado = document.getElementById("resultado");
-
-    var checkboxes = document.querySelectorAll('.form-check-input');
-
-    var itemsMarcados = Array.from(checkboxes)
-        .filter(function (checkbox) {
-            return checkbox.checked;
-        })
-        .map(function (checkbox) {
-            return checkbox.value;
-        });
-
-    // Verificar si al menos uno está marcado
-    if (itemsMarcados.length === 0) {
-        return mostrarAlerta('danger', 'Debes marcar al menos un producto');
-    }
-
-    arrayDeValores = Object.values(itemsMarcados);
-
-    // Deshabilitar el botón de enviar
-    document.querySelector('[class^="btnEnviarPedido"]').disabled = true;
-
-    const url = "../control/getcotipedido.php";
-    const formaData = new FormData();
-    formaData.append("id_coti", id_coti);
-    formaData.append("itemsMarcados", itemsMarcados);
-
-    let arrayCoti = [];
-    let arrayCont = [];
-    let arrayProd = [];
-    let arrayUser = [];
-
-    fetch(url, {
-        method: "POST",
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            arrayCoti = data.resCoti;
-            arrayCont = data.resCont;
-            arrayProd = data.resProd;
-            arrayUser = data.resUser;
-
-            documentDefinition = generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser);
-
-            pdfMake.createPdf(documentDefinition).getBlob(function (blob) {
-                const formData = new FormData(document.getElementById('formCoti'));
-                formData.append('pdf', blob, 'coti_pedido.pdf');
-                formData.append('correlativo', arrayCoti['correlativo']);
-    
-                if(formData.get('archivos[]').size == 0){
-                    formData.delete('archivos[]');
-                }
-    
-                /*const formData = new FormData();
-    
-                formData.append('pdf', blob, 'coti_pedido.pdf');
-                formData.append('correlativo', arrayCoti['correlativo']);
-    
-                document.getElementById('formCoti').elements.forEach(item => {
-                    if(item.tagName == 'INPUT'){
-                        const value = item.value;
-                        const name = item.name;
-    
-                        if(name === 'archivos[]') {
-                            
-                        console.log(name,value);
-                            if(value.size > 0){
-                                formData.append(name, value, value.name);
-                                
-                            }
-                            return;
-                        }
-                        formData.append(name, value);
-                        
-                    }
-                })*/
-    
-                // Utilizar fetch para enviar el PDF al servidor y adjuntarlo al correo
-                fetch(document.getElementById('formCoti').action, {
-                    method: document.getElementById('formCoti').method,
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    mostrarAlerta(data.tipo, data.mensaje);
-    
-                    if(data.redir == true){
-                        setTimeout(function() {
-                            window.location.href = "../vistas/listacotizacion.php";
-                        }, 3000);
-                    }else{
-                        // Volver a habilitar el botón de enviar después de la consulta
-                        document.getElementById('btnEnviar').disabled = false;
-                    }
-                })
-                .catch(error => {
-                    mostrarAlerta('danger', error);
-                });
-            });
-        })
-        .catch(err => {
-            mostrarAlerta('danger', "Error al generar PDF" + err);
-
-            // Volver a habilitar el botón de enviar después de la consulta
-            document.getElementById('btnEnviar').disabled = false;
-        });
-
 }
 
 function actConex(id_cliente,tipo){
+
+    try {
     
-    const divcon = document.getElementById("divcon"+id_cliente);
+        const divcon = document.getElementById("divcon"+id_cliente);
 
-    const regEnt = document.getElementById("regEnt"+id_cliente);
-    const regSal = document.getElementById("regSalDiv"+id_cliente);
+        const regEnt = document.getElementById("regEnt"+id_cliente);
+        const regSal = document.getElementById("regSalDiv"+id_cliente);
 
-    const factor = document.getElementById("factor"+id_cliente);
+        const factor = document.getElementById("factor"+id_cliente);
 
-    if(tipo == 'trafotritorre' || tipo == 'trafotrirack' || tipo == 'estabitritorre' || tipo == 'estabitrirack'){
-        divcon.innerHTML = `
-            <div class="md-form mb-2">
-                <i class="grey-text">Conexión Primario</i>
-                <select name="tipo-factor" id="conpri${id_cliente}" class="form-select">
-                    <option>Delta</option>
-                    <option>Estrella</option>
-                    <option>Delta-Estrella</option>
-                </select>
-            </div>
-            <div class="md-form mb-2">
-                <i class="grey-text">Conexión Secundario</i>
-                <select name="tipo-factor" id="consec${id_cliente}" class="form-select">
-                    <option>Delta</option>
-                    <option>Estrella</option>
-                    <option>Delta-Estrella</option>
-                </select>
-            </div>
-        `;
-    }else{
-        divcon.innerHTML = `
-        `;
-    }
-
-    if(tipo == 'estabimonotorre' || tipo == 'estabimonorack' || tipo == 'estabitritorre' || tipo == 'estabitrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
-        regEnt.innerHTML = `
-            <div class="md-form mb-2">
-                <i class="grey-text">Regulacion de entrada</i>
-                <div class="input-group">
-                    <span class="input-group-text">-</span>
-                    <input type="number" id="regEnt1${id_cliente}" class="form-control" placeholder="" required>
-                    <span class="input-group-text">%</span> 
-                    <span class="input-group-text">+</span>
-                    <input type="number" id="regEnt2${id_cliente}" class="form-control" placeholder="" required>
-                    <span class="input-group-text">%</span> 
+        if(tipo == 'trafotritorre' || tipo == 'trafotrirack' || tipo == 'estabitritorre' || tipo == 'estabitrirack'){
+            divcon.innerHTML = `
+                <div class="md-form mb-2">
+                    <i class="grey-text">Conexión Primario</i>
+                    <select name="tipo-factor" id="conpri${id_cliente}" class="form-select">
+                        <option>Delta</option>
+                        <option>Estrella</option>
+                        <option>Delta-Estrella</option>
+                    </select>
                 </div>
-            </div>
-        `;
-        regSal.innerHTML = `
-            <div class="md-form mb-2">
-                <i class="grey-text">Regulacion de salida</i>
-                <div class="input-group">
-                    <span class="input-group-text">±</span>
-                    <input type="number" id="regSal${id_cliente}" class="form-control" placeholder="" required>
-                    <span class="input-group-text">%</span> 
+                <div class="md-form mb-2">
+                    <i class="grey-text">Conexión Secundario</i>
+                    <select name="tipo-factor" id="consec${id_cliente}" class="form-select">
+                        <option>Delta</option>
+                        <option>Estrella</option>
+                        <option>Delta-Estrella</option>
+                    </select>
                 </div>
-            </div>
-        `;
-    }else{
-        regEnt.innerHTML = `
-        `;
-        regSal.innerHTML = `
-        `;
-    }
+            `;
+        }else{
+            divcon.innerHTML = `
+            `;
+        }
 
-    if(tipo == 'automonorack' || tipo == 'automonotorre' || tipo == 'autotritorre' || tipo == 'autotrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
-        factor.disabled = true;
-        factor.value = '';
-    }else{
-        factor.disabled = false;
+        if(tipo == 'estabimonotorre' || tipo == 'estabimonorack' || tipo == 'estabitritorre' || tipo == 'estabitrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
+            regEnt.innerHTML = `
+                <div class="md-form mb-2">
+                    <i class="grey-text">Regulacion de entrada</i>
+                    <div class="input-group">
+                        <span class="input-group-text">-</span>
+                        <input type="number" id="regEnt1${id_cliente}" class="form-control" placeholder="" required>
+                        <span class="input-group-text">%</span> 
+                        <span class="input-group-text">+</span>
+                        <input type="number" id="regEnt2${id_cliente}" class="form-control" placeholder="" required>
+                        <span class="input-group-text">%</span> 
+                    </div>
+                </div>
+            `;
+            regSal.innerHTML = `
+                <div class="md-form mb-2">
+                    <i class="grey-text">Regulacion de salida</i>
+                    <div class="input-group">
+                        <span class="input-group-text">±</span>
+                        <input type="number" id="regSal${id_cliente}" class="form-control" placeholder="" required>
+                        <span class="input-group-text">%</span> 
+                    </div>
+                </div>
+            `;
+        }else{
+            regEnt.innerHTML = `
+            `;
+            regSal.innerHTML = `
+            `;
+        }
+
+        if(tipo == 'automonorack' || tipo == 'automonotorre' || tipo == 'autotritorre' || tipo == 'autotrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
+            factor.disabled = true;
+            factor.value = '';
+        }else{
+            factor.disabled = false;
+        }
+    } catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
     }
 }
 
 function editFactor(id_cliente){
-    const factorpot = document.getElementById("factorpot"+id_cliente);
 
-    factorpot.removeAttribute('disabled');
+    try{
+        const factorpot = document.getElementById("factorpot"+id_cliente);
+    
+        factorpot.removeAttribute('disabled');
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
 }
 
 function editClase(id_cliente){
-    const divclase = document.getElementById("divclase"+id_cliente);
-
-    divclase.innerHTML = `
-        <input type="text" id="clase${id_cliente}" class="form-control" placeholder="Clase">
-    `;
-}
-
-//Obtiene los datos de la cotizacion de un pedido especifico para luego llamar al script que genera la coti y mostrarla en pantalla
-function pdfCotiPedido(arrayId, generatePdfCoti){
+    try{
+        const divclase = document.getElementById("divclase"+id_cliente);
     
-    arrayId = arrayId.split(',');
-
-    let arrayIdKeys = {
-        id_pedidos: arrayId[0],
-        id_coti: arrayId[1]
-    };
-    
-    const resultado = document.getElementById("resultado");
-
-    const url = "../control/getpdfcotipedido.php";
-    const formaData = new FormData();
-    formaData.append("id_coti", arrayIdKeys['id_coti']);
-    formaData.append("id_pedido", arrayIdKeys['id_pedidos']);
-
-    let arrayCoti = [];
-    let arrayCont = [];
-    let arrayProd = [];
-    let arrayUser = [];
-
-    fetch(url, {
-        method: "POST",
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            arrayCoti = data.resCoti;
-            arrayCont = data.resCont;
-            arrayProd = data.resProd;
-            arrayUser = data.resUser;
-
-            documentDefinition = generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser);
-    
-            // Función para verificar si el dispositivo es un iPhone
-            function esIPhone() {
-                return /iPhone/i.test(navigator.userAgent);
-            }
-
-            // Ejemplo de uso
-            if (esIPhone()) {
-                pdfMake.createPdf(documentDefinition).download();
-            } else {
-                pdfMake.createPdf(documentDefinition).open();
-            }
-        })
-        .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
-        });
-
-}
-
-//Obtiene los datos de la cotizacion de un pedido especifico para luego llamar al script que genera la coti, adjuntarla en un correo y enviarlo mientras que anula el pedido
-function anularPedido(arrayId, generatePdfCoti){
-
-    arrayId = arrayId.split(',');
-
-    let arrayIdKeys = {
-        id_pedidos: arrayId[0],
-        id_coti: arrayId[1]
-    };
-    
-    const resultado = document.getElementById("resultado");
-
-    const url = "../control/getpdfcotipedido.php";
-    const formaData = new FormData();
-    formaData.append("id_coti", arrayIdKeys['id_coti']);
-    formaData.append("id_pedido", arrayIdKeys['id_pedidos']);
-
-    let arrayCoti = [];
-    let arrayCont = [];
-    let arrayProd = [];
-    let arrayUser = [];
-
-    fetch(url, {
-        method: "POST",
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            arrayCoti = data.resCoti;
-            arrayCont = data.resCont;
-            arrayProd = data.resProd;
-            arrayUser = data.resUser;
-            
-            documentDefinition = generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser);
-            
-            pdfMake.createPdf(documentDefinition).getBlob(function (blob) {
-                const formData = new FormData(document.getElementById('formanular'+arrayIdKeys['id_pedidos']));
-                formData.append('pdf', blob, 'coti_pedido.pdf');
-                formData.append('correlativo', arrayCoti['correlativo']);
-                formData.append('nombrecliente', arrayCoti['razon_social']);
-                formData.append('id_pedido', arrayIdKeys['id_pedidos']);
-    
-                // Utilizar fetch para enviar el PDF al servidor y adjuntarlo al correo
-                fetch(document.getElementById('formanular'+arrayIdKeys['id_pedidos']).action, {
-                    method: document.getElementById('formanular'+arrayIdKeys['id_pedidos']).method,
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    mostrarAlerta(data.tipo, data.mensaje);
-    
-                    if(data.redir == true){
-                        setTimeout(function() {
-                            window.location.href = "../vistas/listapedidos.php";
-                        }, 3000);
-                    }else{
-                        // Volver a habilitar el botón de enviar después de la consulta
-                        document.getElementById('btnAnular'+arrayIdKeys['id_pedidos']).disabled = false;
-                    }
-                })
-                .catch(error => {
-                    mostrarAlerta('danger', error);
-                });
-            });
-            
-        })
-        .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
-        });
-
+        divclase.innerHTML = `
+            <input type="text" id="clase${id_cliente}" class="form-control" placeholder="Clase">
+        `;
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
 }
 
 function isValidDate(dateString) {
-    var dateObject = new Date(dateString);
-    
-    return !isNaN(dateObject.getTime()) && 
-           dateObject.toISOString().slice(0,10) === dateString;
+    try{
+        var dateObject = new Date(dateString);
+        
+        return !isNaN(dateObject.getTime()) && 
+            dateObject.toISOString().slice(0,10) === dateString;
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
 }
 
 function filtrarCoti() {
@@ -975,7 +818,7 @@ function filtrarCoti() {
         });
     })
     .catch(err => {
-        console.error(err);
+        mostrarAlerta('danger', "Se ha producido un error");
     });
 }
 

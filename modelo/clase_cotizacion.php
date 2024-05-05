@@ -93,15 +93,10 @@
             $sqlLimit = "LIMIT $inicio, $limit";
 
             // Ordenamiento
-            $sqlOrder = "";
-
-            if (isset($_POST['orderCol'])) {
-                $orderCol = $_POST['orderCol'];
-                $orderType = isset($_POST['orderType']) ? $_POST['orderType'] : 'asc';
-
-                $sqlOrder = "ORDER BY id_coti " . ' ' . $orderType;
-            }
-
+            $orderType = 'desc';
+    
+            $sqlOrder = "ORDER BY fecha " . $orderType;
+        
             // Consulta SQL 
             $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
                     FROM $tabla

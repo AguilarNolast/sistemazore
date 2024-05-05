@@ -41,7 +41,7 @@ async function getCliente() {
         listaOverlay.style.display = 'block';
         listaOverlay.innerHTML = data.data;
     } catch (err) {
-        console.error(err);
+        mostrarAlerta('danger', 'Error al cargar cliente');
     }
 }
 
@@ -77,7 +77,9 @@ function getContacto(id_cliente, nombre_entidad, ruc) {
         contactoContainer.innerHTML = data.data;
         mostrarContacto(data.id_contacto);
     })
-    .catch(err => console.error(err));
+    .catch(error => {
+        mostrarAlerta('danger', 'Error al cargar cliente');
+    });
 }
 
 function contactoEditarCoti(id_cliente, nombre_entidad) {
@@ -108,7 +110,9 @@ function contactoEditarCoti(id_cliente, nombre_entidad) {
         contactoContainer.innerHTML = data.data;
         mostrarContacto(data.id_contacto);
     })
-    .catch(err => console.error(err));
+    .catch(error => {
+        mostrarAlerta('danger', 'Error al cargar contactos');
+    });
 }
 
 function mostrarContacto(id_contacto) {
@@ -133,7 +137,9 @@ function mostrarContacto(id_contacto) {
         telefonoInput.value = data.telefono;
         correoInput.value = data.correo;
     })
-    .catch(err => console.error(err));
+    .catch(error => {
+        mostrarAlerta('danger', 'Error al cargar contacto');
+    });
 }
 
 function añadirContacto() {
@@ -215,7 +221,7 @@ function removeContacto(id) {
     if (cont) {
         cont.remove();
     } else {
-        console.warn(`Elemento con ID "cont${id}" no encontrado.`);
+        mostrarAlerta('danger', 'Error al remover contacto');
     }
 }
 
@@ -329,11 +335,7 @@ function registrarCliente() {
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', 'Error al registrar cliente');
         });
 
         getListadoClientes();
@@ -452,11 +454,7 @@ function registrarCliente2() {
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', 'Error al cargar cliente');
         });
             
         $('#nuevoCli').modal('hide');
@@ -523,7 +521,9 @@ function editarCliente(id_cliente) {
 
             getListadoClientes();
         })
-        .catch(err => console.log(err));
+        .catch(error => {
+            mostrarAlerta('danger', 'Error al editar cliente');
+        });
             
         $('#nuevoCli'+ id_cliente).modal('hide');
         $('body').removeClass('modal-open');
@@ -534,7 +534,7 @@ function editarCliente(id_cliente) {
         removeAlert();
 }
 
-function deleteContacto(id_contacto,item,id_cliente) {
+function deleteContacto(id_contacto,item,id_cliente) { 
     const resultado = document.getElementById("resultado");
     
     let cont = document.getElementById("cont"+item+id_cliente);
@@ -555,8 +555,7 @@ function deleteContacto(id_contacto,item,id_cliente) {
 
         })
         .catch(err => {
-            console.error("Error al eliminar el contacto:", err);
-            // Maneja el error de manera explícita (puedes mostrar un mensaje de error o realizar otras acciones necesarias)
+            mostrarAlerta('danger', 'Error al eliminar contacto');
         });
 
         removeAlert();
@@ -609,8 +608,7 @@ function eliminarCliente(id_cliente) {
             resultado.innerHTML = data.data;
         })
         .catch(err => {
-            console.error("Error al eliminar el cliente:", err);
-            // Maneja el error de manera explícita (puedes mostrar un mensaje de error o realizar otras acciones necesarias)
+            mostrarAlerta('danger', 'Error al eliminar cliente');
         });
 
         getListadoClientes()
@@ -623,6 +621,8 @@ function eliminarCliente(id_cliente) {
 
         removeAlert();
 }
+
+//Atender esta funcion
 /*
 function tipearPago(id_cliente){
 

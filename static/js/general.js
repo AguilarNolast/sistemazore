@@ -1,5 +1,5 @@
 
-function removeAlert(){
+function removeAlert(){//Remueve las alertas que se muestran en el sistema
     setTimeout(function() {
         var alertElement = document.getElementById('miAlert');
         alertElement.parentNode.removeChild(alertElement);
@@ -16,8 +16,7 @@ function obtenerValoresInputsClaseById(clase, id_cliente) {
     return Array.from(elementos).map(elemento => elemento.value);
 }
 
-function checkSession() {
-    // Realizar una solicitud Fetch al archivo PHP que verifica la sesión
+function checkSession() {//Verifica si la sesion sigue activa
     fetch('../control/checksession.php')
         .then(response => response.json())
         .then(data => {
@@ -27,36 +26,9 @@ function checkSession() {
             }
         })
         .catch(error => {
-            console.error('Error al verificar la sesión:', error.message);
+            mostrarAlerta('danger', 'Error al verificar la sesión');
         });
 }
-
-/*document.getElementById('miFormulario').addEventListener('submit', function (event) {
-    event.preventDefault(); // Evita la recarga de la página por defecto
-
-    // Deshabilitar el botón de enviar
-    document.getElementById('btnEnviar').disabled = true;
-
-    const formaData = new FormData(this);
-
-    fetch(this.action, {
-        method: this.method,
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            mostrarAlerta(data.tipo, data.mensaje);
-        })
-        .catch(error => {
-            mostrarAlerta('danger', error);
-        })
-        .finally(() => {
-            // Volver a habilitar el botón de enviar después de la consulta
-            document.getElementById('btnEnviar').disabled = false;
-        });
-    
-    removeAlert();
-});*/
 
 function enviarFormulario() {
     // Deshabilitar el botón de enviar
@@ -82,13 +54,13 @@ function enviarFormulario() {
             }
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al enviar formulario');
         });
         
         removeAlert();
 }
 
-function logIn(){
+function logIn(){//Funcion que realiza el inicio de sesion
     // Deshabilitar el botón de enviar
     document.getElementById('btnEnviar').disabled = true;
 
@@ -112,11 +84,11 @@ function logIn(){
 
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al iniciar sesion');
         });
 }
 
-function mostrarAlerta(tipo, mensaje) {
+function mostrarAlerta(tipo, mensaje) {//Muestra una alerta basada en los datos enviados
     const alertaResultado = document.getElementById('alertaResultado');
     alertaResultado.innerHTML = `
         <div class="alert alert-${tipo}" id="miAlert" role="alert">
@@ -126,7 +98,7 @@ function mostrarAlerta(tipo, mensaje) {
     removeAlert();
 }
 
-function updateConfig() {
+function updateConfig() {//Funcion que actualiza la configuracion del servidor
     // Deshabilitar el botón de enviar
     document.getElementById('btnConfig').disabled = true;
 
@@ -154,7 +126,7 @@ function updateConfig() {
             $('body').css('overflow', 'auto');
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al actualizar la configuracion');
         });
         
         removeAlert();
