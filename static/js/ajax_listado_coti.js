@@ -128,8 +128,7 @@ function getListadoCoti() {
         });
     })
     .catch(err => {
-        console.error(err);
-        // Aquí podrías mostrar un mensaje de error al usuario o realizar alguna acción específica.
+        mostrarAlerta('danger', "Error al cargar listado");
     });
 
     // Función para actualizar la barra de progreso

@@ -43,8 +43,6 @@
             <label class="form-check-label" for="mantenerSesion">Mantener sesión iniciada</label>
         </div>
     </form>
-    
-
     <a href="vistas/recuperarclave.php" class="">Recuperar clave</a>
 </div>
 

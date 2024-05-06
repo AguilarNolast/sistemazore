@@ -61,7 +61,7 @@ function registrarGarantia(){
             document.getElementById('btnGarantia').disabled = false;
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al registrar certificado');
         });
         
         removeAlert();
@@ -125,11 +125,7 @@ function editarGarantia(id_garantia) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al editar garantia");
         });
 }
 
@@ -161,11 +157,7 @@ function eliminarGarantia(id_garantia) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al eliminar certificado");
         });
 }
 
@@ -200,11 +192,7 @@ function getGarantia(id_garantia){
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al cargar certificado");
         });
 }
 

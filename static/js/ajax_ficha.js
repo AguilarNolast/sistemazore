@@ -574,11 +574,7 @@ function generarpdf(id_coti, generarFichaTec){
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al generar PDF");
         });
 
 }
@@ -616,11 +612,7 @@ function generarPdfFicha(id_ficha){
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Se ha producido un error");
         });
 
 }
@@ -647,12 +639,9 @@ function eliminarFicha(id_ficha){
             itemficha.remove();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al eliminar la Ficha");
         });
+    
 }
 
 function cargarEdicionFicha(id_ficha, id_coti){
@@ -683,11 +672,7 @@ function cargarEdicionFicha(id_ficha, id_coti){
             $('#editFicha'+id_ficha).modal('show');
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al cargar ficha");
         });
 
 }
@@ -871,17 +856,17 @@ function editFicha(id_ficha){
             }
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al editar ficha");
         });
-
 }
 
 function editFactorFicha(id_ficha){
-    const factorpot = document.getElementById("factorpot"+id_ficha);
+    try{
+        const factorpot = document.getElementById("factorpot"+id_ficha);
 
-    factorpot.removeAttribute('disabled');
+        factorpot.removeAttribute('disabled');
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
+
 }

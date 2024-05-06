@@ -13,6 +13,7 @@ function getListadoAsistencia() {
     let input = document.getElementById("campo").value; // Obtengo el valor escrito en el buscador
     let num_registros = document.getElementById("num_registros").value; // Obtengo la cantidad de registro que desea mostrar
     let content = document.getElementById("contenido"); // Obtengo el contenedor donde estarán los datos de la BD
+    let selectUser = document.getElementById("selectUser"); // Obtengo el contenedor donde estarán los datos de la BD
     let pagina = document.getElementById("pagina").value; // Obtengo el numero de pagina
     let orderCol = document.getElementById("orderCol").value; 
     let orderType = document.getElementById("orderType").value; 
@@ -36,12 +37,14 @@ function getListadoAsistencia() {
     .then(response => response.json()) // Recibimos el JSON que viene desde el archivo PHP
     .then(data => {
         content.innerHTML = data.data;
+        if(selectUser != null){
+            selectUser.innerHTML = data.optionList;
+        }
         document.getElementById("lbl-total").innerHTML = `Mostrando ${data.totalFiltro} de ${data.totalRegistros} registros`;
         document.getElementById("nav-paginacion").innerHTML = data.paginacion;
     })
     .catch(err => {
-        console.error(err);
-        // Aquí podrías mostrar un mensaje de error al usuario o realizar alguna acción específica.
+        mostrarAlerta('danger', "Error al cargar listado");
     });
 }
 

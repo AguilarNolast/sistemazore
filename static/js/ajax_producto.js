@@ -31,48 +31,56 @@ function cerrarLista(event){
 
 function addItem(){
 
-    let contItems = document.getElementById("cont_items")
-    var newItems = document.createElement('div');
-    newItems.classList.add('form-row');
+    try{
+        let contItems = document.getElementById("cont_items")
+        var newItems = document.createElement('div');
+        newItems.classList.add('form-row');
 
-    newItems.innerHTML = `
-        <div class="form-group col-sm-12 col-md-12 col-lg-1">
-            <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
-        </div>
-        <div class="form-group col-sm-12 col-md-12 col-lg-3">
-            <input type="text" class="prod form-control" onkeyup="getProducto(this)" id="pro" placeholder="Producto" autocomplete="off" required>
-            <input type="hidden" class="idproducto" name="idproducto[]" id="idproducto">
-            <div class="contenedor">
-                <div class="producto_lista lista-overlayPro" id="producto_lista">
+        newItems.innerHTML = `
+            <div class="form-group col-sm-12 col-md-12 col-lg-1">
+                <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
+            </div>
+            <div class="form-group col-sm-12 col-md-12 col-lg-3">
+                <input type="text" class="prod form-control" onkeyup="getProducto(this)" id="pro" placeholder="Producto" autocomplete="off" required>
+                <input type="hidden" class="idproducto" name="idproducto[]" id="idproducto">
+                <div class="contenedor">
+                    <div class="producto_lista lista-overlayPro" id="producto_lista">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group col-sm-12 col-md-12 col-lg-4">
-            <textarea class="descripcion form-control" id="descripcion" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
-        </div>
-        <div class="form-group col-sm-12 col-md-12 col-lg-1">
-            <input type="number" class="precio form-control" onkeyup="totalP(this)" id="precio" name="precio[]" placeholder="Precio unitario" required>
-        </div>
-        <div class="form-group col-sm-12 col-md-12 col-lg-1">
-            <input type="number" class="descuento form-control" onkeyup="totalP(this)" value="0" id="descuento" name="descuento[]" placeholder="Descuento">
-        </div>
-        <div class="form-group col-sm-12 col-md-12 col-lg-1">
-            <input type="number" class="total_producto form-control" id="total_producto" readonly placeholder="Total" required>
-        </div>
-        <div class="form-group col-sm-12 col-md-12 col-lg-1">
-            <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this)" id="btnitem">
-                X
-            </button>
-        </div>
-    `;
-    contItems.appendChild(newItems);
+            <div class="form-group col-sm-12 col-md-12 col-lg-4">
+                <textarea class="descripcion form-control" id="descripcion" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
+            </div>
+            <div class="form-group col-sm-12 col-md-12 col-lg-1">
+                <input type="number" class="precio form-control" onkeyup="totalP(this)" id="precio" name="precio[]" placeholder="Precio unitario" required>
+            </div>
+            <div class="form-group col-sm-12 col-md-12 col-lg-1">
+                <input type="number" class="descuento form-control" onkeyup="totalP(this)" value="0" id="descuento" name="descuento[]" placeholder="Descuento">
+            </div>
+            <div class="form-group col-sm-12 col-md-12 col-lg-1">
+                <input type="number" class="total_producto form-control" id="total_producto" readonly placeholder="Total" required>
+            </div>
+            <div class="form-group col-sm-12 col-md-12 col-lg-1">
+                <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this)" id="btnitem">
+                    X
+                </button>
+            </div>
+        `;
+        contItems.appendChild(newItems);
+    }catch (error) {
+        mostrarAlerta('danger', "Error al añadir item");
+    }
 
 }
 
 function eliminar_Item(button){
-    var divContainer = button.closest('.form-row');
-    divContainer.remove();
-    calcular_total();
+    try{
+        var divContainer = button.closest('.form-row');
+        divContainer.remove();
+        calcular_total();
+    }catch (error) {
+        mostrarAlerta('danger', "Error al eliminar item");
+    }
 }
 
 function getProducto(producto){
@@ -93,27 +101,34 @@ function getProducto(producto){
     .then(data => {
         producto_lista.style.display = 'block';
         producto_lista.innerHTML = data.data
-    }).catch(err => console.log(err)) //Capturamos un posible error
+    }).catch(error => {
+        mostrarAlerta('danger', 'Error al cargar producto');
+    });
 }
 
 function totalP(item){
-    //item.value = item.value.replace(/[^0-9.]/g, '');
-    var divContainer = item.closest('.form-row');
-    var cantidad = divContainer.querySelector('.cantidad').value;
-    var precio = divContainer.querySelector('.precio').value;
-    var descuento = divContainer.querySelector('.descuento').value;
+    try{
+        var divContainer = item.closest('.form-row');
+        var cantidad = divContainer.querySelector('.cantidad').value;
+        var precio = divContainer.querySelector('.precio').value;
+        var descuento = divContainer.querySelector('.descuento').value;
+        
+        let total_prod = divContainer.querySelector('.total_producto');
+
+        let subtotal = cantidad * precio
+
+        let porcentaje = descuento / 100
+
+        total = subtotal - (subtotal * porcentaje)
+
+        total_prod.value = total;
+
+        calcular_total()
+
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
     
-    let total_prod = divContainer.querySelector('.total_producto');
-
-    let subtotal = cantidad * precio
-
-    let porcentaje = descuento / 100
-
-    total = subtotal - (subtotal * porcentaje)
-
-    total_prod.value = total;
-
-    calcular_total()
 }
 
 function mostrarProducto(producto, item){
@@ -140,7 +155,9 @@ function mostrarProducto(producto, item){
         inputProd.value = data.nombre
         precio.value = data.precio;
         totalP(divContainer);
-    }).catch(err => console.log(err)) //Capturamos un posible error
+    }).catch(error => {
+        mostrarAlerta('danger', 'Se ha producido un error');
+    });
 
 }
 
@@ -171,24 +188,30 @@ function calcular_total(){
             subtotal_completo += subtotal_und;
         }
     } else {
-        console.error("Los NodeList no tienen la misma longitud.");
+        mostrarAlerta('danger', "Se ha producido un error");
     }
 
-    subtotal_completo = parseFloat(subtotal_completo.toFixed(2));
-    if(Number.isNaN(subtotal_completo) == false){
-        
-        td_subtotal.value = subtotal_completo.toLocaleString('en-US');
+    try{
 
-        let igv = subtotal_completo * porcentaje_igv
+        subtotal_completo = parseFloat(subtotal_completo.toFixed(2));
+        if(Number.isNaN(subtotal_completo) == false){
+            
+            td_subtotal.value = subtotal_completo.toLocaleString('en-US');
 
-        igv = parseFloat(igv.toFixed(2))
+            let igv = subtotal_completo * porcentaje_igv
 
-        td_igv.value = igv.toLocaleString('en-US');
+            igv = parseFloat(igv.toFixed(2))
 
-        totalTotal = subtotal_completo + igv;
+            td_igv.value = igv.toLocaleString('en-US');
 
-        td_total.value = parseFloat(totalTotal.toFixed(2)).toLocaleString('en-US');
-        
+            totalTotal = subtotal_completo + igv;
+
+            td_total.value = parseFloat(totalTotal.toFixed(2)).toLocaleString('en-US');
+            
+        }
+
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
     }
 }
 
@@ -263,11 +286,7 @@ function registrarProducto() {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al registrar producto");
         });
 }
 
@@ -313,11 +332,7 @@ function editarProducto(id_producto) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al editar producto");
         });
 }
 
@@ -349,10 +364,6 @@ function eliminarProducto(id_producto) {
             removeAlert();
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al eliminar producto");
         });
 }

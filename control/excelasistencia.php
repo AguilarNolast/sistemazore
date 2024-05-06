@@ -3,15 +3,21 @@
     require '../vendor/autoload.php';
     require_once "../modelo/clase_usuario.php"; //Llamo a la clase
 
+    $limit = isset($_POST['registros']) ? $_POST['registros'] : 10; //Dato que viene de la vista para hacer el limite
+    $pagina = isset($_POST['pagina']) ? $_POST['pagina'] : 0; 
+
+    $dateIn = $_POST['dateIn'] ?? null;
+    $dateOut = $_POST['dateOut'] ?? null;
+    $selectUser = $_POST['selectUser'] ?? null;
+
     $usuario = new Usuario();
-    list($resultado, $totalFiltro, $totalRegistros, $columns) = $usuario->listado_asistencia(null, null, 0, '');
-    
+    list($resultado, $totalFiltro, $totalRegistros, $columns) = $usuario->filtro_asistencia(NULL, $pagina, $dateIn, $dateOut, $selectUser);
+   
     $num_rows = $resultado->num_rows;
 
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-    
     // Establecer estilos para el Header
     $styleHeader = [
         'font' => [

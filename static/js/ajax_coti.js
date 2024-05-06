@@ -18,8 +18,7 @@ function eliminarCoti(id_coti) {
             location.reload();
         })
         .catch(err => {
-            console.error("Error al eliminar el cliente:", err);
-            // Maneja el error de manera explícita (puedes mostrar un mensaje de error o realizar otras acciones necesarias)
+            mostrarAlerta('danger', 'Error al eliminar el cliente');
         });
 }
 
@@ -48,27 +47,38 @@ function redirectToPageWithData(url, postData) {
     form.submit();
 }
 
+//Funcion que redirige a una pagina para enviar el pedido
 function pedidoCoti($id_coti){
-    
-    // Ejemplo de uso
-    var postData = {
-        id_coti: $id_coti,
-    };
 
-    // Redirige a la página deseada y envía datos por POST
-    redirectToPageWithData('../vistas/pedido.php', postData);
+    try{
+        // Ejemplo de uso
+        var postData = {
+            id_coti: $id_coti,
+        };
+
+        // Redirige a la página deseada y envía datos por POST
+        redirectToPageWithData('../vistas/pedido.php', postData);
+    } catch (error) {
+        mostrarAlerta('danger', 'Error al cargar pedido');
+    }
 
 }
 
+//Funcion que redirige a una pagina para editar la cotizacion
 function linkCoti($id_coti){
-    
-    // Ejemplo de uso
-    var postData = {
-        id_coti: $id_coti,
-    };
 
-    // Redirige a la página deseada y envía datos por POST
-    redirectToPageWithData('../vistas/editarcotizacion.php', postData);
+    try {
+        // Ejemplo de uso
+        var postData = {
+            id_coti: $id_coti,
+        };
+    
+        // Redirige a la página deseada y envía datos por POST
+        redirectToPageWithData('../vistas/editarcotizacion.php', postData);
+    } catch (error) {
+        // Manejo de errores
+        mostrarAlerta('danger', 'Error al cargar cotizacion');
+    }
 
 }
 
@@ -108,6 +118,37 @@ function registrarCoti(){
 
     const formaData = new FormData(document.getElementById('formCoti'));
 
+    //-----Verificar que la cantidad o el precio sean negativos
+
+    var cantidadInputs = document.getElementById('formCoti').querySelectorAll('.cantidad');
+    precioInputs = document.getElementById('formCoti').querySelectorAll('.precio')
+
+    for (var i = 0; i < cantidadInputs.length; i++) {
+        var cantidad = cantidadInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (cantidad <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa una cantidad correcta');
+            cantidadInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    for (var i = 0; i < precioInputs.length; i++) {
+        var precio = precioInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (precio <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa un monto correcto');
+            precioInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    //-----
+
     const existeCampo = formaData.has('idproducto[]');
     if(existeCampo){
         fetch(document.getElementById('formCoti').action, {
@@ -126,7 +167,7 @@ function registrarCoti(){
                 }
             })
             .catch(error => {
-                mostrarAlerta('danger', error);
+                mostrarAlerta('danger', 'Error al registrar la cotizacion');
             });
             
             removeAlert();
@@ -141,6 +182,37 @@ function editarCoti(){
     document.getElementById('btnEnviar').disabled = true;
 
     const formaData = new FormData(document.getElementById('formCoti'));
+
+    //-----Verificar que la cantidad o el precio sean negativos
+
+    var cantidadInputs = document.getElementById('formCoti').querySelectorAll('.cantidad');
+    precioInputs = document.getElementById('formCoti').querySelectorAll('.precio')
+
+    for (var i = 0; i < cantidadInputs.length; i++) {
+        var cantidad = cantidadInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (cantidad <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa una cantidad correcta');
+            cantidadInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    for (var i = 0; i < precioInputs.length; i++) {
+        var precio = precioInputs[i].value;
+
+        // Verifica si la cantidad es menor o igual a 0
+        if (precio <= 0) {
+            document.getElementById('btnEnviar').disabled = false;
+            mostrarAlerta('warning', 'Por favor, ingresa un monto correcto');
+            precioInputs[i].focus();
+            return; // Detiene la ejecución de la función
+        }
+    }
+
+    //-----
 
     fetch(document.getElementById('formCoti').action, {
         method: document.getElementById('formCoti').method,
@@ -160,7 +232,7 @@ function editarCoti(){
             }
         })
         .catch(error => {
-            mostrarAlerta('danger', error);
+            mostrarAlerta('danger', 'Error al editar la cotizacion');
         });
         
         removeAlert();
@@ -414,9 +486,10 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
         defaultBorder: false,
     },
     defaultStyle: {
-        fontSize: 10
+        fontSize: 10,
+        columnGap: 20
     },
-    pageMargins: [0, 0, 0, 0],
+    pageMargins: [0, 0, 0, 40],
     };
 
     documentDefinition.content.push({
@@ -507,6 +580,78 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
     
     documentDefinition.content.push(divImageCuenta);
 
+    condiciones = [
+        {
+            text: 'CONDICIONES GENERALES DE VENTA',
+            margin:[60, 60, 60, 10],
+            alignment: 'center',
+            fontSize: 14,
+            decoration: 'underline',
+            pageBreak: 'before',
+            style: 'header'
+            
+        },  
+        
+        	{
+            margin:[40, 20, 40, 60],
+			alignment: 'justify',
+			columns: [
+				{
+                   // width: 270,
+                    //columnGap: 10,
+                    fontSize: 12,
+					text: [
+                    'Las condiciones establecidas en el presente documento son las únicas que obligan a ambas partes, a menos que se acuerden condiciones diferentes en la oferta presentada por GRUPO ZORE EIRL. Cualquier modificación posterior o declaración adicional, así como las condiciones incluidas en las órdenes de compra del cliente, sólo serán válidas cuando GRUPO ZORE EIRL las haya aceptado de forma expresa y por escrito. Considerando lo anterior, si en la orden de compra se observan condiciones distintas a las acordadas por GRUPO ZORE EIRL, esta podrá optar por no recibirla hasta que se realicen las modificaciones correspondientes. \n\n',
+                    {text: 'Indice:\n', bold: true},
+                    '1. Validez de la propuesta \n  2. Plazo y lugar de entrega \n  3. Formas de pago \n  4. Órdenes de compra \n  5. Garantía y post venta \n\n', 
+                    {text: '1. Validez de la propuesta \n\n', decoration: 'underline', bold: true},
+                    '> Aceptar la cotización y/o recibir el producto o servicio, implica la aceptación de las condiciones de venta que se presentan en el documento. \n > El CLIENTE tiene la responsabilidad de comunicar a su personal las presentes condiciones de venta, así como tomar las medidas correspondientes para el cumplimiento de las mismas.\n\n',
+                    {text: '2. Plaza y lugar de entrega \n\n', decoration: 'underline', bold: true},
+                    '> En caso de que en la oferta se haya acordado la entrega en el lugar señalado por el CLIENTE, GRUPO ZORE EIRL habrá cumplido con su obligación al llevar el bien al lugar solicitado (puesto en puerta). (la descarga cuenta por parte de ellos) \n > Por cada entrega de equipos, se requiere que el CLIENTE, representado por el encargado y/o responsable en el punto de entrega, firme y selle toda Guía de Remisión. \n > En el caso de que el CLIENTE designe una agencia de transporte, GRUPO ZORE EIRL.  \n\n\n\n\n',
+                    {text: '4. Órdenes de compra \n\n', decoration: 'underline', bold: true},
+                    '> El bien se ofrecerá de acuerdo a las especificaciones técnicas señaladas en la Oferta, una vez suscrita la Orden de Compra, no se aceptará modificación alguna. \n > GRUPO ZORE EIRL, mediante su área de Administración de Ventas, pondrá a disposición del CLIENTE la información que este requiera acerca del avance del proceso de entrega del bien.\n  > GRUPO ZORE EIRL asesora al cliente en la selección de equipos, pero la responsabilidad sobre la idoneidad de lo comprado recae únicamente en el CLIENTE.\n > La fabricación o despacho de los equipos solicitados en la Orden de Compra iniciará una vez que el cliente haya cumplido con las condiciones establecidas en la misma. \n\n', 
+                    {text: '5. Garantía y post venta \n\n', decoration: 'underline', bold: true},
+                    '> En GRUPO ZORE EIRL, nos comprometemos a proporcionar equipos que cumplan con las especificaciones técnicas proporcionadas por nuestros CLIENTE y que sean aptos para resistir las condiciones ambientales habituales en el lugar de operación designado. \n\n > Nosotros, en GRUPO ZORE EIRL, nos encargaremos de reparar o reemplazar, sin costo alguno, cualquier equipo, pieza o accesorio que presente defectos de fabricación durante el período de garantía, siempre y cuando sean verificados por nuestro equipo técnico. \n\n > Es importante tener en cuenta que la garantía no cubrirá los costos asociados con el desmontaje, carga, transporte al almacén, retorno y reinstalación del equipo defectuoso en las instalaciones del cliente. Estos gastos correrán por cuenta del CLIENTE. \n\n > La garantía no se extenderá al desgaste natural del equipo, ni a desperfectos consecuencia de una instalación o aplicación inapropiada y/o falta de mantenimiento. De ser transferido el'
+                        ]
+				},
+				{
+                    //width: 270,
+                    //columnGap: 10,
+                    fontSize: 12,
+					text: [
+                     'cumplirá su obligación al entregar el bien en la agencia indicada. Importante mencionar que los riesgos asociados con el manejo inadecuado del bien por parte de la agencia recaen en el CLIENTE.\n\n', 
+                    {text: '3. Formas de pago \n', decoration: 'underline', bold: true},
+                    '> Los pagos se realizarán de acuerdo a los términos acordados en la oferta entre GRUPO ZORE EIRL y el CLIENTE. \n\n > En caso de que el bien adquirido deba ser instalado y puesta en marcha por el CLIENTE, y este no pueda llevarlo a cabo, siendo esta acción bajo la responsabilidad plena del CLIENTE en su interpretación más amplia, no se requerirá la conformidad de la instalación y puesta en marcha para proceder con la facturación y la contabilización del plazo para su cancelación. Bastará con la constancia de entrega del bien, único documento sustentatorio para la aceptación de la factura por parte del CLIENTE. \n\n > En caso de que el bien adquirido deba ser instalado y puesto en marcha por GRUPO ZORE EIRL y este no pueda ser realizado por causas atribuibles al cliente, tampoco se requerirá la conformidad de la instalación y puesto en marcha para proceder con la facturación y la contabilización del plazo para su cancelación. Bastará con la constancia de entrega del bien, único documento sustentatorio para la aceptación de la factura por parte del CLIENTE. En este caso, el cliente podrá retener únicamente los costos de puesta en marcha, pero se le aplicarán los costos secundarios y viáticos correspondientes. \n\n > En el caso de que la venta involucre más de 1 bien y GRUPO ZORE EIRL haya cumplido parcialmente, podrá facturar por dicha entrega o puesta a disposición. Por otro lado, luego de la recepción de cualquier factura por parte del CLIENTE, GRUPO ZORE EIRL no aceptará modificación alguna de la razón social del cliente o cualquier otra variación que invalide la factura emitida. \n\n\n\n\n producto por parte del cliente a un tercero, este último podrá hacer uso de la garantía, siempre que acredite la propiedad misma o documento de acta de entrega en caso. \n\n > La manipulación interna, modificaciones, alteraciones, reparaciones y/o desmontaje del equipo realizados por el CLIENTE o terceros distintos a GRUPO ZORE EIRL cancelarán de plano la garantía que cubre el bien sin que el CLIENTE pueda efectuar reclamo alguno al respecto.\n\n > Todas las solicitudes de servicio deben ser enviadas sólo al correo de soporte técnico: soporte@grupozore.com y/o vía telefónica al teléfono 912710234. En un plazo no menor a 3 días hábiles de su solicitud nos comunicaremos para coordinar la atención técnica. \n\n  > Asimismo, GRUPO ZORE EIRL no trabaja con devoluciones de productos.'
+                            ]
+
+				}
+			],
+
+            styles: {
+                header: {
+                fontSize: 18,
+                bold: true
+                  },
+                bigger: {
+                fontSize: 15,
+                italics: true
+                  },
+                smallText:{
+                fontSize: 8,
+                color: fourth,
+                bold: true
+                  },
+                },
+                defaultStyle: {
+                columnGap: 20
+                },
+		},
+        
+    ]
+    
+
+    documentDefinition.content.push(condiciones);
+
     return documentDefinition;
 
 }
@@ -549,352 +694,123 @@ function getDataPDF(id_coti, generatePdfCoti){//Generar PDF coti
                     pdfMake.createPdf(documentDefinition).open();
                 }
             }catch{
-                mostrarAlerta('danger', 'Error al generar el PDF:' + error)
+                mostrarAlerta('danger', 'Error al generar el PDF')
             }
         })
         .catch(err => {
-            console.error("Error al generar PDF", err);
-            // Maneja el error de manera explícita (puedes mostrar un mensaje de error o realizar otras acciones necesarias)
+            mostrarAlerta('danger', 'Error al generar el PDF')
         });
-}
-
-//Funcion que registra un pedido especifico de una coti, carga la cotizacion y la envia por correo
-function registrarPedido(id_coti, generatePdfCoti){
-
-    const resultado = document.getElementById("resultado");
-
-    var checkboxes = document.querySelectorAll('.form-check-input');
-
-    var itemsMarcados = Array.from(checkboxes)
-        .filter(function (checkbox) {
-            return checkbox.checked;
-        })
-        .map(function (checkbox) {
-            return checkbox.value;
-        });
-
-    // Verificar si al menos uno está marcado
-    if (itemsMarcados.length === 0) {
-        return mostrarAlerta('danger', 'Debes marcar al menos un producto');
-    }
-
-    arrayDeValores = Object.values(itemsMarcados);
-
-    // Deshabilitar el botón de enviar
-    document.querySelector('[class^="btnEnviarPedido"]').disabled = true;
-
-    const url = "../control/getcotipedido.php";
-    const formaData = new FormData();
-    formaData.append("id_coti", id_coti);
-    formaData.append("itemsMarcados", itemsMarcados);
-
-    let arrayCoti = [];
-    let arrayCont = [];
-    let arrayProd = [];
-    let arrayUser = [];
-
-    fetch(url, {
-        method: "POST",
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            arrayCoti = data.resCoti;
-            arrayCont = data.resCont;
-            arrayProd = data.resProd;
-            arrayUser = data.resUser;
-
-            documentDefinition = generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser);
-
-            pdfMake.createPdf(documentDefinition).getBlob(function (blob) {
-                const formData = new FormData(document.getElementById('formCoti'));
-                formData.append('pdf', blob, 'coti_pedido.pdf');
-                formData.append('correlativo', arrayCoti['correlativo']);
-    
-                if(formData.get('archivos[]').size == 0){
-                    formData.delete('archivos[]');
-                }
-    
-                /*const formData = new FormData();
-    
-                formData.append('pdf', blob, 'coti_pedido.pdf');
-                formData.append('correlativo', arrayCoti['correlativo']);
-    
-                document.getElementById('formCoti').elements.forEach(item => {
-                    if(item.tagName == 'INPUT'){
-                        const value = item.value;
-                        const name = item.name;
-    
-                        if(name === 'archivos[]') {
-                            
-                        console.log(name,value);
-                            if(value.size > 0){
-                                formData.append(name, value, value.name);
-                                
-                            }
-                            return;
-                        }
-                        formData.append(name, value);
-                        
-                    }
-                })*/
-    
-                // Utilizar fetch para enviar el PDF al servidor y adjuntarlo al correo
-                fetch(document.getElementById('formCoti').action, {
-                    method: document.getElementById('formCoti').method,
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    mostrarAlerta(data.tipo, data.mensaje);
-    
-                    if(data.redir == true){
-                        setTimeout(function() {
-                            window.location.href = "../vistas/listacotizacion.php";
-                        }, 3000);
-                    }else{
-                        // Volver a habilitar el botón de enviar después de la consulta
-                        document.getElementById('btnEnviar').disabled = false;
-                    }
-                })
-                .catch(error => {
-                    mostrarAlerta('danger', error);
-                });
-            });
-        })
-        .catch(err => {
-            mostrarAlerta('danger', "Error al generar PDF" + err);
-
-            // Volver a habilitar el botón de enviar después de la consulta
-            document.getElementById('btnEnviar').disabled = false;
-        });
-
 }
 
 function actConex(id_cliente,tipo){
+
+    try {
     
-    const divcon = document.getElementById("divcon"+id_cliente);
+        const divcon = document.getElementById("divcon"+id_cliente);
 
-    const regEnt = document.getElementById("regEnt"+id_cliente);
-    const regSal = document.getElementById("regSalDiv"+id_cliente);
+        const regEnt = document.getElementById("regEnt"+id_cliente);
+        const regSal = document.getElementById("regSalDiv"+id_cliente);
 
-    const factor = document.getElementById("factor"+id_cliente);
+        const factor = document.getElementById("factor"+id_cliente);
 
-    if(tipo == 'trafotritorre' || tipo == 'trafotrirack' || tipo == 'estabitritorre' || tipo == 'estabitrirack'){
-        divcon.innerHTML = `
-            <div class="md-form mb-2">
-                <i class="grey-text">Conexión Primario</i>
-                <select name="tipo-factor" id="conpri${id_cliente}" class="form-select">
-                    <option>Delta</option>
-                    <option>Estrella</option>
-                    <option>Delta-Estrella</option>
-                </select>
-            </div>
-            <div class="md-form mb-2">
-                <i class="grey-text">Conexión Secundario</i>
-                <select name="tipo-factor" id="consec${id_cliente}" class="form-select">
-                    <option>Delta</option>
-                    <option>Estrella</option>
-                    <option>Delta-Estrella</option>
-                </select>
-            </div>
-        `;
-    }else{
-        divcon.innerHTML = `
-        `;
-    }
-
-    if(tipo == 'estabimonotorre' || tipo == 'estabimonorack' || tipo == 'estabitritorre' || tipo == 'estabitrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
-        regEnt.innerHTML = `
-            <div class="md-form mb-2">
-                <i class="grey-text">Regulacion de entrada</i>
-                <div class="input-group">
-                    <span class="input-group-text">-</span>
-                    <input type="number" id="regEnt1${id_cliente}" class="form-control" placeholder="" required>
-                    <span class="input-group-text">%</span> 
-                    <span class="input-group-text">+</span>
-                    <input type="number" id="regEnt2${id_cliente}" class="form-control" placeholder="" required>
-                    <span class="input-group-text">%</span> 
+        if(tipo == 'trafotritorre' || tipo == 'trafotrirack' || tipo == 'estabitritorre' || tipo == 'estabitrirack'){
+            divcon.innerHTML = `
+                <div class="md-form mb-2">
+                    <i class="grey-text">Conexión Primario</i>
+                    <select name="tipo-factor" id="conpri${id_cliente}" class="form-select">
+                        <option>Delta</option>
+                        <option>Estrella</option>
+                        <option>Delta-Estrella</option>
+                    </select>
                 </div>
-            </div>
-        `;
-        regSal.innerHTML = `
-            <div class="md-form mb-2">
-                <i class="grey-text">Regulacion de salida</i>
-                <div class="input-group">
-                    <span class="input-group-text">±</span>
-                    <input type="number" id="regSal${id_cliente}" class="form-control" placeholder="" required>
-                    <span class="input-group-text">%</span> 
+                <div class="md-form mb-2">
+                    <i class="grey-text">Conexión Secundario</i>
+                    <select name="tipo-factor" id="consec${id_cliente}" class="form-select">
+                        <option>Delta</option>
+                        <option>Estrella</option>
+                        <option>Delta-Estrella</option>
+                    </select>
                 </div>
-            </div>
-        `;
-    }else{
-        regEnt.innerHTML = `
-        `;
-        regSal.innerHTML = `
-        `;
-    }
+            `;
+        }else{
+            divcon.innerHTML = `
+            `;
+        }
 
-    if(tipo == 'automonorack' || tipo == 'automonotorre' || tipo == 'autotritorre' || tipo == 'autotrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
-        factor.disabled = true;
-        factor.value = '';
-    }else{
-        factor.disabled = false;
+        if(tipo == 'estabimonotorre' || tipo == 'estabimonorack' || tipo == 'estabitritorre' || tipo == 'estabitrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
+            regEnt.innerHTML = `
+                <div class="md-form mb-2">
+                    <i class="grey-text">Regulacion de entrada</i>
+                    <div class="input-group">
+                        <span class="input-group-text">-</span>
+                        <input type="number" id="regEnt1${id_cliente}" class="form-control" placeholder="" required>
+                        <span class="input-group-text">%</span> 
+                        <span class="input-group-text">+</span>
+                        <input type="number" id="regEnt2${id_cliente}" class="form-control" placeholder="" required>
+                        <span class="input-group-text">%</span> 
+                    </div>
+                </div>
+            `;
+            regSal.innerHTML = `
+                <div class="md-form mb-2">
+                    <i class="grey-text">Regulacion de salida</i>
+                    <div class="input-group">
+                        <span class="input-group-text">±</span>
+                        <input type="number" id="regSal${id_cliente}" class="form-control" placeholder="" required>
+                        <span class="input-group-text">%</span> 
+                    </div>
+                </div>
+            `;
+        }else{
+            regEnt.innerHTML = `
+            `;
+            regSal.innerHTML = `
+            `;
+        }
+
+        if(tipo == 'automonorack' || tipo == 'automonotorre' || tipo == 'autotritorre' || tipo == 'autotrirack' || tipo == 'estabiautomonotorre' || tipo == 'estabiautomonorack' || tipo == 'estabiautotrifatorre' || tipo == 'estabiautotrifarack'){
+            factor.disabled = true;
+            factor.value = '';
+        }else{
+            factor.disabled = false;
+        }
+    } catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
     }
 }
 
 function editFactor(id_cliente){
-    const factorpot = document.getElementById("factorpot"+id_cliente);
 
-    factorpot.removeAttribute('disabled');
+    try{
+        const factorpot = document.getElementById("factorpot"+id_cliente);
+    
+        factorpot.removeAttribute('disabled');
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
 }
 
 function editClase(id_cliente){
-    const divclase = document.getElementById("divclase"+id_cliente);
-
-    divclase.innerHTML = `
-        <input type="text" id="clase${id_cliente}" class="form-control" placeholder="Clase">
-    `;
-}
-
-//Obtiene los datos de la cotizacion de un pedido especifico para luego llamar al script que genera la coti y mostrarla en pantalla
-function pdfCotiPedido(arrayId, generatePdfCoti){
+    try{
+        const divclase = document.getElementById("divclase"+id_cliente);
     
-    arrayId = arrayId.split(',');
-
-    let arrayIdKeys = {
-        id_pedidos: arrayId[0],
-        id_coti: arrayId[1]
-    };
-    
-    const resultado = document.getElementById("resultado");
-
-    const url = "../control/getpdfcotipedido.php";
-    const formaData = new FormData();
-    formaData.append("id_coti", arrayIdKeys['id_coti']);
-    formaData.append("id_pedido", arrayIdKeys['id_pedidos']);
-
-    let arrayCoti = [];
-    let arrayCont = [];
-    let arrayProd = [];
-    let arrayUser = [];
-
-    fetch(url, {
-        method: "POST",
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            arrayCoti = data.resCoti;
-            arrayCont = data.resCont;
-            arrayProd = data.resProd;
-            arrayUser = data.resUser;
-
-            documentDefinition = generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser);
-    
-            // Función para verificar si el dispositivo es un iPhone
-            function esIPhone() {
-                return /iPhone/i.test(navigator.userAgent);
-            }
-
-            // Ejemplo de uso
-            if (esIPhone()) {
-                pdfMake.createPdf(documentDefinition).download();
-            } else {
-                pdfMake.createPdf(documentDefinition).open();
-            }
-        })
-        .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
-        });
-
-}
-
-//Obtiene los datos de la cotizacion de un pedido especifico para luego llamar al script que genera la coti, adjuntarla en un correo y enviarlo mientras que anula el pedido
-function anularPedido(arrayId, generatePdfCoti){
-
-    arrayId = arrayId.split(',');
-
-    let arrayIdKeys = {
-        id_pedidos: arrayId[0],
-        id_coti: arrayId[1]
-    };
-    
-    const resultado = document.getElementById("resultado");
-
-    const url = "../control/getpdfcotipedido.php";
-    const formaData = new FormData();
-    formaData.append("id_coti", arrayIdKeys['id_coti']);
-    formaData.append("id_pedido", arrayIdKeys['id_pedidos']);
-
-    let arrayCoti = [];
-    let arrayCont = [];
-    let arrayProd = [];
-    let arrayUser = [];
-
-    fetch(url, {
-        method: "POST",
-        body: formaData,
-    })
-        .then(response => response.json())
-        .then(data => {
-            arrayCoti = data.resCoti;
-            arrayCont = data.resCont;
-            arrayProd = data.resProd;
-            arrayUser = data.resUser;
-            
-            documentDefinition = generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser);
-            
-            pdfMake.createPdf(documentDefinition).getBlob(function (blob) {
-                const formData = new FormData(document.getElementById('formanular'+arrayIdKeys['id_pedidos']));
-                formData.append('pdf', blob, 'coti_pedido.pdf');
-                formData.append('correlativo', arrayCoti['correlativo']);
-                formData.append('nombrecliente', arrayCoti['razon_social']);
-                formData.append('id_pedido', arrayIdKeys['id_pedidos']);
-    
-                // Utilizar fetch para enviar el PDF al servidor y adjuntarlo al correo
-                fetch(document.getElementById('formanular'+arrayIdKeys['id_pedidos']).action, {
-                    method: document.getElementById('formanular'+arrayIdKeys['id_pedidos']).method,
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    mostrarAlerta(data.tipo, data.mensaje);
-    
-                    if(data.redir == true){
-                        setTimeout(function() {
-                            window.location.href = "../vistas/listapedidos.php";
-                        }, 3000);
-                    }else{
-                        // Volver a habilitar el botón de enviar después de la consulta
-                        document.getElementById('btnAnular'+arrayIdKeys['id_pedidos']).disabled = false;
-                    }
-                })
-                .catch(error => {
-                    mostrarAlerta('danger', error);
-                });
-            });
-            
-        })
-        .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
-        });
-
+        divclase.innerHTML = `
+            <input type="text" id="clase${id_cliente}" class="form-control" placeholder="Clase">
+        `;
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
 }
 
 function isValidDate(dateString) {
-    var dateObject = new Date(dateString);
-    
-    return !isNaN(dateObject.getTime()) && 
-           dateObject.toISOString().slice(0,10) === dateString;
+    try{
+        var dateObject = new Date(dateString);
+        
+        return !isNaN(dateObject.getTime()) && 
+            dateObject.toISOString().slice(0,10) === dateString;
+    }catch (error) {
+        mostrarAlerta('danger', "Se ha producido un error");
+    }
 }
 
 function filtrarCoti() {
@@ -975,7 +891,7 @@ function filtrarCoti() {
         });
     })
     .catch(err => {
-        console.error(err);
+        mostrarAlerta('danger', "Se ha producido un error");
     });
 }
 

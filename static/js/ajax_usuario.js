@@ -26,7 +26,7 @@ function registrarUsuario() {
 
         // Si hay campos vacíos, mostrar una alerta y asignar el foco al primer campo vacío
         if (camposVacios) {
-            mostrarAlerta('danger', 'Por favor, complete todos los campos requeridos.');
+            mostrarAlerta('warning', 'Por favor, complete todos los campos requeridos.');
             
             if (primerInputVacio) {
                 primerInputVacio.focus();
@@ -64,20 +64,11 @@ function registrarUsuario() {
                 removeAlert();
             })
             .catch(error => {
-                resultado.innerHTML = `
-                    <div class="alert alert-danger" id="miAlert" role="alert">
-                        Error: ${error.message}
-                    </div>
-                `
+                mostrarAlerta('danger', "Error al registrar usuario");
             });
             
     }else{
-        resultado.innerHTML = `
-            <div class="alert alert-danger" id="miAlert" role="alert">
-                Las claves ingresadas son diferentes
-            </div>
-        `
-
+        mostrarAlerta('warning', "Las claves ingresadas son diferentes");
         removeAlert();
     }
 }
@@ -132,19 +123,10 @@ function editarUsuario(id_usuario) {
                 removeAlert();
             })
             .catch(error => {
-                resultado.innerHTML = `
-                    <div class="alert alert-danger" id="miAlert" role="alert">
-                        Error: ${error.message}
-                    </div>
-                `
+                mostrarAlerta('danger', "Error al editar usuario");
             });
     }else{
-        resultado.innerHTML = `
-            <div class="alert alert-danger" id="miAlert" role="alert">
-                Las claves ingresadas son diferentes
-            </div>
-        `
-
+        mostrarAlerta('warning', "Las claves ingresadas son diferentes");
         removeAlert();
     }
 }
@@ -165,11 +147,7 @@ function eliminarUsuario(id_usuario) {
             resultado.innerHTML = data.data;
         })
         .catch(error => {
-            resultado.innerHTML = `
-                <div class="alert alert-danger" id="miAlert" role="alert">
-                    Error: ${error.message}
-                </div>
-            `
+            mostrarAlerta('danger', "Error al eliminar usuario");
 
             removeAlert();
         });
@@ -334,7 +312,9 @@ function registrarEntrada(id_usuario){
         resultado.innerHTML = data.data;
 
     })
-    .catch(err => console.log(err));
+    .catch(error => {
+        mostrarAlerta('danger', 'Error al registrar entrada');
+    });
 
     getListadoAsistencia();
 
@@ -356,7 +336,9 @@ function registrarSalida(id_usuario){
     .then(data => {
         resultado.innerHTML = data.data;
     })
-    .catch(err => console.log(err));
+    .catch(error => {
+        mostrarAlerta('danger', 'Error al registrar salida');
+    });
     
     getListadoAsistencia();
 
@@ -370,23 +352,6 @@ function editarPerfil(id_usuario) {
     
     var clavesIguales = compararClave3(passwordInput1, passwordInput2);
     if(clavesIguales == true){
-
-        /*const usuario = obtenerValoresInput("usuarioperfil");
-        const clave = obtenerValoresInput("claveperfil");
-        const nombre = obtenerValoresInput("nombreperfil");
-        const apellido = obtenerValoresInput("apellidoperfil");
-        const telefono = obtenerValoresInput("telefonoperfil");
-        const correo = obtenerValoresInput("correoperfil");
-
-        const url = "../control/editar_usuario.php";
-        const formaData = new FormData();
-        formaData.append("id_usuario", id_usuario);
-        formaData.append("usuario", usuario);
-        formaData.append("clave", clave);
-        formaData.append("nombre", nombre);
-        formaData.append("apellido", apellido);
-        formaData.append("telefono", telefono);
-        formaData.append("correo", correo);*/
 
         const formPerfil = document.getElementById('formPerfil');
 
@@ -402,13 +367,9 @@ function editarPerfil(id_usuario) {
                 resultado.innerHTML = data.data;
             })
             .catch(error => {
-                resultado.innerHTML = `
-                    <div class="alert alert-danger" id="miAlert" role="alert">
-                        Error: ${error.message}
-                    </div>
-                `
+                mostrarAlerta('danger', "Error al editar perfil");
             });
-                
+        
             $('#perfil').modal('hide');
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
@@ -417,12 +378,196 @@ function editarPerfil(id_usuario) {
 
             removeAlert();
     }else{
-        resultado.innerHTML = `
-            <div class="alert alert-danger" id="miAlert" role="alert">
-                Las claves ingresadas son diferentes
-            </div>
-        `
-
+        mostrarAlerta('warning', "Las claves ingresadas son diferentes");
+        
         removeAlert();
     }
 }
+
+function filtrarAsistencia() {
+    let num_registros = document.getElementById("num_registros").value; // Obtengo la cantidad de registro que desea mostrar
+    let content = document.getElementById("contenido"); // Obtengo el contenedor donde estarán los datos de la BD
+    let pagina = document.getElementById("pagina").value; // Obtengo el numero de pagina
+    let orderCol = document.getElementById("orderCol").value; // Obtengo el numero de pagina
+    let orderType = document.getElementById("orderType").value; // Obtengo el numero de pagina
+
+    checkDateAsistencia = document.getElementById("checkDateAsistencia");
+
+    if(!checkDateAsistencia.checked){
+        var dateIn = document.getElementById("dateIn").value; // Fecha de inicio para el filtro
+        var dateOut = document.getElementById("dateOut").value; // Fecha final para el filtro
+        
+        if(isNaN(Date.parse(dateIn)) || isNaN(Date.parse(dateOut))){
+            mostrarAlerta('warning', 'Seleccione una fecha valida');
+            
+            removeAlert();
+
+            return;
+        }
+
+        if (dateIn >= dateOut) {
+            mostrarAlerta('warning', 'Debe seleccionar una fecha de inicio menor a la final');
+            
+            removeAlert();
+
+            return;
+        }
+    }else{
+        var dateIn = false;
+        var dateOut = false;
+    }
+    
+    if (pagina == null) {
+        pagina = 1;
+    }
+
+    const formFilterUsuario = document.getElementById('formFilterUsuario');
+
+    const formData = new FormData(formFilterUsuario);
+    
+    formData.append('registros', num_registros); // Agregamos la cantidad de registros al FormData
+    formData.append('pagina', pagina); 
+    formData.append('orderCol', orderCol); 
+    formData.append('orderType', orderType);
+
+    fetch(formFilterUsuario.action, { // Generamos la petición con fetch
+        method: formFilterUsuario.method,
+        body: formData
+    })
+    .then(response => response.json()) // Recibimos el JSON que viene desde el archivo PHP
+    .then(data => {
+        content.innerHTML = data.data;
+        document.getElementById("lbl-total").innerHTML = `Mostrando ${data.totalFiltro} de ${data.totalRegistros} registros`;
+        document.getElementById("nav-paginacion").innerHTML = data.paginacion;
+    })
+    .catch(err => {
+        mostrarAlerta('danger', "Se ha producido un error");
+    });
+}
+
+function nextPageFilterAsistencia(pagina){
+    document.getElementById('pagina').value = pagina
+    filtrarAsistencia()
+}
+
+function eliminarFiltroAsistencia(){
+    const formFilterUsuario = document.getElementById('formFilterUsuario');
+    formFilterUsuario.reset();
+    var dateIn = document.getElementById("dateIn"); // Fecha de inicio para el filtro
+    var dateOut = document.getElementById("dateOut"); // Fecha final para el filtro
+    dateIn.disabled = true;
+    dateOut.disabled = true;
+    getListadoAsistencia();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    checkDateAsistencia = document.getElementById("checkDateAsistencia");
+
+    checkDateAsistencia.addEventListener("change", function(event){
+        disabledDatesInputAsistencia();
+    });
+});
+
+function disabledDatesInputAsistencia(){
+    var dateIn = document.getElementById("dateIn"); // Fecha de inicio para el filtro
+    var dateOut = document.getElementById("dateOut"); // Fecha final para el filtro
+
+    if(dateIn.disabled == true){
+        dateIn.disabled = false;
+        dateOut.disabled = false;
+    }else{
+        dateIn.disabled = true;
+        dateOut.disabled = true;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Obtener el botón para generar el Excel
+    var buttonExcel = document.getElementById("excelAsist");
+
+    // Agregar un event listener para el evento 'click' del botón
+    buttonExcel.addEventListener("click", function(event) {
+        // Evitar el comportamiento predeterminado del botón
+        event.preventDefault();
+        checkDateAsistencia = document.getElementById("checkDateAsistencia");
+
+        // Obtener los valores de los campos del formulario
+
+        if(!checkDateAsistencia.checked){
+            var dateIn = document.getElementById("dateIn").value; // Fecha de inicio para el filtro
+            var dateOut = document.getElementById("dateOut").value; // Fecha final para el filtro
+            if(isNaN(Date.parse(dateIn)) || isNaN(Date.parse(dateOut))){
+                mostrarAlerta('warning', 'Seleccione una fecha valida');
+                
+                removeAlert();
+    
+                return;
+            }
+    
+            if (dateIn >= dateOut) {
+                mostrarAlerta('warning', 'Debe seleccionar una fecha de inicio menor a la final');
+                
+                removeAlert();
+    
+                return;
+            }
+        }else{
+            var dateIn = false;
+            var dateOut = false;
+        }
+
+        var selectUser = document.getElementById("selectUser").value; // Usuario seleccionado para el filtro
+
+        // Crear un formulario dinámicamente
+        var form = document.createElement("form");
+        form.action = '../control/excelasistencia.php';
+        form.method = 'POST';
+
+        // Crear campos ocultos y agregarlos al formulario
+        var dateInField = document.createElement("input");
+        dateInField.type = "hidden";
+        dateInField.name = "dateIn";
+        dateInField.value = dateIn;
+        form.appendChild(dateInField);
+
+        var dateOutField = document.createElement("input");
+        dateOutField.type = "hidden";
+        dateOutField.name = "dateOut";
+        dateOutField.value = dateOut;
+        form.appendChild(dateOutField);
+
+        var selectUserField = document.createElement("input");
+        selectUserField.type = "hidden";
+        selectUserField.name = "selectUser";
+        selectUserField.value = selectUser;
+        form.appendChild(selectUserField);
+
+        // Agregar el formulario al documento y enviarlo
+        document.body.appendChild(form);
+        form.submit();
+    });
+});
+
+/*document.addEventListener("DOMContentLoaded", function() {
+    // Obtener el formulario
+    var buttonExcel = document.getElementById("excelAsist");
+    
+    // Agregar un event listener para el evento 'submit' del formulario
+    buttonExcel.addEventListener("click", function(event) {
+
+        let dateIn = new Date(document.getElementById("dateIn").value);//Fecha de inicio para el filtro
+        let dateOut = new Date(document.getElementById("dateOut").value);//Fecha final para el filtro
+        let selectUser = document.getElementById("selectUser").value;//Fecha final para el filtro
+
+        const formExcel = new FormData();
+        formExcel.action = '../control/excelasistencia.php';
+        formExcel.method = 'POST';
+
+        formExcel.append("dateIn", dateIn);
+        formExcel.append("dateOut", dateOut);
+        formExcel.append("selectUser", selectUser);
+
+        // Enviar el formulario manualmente
+        formExcel.submit();
+    });
+  });*/
