@@ -486,9 +486,10 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
         defaultBorder: false,
     },
     defaultStyle: {
-        fontSize: 10
+        fontSize: 10,
+        columnGap: 20
     },
-    pageMargins: [0, 0, 0, 0],
+    pageMargins: [0, 0, 0, 40],
     };
 
     documentDefinition.content.push({
@@ -578,6 +579,78 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
     }]
     
     documentDefinition.content.push(divImageCuenta);
+
+    condiciones = [
+        {
+            text: 'CONDICIONES GENERALES DE VENTA',
+            margin:[60, 60, 60, 10],
+            alignment: 'center',
+            fontSize: 14,
+            decoration: 'underline',
+            pageBreak: 'before',
+            style: 'header'
+            
+        },  
+        
+        	{
+            margin:[40, 20, 40, 60],
+			alignment: 'justify',
+			columns: [
+				{
+                   // width: 270,
+                    //columnGap: 10,
+                    fontSize: 12,
+					text: [
+                    'Las condiciones establecidas en el presente documento son las únicas que obligan a ambas partes, a menos que se acuerden condiciones diferentes en la oferta presentada por GRUPO ZORE EIRL. Cualquier modificación posterior o declaración adicional, así como las condiciones incluidas en las órdenes de compra del cliente, sólo serán válidas cuando GRUPO ZORE EIRL las haya aceptado de forma expresa y por escrito. Considerando lo anterior, si en la orden de compra se observan condiciones distintas a las acordadas por GRUPO ZORE EIRL, esta podrá optar por no recibirla hasta que se realicen las modificaciones correspondientes. \n\n',
+                    {text: 'Indice:\n', bold: true},
+                    '1. Validez de la propuesta \n  2. Plazo y lugar de entrega \n  3. Formas de pago \n  4. Órdenes de compra \n  5. Garantía y post venta \n\n', 
+                    {text: '1. Validez de la propuesta \n\n', decoration: 'underline', bold: true},
+                    '> Aceptar la cotización y/o recibir el producto o servicio, implica la aceptación de las condiciones de venta que se presentan en el documento. \n > El CLIENTE tiene la responsabilidad de comunicar a su personal las presentes condiciones de venta, así como tomar las medidas correspondientes para el cumplimiento de las mismas.\n\n',
+                    {text: '2. Plaza y lugar de entrega \n\n', decoration: 'underline', bold: true},
+                    '> En caso de que en la oferta se haya acordado la entrega en el lugar señalado por el CLIENTE, GRUPO ZORE EIRL habrá cumplido con su obligación al llevar el bien al lugar solicitado (puesto en puerta). (la descarga cuenta por parte de ellos) \n > Por cada entrega de equipos, se requiere que el CLIENTE, representado por el encargado y/o responsable en el punto de entrega, firme y selle toda Guía de Remisión. \n > En el caso de que el CLIENTE designe una agencia de transporte, GRUPO ZORE EIRL.  \n\n\n\n\n',
+                    {text: '4. Órdenes de compra \n\n', decoration: 'underline', bold: true},
+                    '> El bien se ofrecerá de acuerdo a las especificaciones técnicas señaladas en la Oferta, una vez suscrita la Orden de Compra, no se aceptará modificación alguna. \n > GRUPO ZORE EIRL, mediante su área de Administración de Ventas, pondrá a disposición del CLIENTE la información que este requiera acerca del avance del proceso de entrega del bien.\n  > GRUPO ZORE EIRL asesora al cliente en la selección de equipos, pero la responsabilidad sobre la idoneidad de lo comprado recae únicamente en el CLIENTE.\n > La fabricación o despacho de los equipos solicitados en la Orden de Compra iniciará una vez que el cliente haya cumplido con las condiciones establecidas en la misma. \n\n', 
+                    {text: '5. Garantía y post venta \n\n', decoration: 'underline', bold: true},
+                    '> En GRUPO ZORE EIRL, nos comprometemos a proporcionar equipos que cumplan con las especificaciones técnicas proporcionadas por nuestros CLIENTE y que sean aptos para resistir las condiciones ambientales habituales en el lugar de operación designado. \n\n > Nosotros, en GRUPO ZORE EIRL, nos encargaremos de reparar o reemplazar, sin costo alguno, cualquier equipo, pieza o accesorio que presente defectos de fabricación durante el período de garantía, siempre y cuando sean verificados por nuestro equipo técnico. \n\n > Es importante tener en cuenta que la garantía no cubrirá los costos asociados con el desmontaje, carga, transporte al almacén, retorno y reinstalación del equipo defectuoso en las instalaciones del cliente. Estos gastos correrán por cuenta del CLIENTE. \n\n > La garantía no se extenderá al desgaste natural del equipo, ni a desperfectos consecuencia de una instalación o aplicación inapropiada y/o falta de mantenimiento. De ser transferido el'
+                        ]
+				},
+				{
+                    //width: 270,
+                    //columnGap: 10,
+                    fontSize: 12,
+					text: [
+                     'cumplirá su obligación al entregar el bien en la agencia indicada. Importante mencionar que los riesgos asociados con el manejo inadecuado del bien por parte de la agencia recaen en el CLIENTE.\n\n', 
+                    {text: '3. Formas de pago \n', decoration: 'underline', bold: true},
+                    '> Los pagos se realizarán de acuerdo a los términos acordados en la oferta entre GRUPO ZORE EIRL y el CLIENTE. \n\n > En caso de que el bien adquirido deba ser instalado y puesta en marcha por el CLIENTE, y este no pueda llevarlo a cabo, siendo esta acción bajo la responsabilidad plena del CLIENTE en su interpretación más amplia, no se requerirá la conformidad de la instalación y puesta en marcha para proceder con la facturación y la contabilización del plazo para su cancelación. Bastará con la constancia de entrega del bien, único documento sustentatorio para la aceptación de la factura por parte del CLIENTE. \n\n > En caso de que el bien adquirido deba ser instalado y puesto en marcha por GRUPO ZORE EIRL y este no pueda ser realizado por causas atribuibles al cliente, tampoco se requerirá la conformidad de la instalación y puesto en marcha para proceder con la facturación y la contabilización del plazo para su cancelación. Bastará con la constancia de entrega del bien, único documento sustentatorio para la aceptación de la factura por parte del CLIENTE. En este caso, el cliente podrá retener únicamente los costos de puesta en marcha, pero se le aplicarán los costos secundarios y viáticos correspondientes. \n\n > En el caso de que la venta involucre más de 1 bien y GRUPO ZORE EIRL haya cumplido parcialmente, podrá facturar por dicha entrega o puesta a disposición. Por otro lado, luego de la recepción de cualquier factura por parte del CLIENTE, GRUPO ZORE EIRL no aceptará modificación alguna de la razón social del cliente o cualquier otra variación que invalide la factura emitida. \n\n\n\n\n producto por parte del cliente a un tercero, este último podrá hacer uso de la garantía, siempre que acredite la propiedad misma o documento de acta de entrega en caso. \n\n > La manipulación interna, modificaciones, alteraciones, reparaciones y/o desmontaje del equipo realizados por el CLIENTE o terceros distintos a GRUPO ZORE EIRL cancelarán de plano la garantía que cubre el bien sin que el CLIENTE pueda efectuar reclamo alguno al respecto.\n\n > Todas las solicitudes de servicio deben ser enviadas sólo al correo de soporte técnico: soporte@grupozore.com y/o vía telefónica al teléfono 912710234. En un plazo no menor a 3 días hábiles de su solicitud nos comunicaremos para coordinar la atención técnica. \n\n  > Asimismo, GRUPO ZORE EIRL no trabaja con devoluciones de productos.'
+                            ]
+
+				}
+			],
+
+            styles: {
+                header: {
+                fontSize: 18,
+                bold: true
+                  },
+                bigger: {
+                fontSize: 15,
+                italics: true
+                  },
+                smallText:{
+                fontSize: 8,
+                color: fourth,
+                bold: true
+                  },
+                },
+                defaultStyle: {
+                columnGap: 20
+                },
+		},
+        
+    ]
+    
+
+    documentDefinition.content.push(condiciones);
 
     return documentDefinition;
 
