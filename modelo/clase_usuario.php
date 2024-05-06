@@ -566,7 +566,7 @@
             $columnsWhere = ["entrada", "salida", "fecha"];
             $tabla = "asistencia";         
 
-            if($dateIn == false && $dateOut == false){
+            if($dateIn == false && $dateOut == false || $dateIn == 'false' && $dateOut == 'false'){
                 if($selectUser != 'todos'){
                     $where = "WHERE id_usuario = $selectUser";
                 }else{
