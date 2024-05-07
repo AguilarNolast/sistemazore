@@ -245,7 +245,7 @@
                             <input type="number" class="precio form-control" onkeyup="totalP(this)" value="{$row2['precio']}" id="precio{$items}" name="precio[]" placeholder="Precio unitario" required>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <input type="number" class="form-control" onkeyup="totalP(this)" value="{$row2['descuento']}" id="descuento{$items}" name="descuento[]" placeholder="Descuento">
+                            <input type="number" class="descuento form-control" onkeyup="totalP(this)" value="{$row2['descuento']}" id="descuento{$items}" name="descuento[]" placeholder="Descuento">
                         </div>
                         
                 HTML;
@@ -265,7 +265,7 @@
                             <input type="text" class="total_producto form-control" id="total_producto{$items}" value="{$total }" readonly placeholder="total" required>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <button type="button" class="btn btn-primary" onclick="eliminar_Item(this.id)" id="btnitem{$items}">
+                            <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this.id)" id="btnitem{$items}">
                                 X
                             </button>
                         </div>

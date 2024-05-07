@@ -126,7 +126,7 @@ function totalP(item){
         calcular_total()
 
     }catch (error) {
-        mostrarAlerta('danger', "Se ha producido un error");
+        mostrarAlerta('danger', "Se ha producido un error" + error);
     }
     
 }
@@ -211,7 +211,7 @@ function calcular_total(){
         }
 
     }catch (error) {
-        mostrarAlerta('danger', "Se ha producido un error");
+        mostrarAlerta('danger', "Se ha producido un error" + error);
     }
 }
 
