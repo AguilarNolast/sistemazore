@@ -3,10 +3,10 @@
   include 'header.php';
 
 ?>
-<div class="container">
-<br>
+<div class="container-fluid">
+
  <h3 class="text-center">Listado de clientes</h3>
- <br>
+ 
         
   <div id="resultado"></div>
   <div id="alertaResultado"></div> 
@@ -36,7 +36,7 @@
               <div class="md-form mb-2">
                <i class="grey-text">Razon social / Nombre</i>
                 <input type="text" id="entidad" class="form-control" placeholder="Razon social / Nombre y apellido" required>
-              </div><br><br>
+              </div>
               <div class="md-form mb-2 row">
                 <i class="grey-text col">Dirección</i>
                 <i class="grey-text col">Distrito</i>
@@ -53,7 +53,7 @@
                       <option>Distribuidor</option>
                       <option>Cliente final</option>
                   </select>
-              </div><br><br>
+              </div>
               <div class="md-form mb-2">
                <i class="grey-text">Tipo de pago</i>
                 <div class="input-group" id="inputpago"  onselectstart="return false;">
@@ -101,7 +101,7 @@
                     </div>
                   </div>
                 </div>
-              <br>
+              
               <div class=" justify-content-center md-form">
                 <button  type="button"  onclick="añadirContacto()" id="addcontacto"  class="btn btn-primary">Agregar</button>
               </div>
@@ -119,7 +119,7 @@
   </form>
 </nav>
 
-      <br>
+      
 <label for="num_registros">Mostrar: </label>
 
 <select name="num_registros" id="num_registros">
@@ -130,7 +130,7 @@
 
   <label for="num_registros">registros</label>
   <div class="table-responsive">
-    <table class="table table-striped text-center">
+    <table class="table table-striped text-center table-hover table-borderless table-sm">
       <thead>
         <tr>
           <th class="sort asc" scope="col" scope="row">RUC / DNI</th>
@@ -141,7 +141,7 @@
           <th class="sort asc" scope="col">Opciones</th>
         </tr>
       </thead>
-      <tbody id="contenido">
+      <tbody class="table-group-divider" id="contenido">
       </tbody>
     </table>
   </div>

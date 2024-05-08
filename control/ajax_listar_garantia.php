@@ -72,17 +72,19 @@
                     <td>{$row['factura']}</td>
                     <td>{$row['oc']}</td>
                     <td>
-                        <button type="button" class="btn btn-danger" onclick="getGarantia({$row['id_garantia']})" id="{$row['id_garantia']}">
-                            <i class="fas fa-file-pdf"></i>
-                        </button>
+                        <div class="d-flex flex-row justify-content-center">
+                            <button type="button" class="btn btn-danger" onclick="getGarantia({$row['id_garantia']})" id="{$row['id_garantia']}">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarGarantia{$row['id_garantia']}">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarGarantia{$row['id_garantia']}">
-                            <i class="far fa-trash-can"></i>
-                        </button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarGarantia{$row['id_garantia']}">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarGarantia{$row['id_garantia']}">
+                                <i class="far fa-trash-can"></i>
+                            </button>
+                        </div>
                     </td>
 
                 <td>

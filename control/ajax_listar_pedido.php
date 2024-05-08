@@ -111,11 +111,13 @@
             if($row['estado'] == 'activo'){
                 $output['data'] .= <<<HTML
                         <td>
-                            <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#anularPedido{$row['id_pedidos']}">Anular</button>
+                            <div class="d-flex flex-row justify-content-center">
+                                <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#anularPedido{$row['id_pedidos']}">Anular</button>
 
-                            <button type="button" class="btnpdfpedido btn btn-success" id="{$row['id_pedidos']},{$row['id_coti']}" style="margin-left: 10px">
-                                <i class="fas fa-file-pdf"></i>
-                            </button>
+                                <button type="button" class="btnpdfpedido btn btn-success" id="{$row['id_pedidos']},{$row['id_coti']}" style="margin-left: 10px">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
+                            </div>
                         </td>
                         <td>
                             <div class="modal fade" id="anularPedido{$row['id_pedidos']}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

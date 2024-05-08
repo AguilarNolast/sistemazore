@@ -40,9 +40,11 @@
                     <td>{$row[5]}</td>  
                     <td>{$row[4]}</td>  
                     <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarUsuario{$row[0]}"><i class="fas fa-pen"></i></button>
+                        <div class="d-flex flex-row justify-content-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarUsuario{$row[0]}"><i class="fas fa-pen"></i></button>
 
-                        <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#eliminarUsuario{$row[0]}"><i class="far fa-trash-can"></i></button>
+                            <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#eliminarUsuario{$row[0]}"><i class="far fa-trash-can"></i></button>
+                        </div>   
                     </td>   
                     <td>   
                         <!-- Modal -->

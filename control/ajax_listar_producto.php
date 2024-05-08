@@ -40,9 +40,11 @@
                     <td>{$row[7]}</td>
                     <td>{$row[4]} x {$row[5]} x {$row[6]}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarProducto{$row[0]}"><i class="fas fa-pen"></i></button>
-                        
-                        <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#eliminarProducto{$row[0]}"><i class="far fa-trash-can"></i></button>
+                        <div class="d-flex flex-row justify-content-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarProducto{$row[0]}"><i class="fas fa-pen"></i></button>
+                            
+                            <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#eliminarProducto{$row[0]}"><i class="far fa-trash-can"></i></button>
+                        </div>
                     </td>
                     <td>    
                         <div class="modal fade" id="editarProducto{$row[0]}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

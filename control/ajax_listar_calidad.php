@@ -131,15 +131,15 @@
                     <td>{$tipoequipo}</td>
                     <td>{$row['serie']}</td>
                     <td>
+                        <div class="d-flex flex-row justify-content-center">
+                            <button type="button" class="btn btn-danger" onclick="getCalidad({$row['id_calidad']})" id="{$row['id_calidad']}">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
 
-                        <button type="button" class="btn btn-danger" onclick="getCalidad({$row['id_calidad']})" id="{$row['id_calidad']}">
-                            <i class="fas fa-file-pdf"></i>
-                        </button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarCalidad{$row['id_calidad']}"><i class="fas fa-pen"></i></button>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarCalidad{$row['id_calidad']}"><i class="fas fa-pen"></i></button>
-
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCalidad{$row['id_calidad']}"><i class="far fa-trash-can"></i></button>
-
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCalidad{$row['id_calidad']}"><i class="far fa-trash-can"></i></button>
+                        </div>
                     </td>
                     <td>
 

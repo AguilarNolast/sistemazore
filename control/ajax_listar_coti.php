@@ -102,6 +102,7 @@
                     <td>{$total_todo}</td>
                     <td>
                         <input type="hidden" name="id_coti" value="{$row[0]}">
+                        <div class="d-flex flex-row justify-content-center">
                         <button type="button" class="btn btn-primary" onclick="linkCoti({$row[0]})">
                             <i class="fas fa-pen"></i>
                         </button>
@@ -439,7 +440,7 @@
                                     </div>
                                 </form>
                             </div>
-                            
+                        </div>
                         </div>
                     </td>
                 </tr>
