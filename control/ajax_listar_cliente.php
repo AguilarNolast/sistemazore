@@ -67,9 +67,11 @@
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalContactos{$row['id_clientes']}">Ver mas</button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarCliente{$row['id_clientes']}"><i class="fas fa-pen"></i></button>
-                        
-                        <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#eliminarCliente{$row['id_clientes']}"><i class="far fa-trash-can"></i></button>
+                        <div class="d-flex flex-row justify-content-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarCliente{$row['id_clientes']}"><i class="fas fa-pen"></i></button>
+                            
+                            <button type="button" class="btn btn-danger" style="margin-left: 10px" data-bs-toggle="modal" data-bs-target="#eliminarCliente{$row['id_clientes']}"><i class="far fa-trash-can"></i></button>
+                        </div>
                     </td>
                     <td>
                     <form>

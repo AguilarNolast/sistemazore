@@ -3,10 +3,8 @@
   include 'header.php';
 
 ?>
-<div class="container">
-<br>
+<div class="container-fluid">
  <h3 class="text-center">Control de asistencia</h3>
- <br>
 
  <div id="resultado"></div>
     <div id="alertaResultado"></div> 
@@ -31,7 +29,7 @@
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFilter" aria-controls="navbarFilter" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarFilter">
+              <div class="collapse navbar-collapse justify-content-center" id="navbarFilter">
                 <form id="formFilterUsuario" method="POST" action="../control/ajax_filtrar_asistencia.php">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
                     <li class="nav-item">
@@ -73,7 +71,6 @@
         HTML;
       }
     ?>
-<br>
   <label for="num_registros">Mostrar: </label>
 
   <select name="num_registros" id="num_registros">
@@ -84,9 +81,8 @@
 
   <label for="num_registros">registros</label>
 
-      <br>
   <div class="table-responsive">
-    <table class="table table-striped text-center">
+    <table class="table table-striped text-center table-hover table-borderless table-sm">
       <thead>
         <tr>
           <th scope="col" scope="row">Nombre y apellido</th>
@@ -97,7 +93,7 @@
           <th scope="col">Tiempo de trabajo</th>
         </tr>
       </thead>
-      <tbody id="contenido">
+      <tbody class="table-group-divider" id="contenido">
       </tbody>
     </table>
   </div>

@@ -63,12 +63,12 @@
 
             $output['data'] .= <<<HTML
                 <tr>
-                <td>{$array_datos[2]} {$array_datos[3]}</td>
-                <td>{$array_datos[1]}</td>
-                <td>{$fecha}</td>
-                <td>{$hora_inicio}</td>
-                <td>{$hora_final}</td>
-                <td>{$intervaloFormateado}</td>
+                    <td>{$array_datos[2]} {$array_datos[3]}</td>
+                    <td>{$array_datos[1]}</td>
+                    <td>{$fecha}</td>
+                    <td>{$hora_inicio}</td>
+                    <td>{$hora_final}</td>
+                    <td>{$intervaloFormateado}</td>
                 </tr>
             HTML;
                 

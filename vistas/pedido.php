@@ -119,11 +119,11 @@
                     <button type="button" id="<?php echo $id_coti; ?>" class="btnEnviarPedido btn btn-primary" style="margin-left: 300px">Enviar pedidos</button>
                 
             </div>
-            <br>
+            
         </div>
     </form>
 </div>
-<br>
+
 <script src='../static/js/createPedido.js?v=1.9' async></script>
 <?php
 

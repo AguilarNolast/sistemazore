@@ -70,13 +70,15 @@
                     <td>{$row['cliente']}</td>
                     <td>{$row['fecha']}</td>
                     <td>
-                        <button type="button" class="btn btn-danger" onclick="getPruebas({$row['id_pruebas']})" id="{$row['id_pruebas']}"">
-                            <i class="fas fa-file-pdf"></i>
-                        </button>
+                        <div class="d-flex flex-row justify-content-center">
+                            <button type="button" class="btn btn-danger" onclick="getPruebas({$row['id_pruebas']})" id="{$row['id_pruebas']}"">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarPruebas{$row['id_pruebas']}"><i class="fas fa-pen"></i></button>
-                        
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarPruebas{$row['id_pruebas']}"><i class="far fa-trash-can"></i></button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarPruebas{$row['id_pruebas']}"><i class="fas fa-pen"></i></button>
+                            
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarPruebas{$row['id_pruebas']}"><i class="far fa-trash-can"></i></button>
+                        </div>
                     </td>
                     <td>
                     

@@ -6,10 +6,8 @@
     <div id="resultado"></div>
     <div id="modalEditFicha"></div>
     <div id="alertaResultado"></div> 
-<div class="container">
-<br>
+<div class="container-fluid">
  <h3 class="text-center">Listado de Cotizaciónes</h3>
- <br>
     <nav class="navbar navbar-light navbar-dark bg-white">
     
       <button type="button" class="btn btn-primary col-xs-12 btn-sm">
@@ -29,7 +27,7 @@
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFilter" aria-controls="navbarFilter" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarFilter">
+              <div class="collapse navbar-collapse justify-content-center" id="navbarFilter">
                 <form id="formFilterCoti" method="POST" action="../control/ajax_filtrar_coti.php">
                   <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center">
                     <li class="nav-item">
@@ -75,14 +73,13 @@
         HTML;
       }
     ?>
-      <br>
       
         
   <div id="progressContainer">
 
   </div>  
   <div class="table-responsive">
-    <table class="table table-striped text-center">
+    <table class="table table-striped text-center table-hover table-borderless table-sm">
       <label for="num_registros">Mostrar: </label>
 
       <select name="num_registros" id="num_registros">
@@ -93,7 +90,7 @@
 
       <label for="num_registros">registros</label>
       <thead>
-        <tr>
+        <tr class="">
           <th class="sort asc" scope="col" scope="row">Correlativo</th>
           <th class="sort asc" scope="col">Cliente</th>
           <th class="sort asc" scope="col">Fecha</th>
@@ -102,7 +99,7 @@
           <th class="" scope="col">Opciones</th>
         </tr>
       </thead>
-      <tbody id="contenido">
+      <tbody class="table-group-divider" id="contenido">
       </tbody>
     </table>
   </div>

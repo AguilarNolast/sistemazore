@@ -11,10 +11,10 @@
    
     <div id="resultado"></div>
     <div id="alertaResultado"></div> 
-<div class="container">
-<br>
+<div class="container-fluid">
+
  <h3 class="text-center">Listado de Certificado de Calidad</h3>
- <br>
+ 
      
 <nav class="navbar navbar-light navbar-dark bg-white">
    <!-- Button trigger modal -->
@@ -112,9 +112,9 @@
     <input class="form-control mr-sm-2" type="search" placeholder="Buscar" id="campo" aria-label="Search">
   </form>
 </nav>
-      <br>
+      
 <div class="table-responsive">
-  <table class="table table-striped text-center">
+  <table class="table table-striped text-center table-hover table-borderless table-sm">
     <label for="num_registros">Mostrar: </label>
 
     <select name="num_registros" id="num_registros">
@@ -133,7 +133,7 @@
         <th scope="col">Descargar</th>
       </tr>
     </thead>
-    <tbody id="contenido">
+    <tbody class="table-group-divider" id="contenido">
     </tbody>
   </table>
 </div>
