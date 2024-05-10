@@ -95,7 +95,7 @@
             // Ordenamiento
             $orderType = 'desc';
     
-            $sqlOrder = "ORDER BY fecha " . $orderType;
+            $sqlOrder = "ORDER BY id_coti " . $orderType;
         
             // Consulta SQL 
             $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
@@ -104,35 +104,37 @@
                     $sqlOrder
                     $sqlLimit";
 
-            //-----Datos de precio de la cotizacion
-
-            if(empty($id_usuario)){
-
-                $prod_temporal = $this->conexion->query($sql_producto_temporal);
-    
-                $columnsProd = ["id_coti","cantidad", "descuento", "precio", "moneda"]; //Array con todas las columnas de la tabla            
-                $tabla = "lista_producto_tmp"; 
-    
-                // Consulta SQL 
-                $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
-                        FROM $tabla";
-
-            }
-
             try {
+
                 $resultado = $this->conexion->query($sql);
+    
+                // Consulta de cantidad de registros filtrados
+                $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
+                $totalFiltro = $resFiltro->fetch_array()[0];
+    
+                // Consulta para total de registros filtrados
+                $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
+                $totalRegistros = $resTotal->fetch_array()[0];
+    
+                //-----Datos de precio de la cotizacion
+    
+                if(empty($id_usuario)){
+    
+                    $prod_temporal = $this->conexion->query($sql_producto_temporal);
+        
+                    $columnsProd = ["id_coti","cantidad", "descuento", "precio", "moneda"]; //Array con todas las columnas de la tabla            
+                    $tabla = "lista_producto_tmp"; 
+        
+                    // Consulta SQL 
+                    $sqlProd = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columnsProd) . "
+                            FROM $tabla";
+    
+                }
+                
                 $resProd='';
                 if(empty($id_usuario)){
                     $resProd = $this->conexion->query($sqlProd);
                 }
-
-                // Consulta de cantidad de registros filtrados
-                $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
-                $totalFiltro = $resFiltro->fetch_array()[0];
-
-                // Consulta para total de registros filtrados
-                $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
-                $totalRegistros = $resTotal->fetch_array()[0];
 
                 return [$resultado, $resProd, $totalFiltro, $totalRegistros, $columns];
             } catch (Exception $e) {

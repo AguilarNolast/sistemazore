@@ -231,7 +231,7 @@
                             <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="{$row2['cantidad']}" id="cantidad{$items}" name="cantidad[]" placeholder="Cant" required>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-3">
-                            <input type="text" class="prod form-control" onkeyup="getProducto(this.id)" value="{$row2['nombre_producto']}" onchange="getProducto(this.id)" id="pro{$items}" placeholder="Producto" autocomplete="off" required>
+                            <input type="text" class="prod form-control" onkeyup="getProducto(this)" value="{$row2['nombre_producto']}" onchange="getProducto(this)" id="pro{$items}" placeholder="Producto" autocomplete="off" required>
                             <input type="hidden" value="{$row2['id_productos']}" name="idproducto[]" id="idproducto{$items}">
                             <div class="contenedor">
                                 <div class="producto_lista lista-overlayPro" id="producto_lista{$items}">

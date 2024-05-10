@@ -94,7 +94,7 @@
             // Ordenamiento
             $orderType = 'desc';
     
-            $sqlOrder = "ORDER BY fecha " . $orderType;
+            $sqlOrder = "ORDER BY id_pedidos " . $orderType;
         
             // Consulta SQL 
             $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
@@ -120,10 +120,6 @@
         
             try {
                 $resultado = $this->conexion->query($sql);
-                $resProd='';
-                if(empty($id_usuario)){
-                    $resProd = $this->conexion->query($sqlProd);
-                }
         
                 // Consulta de cantidad de registros filtrados
                 $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
@@ -131,7 +127,12 @@
         
                 // Consulta para total de registros filtrados
                 $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
-                $totalRegistros = $resTotal->fetch_array()[0];  
+                $totalRegistros = $resTotal->fetch_array()[0]; 
+                
+                $resProd='';
+                if(empty($id_usuario)){
+                    $resProd = $this->conexion->query($sqlProd);
+                } 
 
                 // Cierra la conexión
                 $this->conexion->close();
