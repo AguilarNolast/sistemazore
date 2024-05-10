@@ -232,7 +232,7 @@
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-3">
                             <input type="text" class="prod form-control" onkeyup="getProducto(this)" value="{$row2['nombre_producto']}" onchange="getProducto(this)" id="pro{$items}" placeholder="Producto" autocomplete="off" required>
-                            <input type="hidden" value="{$row2['id_productos']}" name="idproducto[]" id="idproducto{$items}">
+                            <input type="hidden" value="{$row2['id_productos']}" class="idproducto" name="idproducto[]" id="idproducto{$items}">
                             <div class="contenedor">
                                 <div class="producto_lista lista-overlayPro" id="producto_lista{$items}">
                                 </div>
