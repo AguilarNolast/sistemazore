@@ -343,7 +343,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
             
         },
         {
-            absolutePosition: { x: 425, y: 50 },  // Ajusta las coordenadas
+            absolutePosition: { x: 449, y: 50 },  // Ajusta las coordenadas
             style: 'header',
             table: {
                 //headerRows: 1,
@@ -385,7 +385,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                     
                     {
                         table:{
-                            widths: [60, 147],
+                            widths: [60, 129],
                             body:[
                                 [{text: 'RUC', margin: [15, 10,10,10], bold: true}, {text: arrayCoti['ruc'], margin: [10, 10,10,10] , bold: true}],
                             ]
@@ -394,7 +394,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                             hLineColor: () => thrid, // Gris claro para las líneas horizontales
                             vLineColor: () => thrid,
                         },
-                        margin:[30, 0, 0, 0],
+                        margin:[30, 0, 30, 0],
                     },
                     
                     
@@ -403,7 +403,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                             style: 'table',
                             table:{
                                 
-                                widths: [60, 60, 79],
+                                widths: [55, 50, 75],
                                 body:[
                                     //TITULO DE LA COLUMNA
                                     [{text: 'TOTAL', fillColor: secondary, border: [true, true, false, false] , bold: true, color: 'black' }, 
@@ -549,7 +549,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
                 {
                     style: 'tableTotal',
                     table: {
-                        widths: [60, 10, 80],
+                        widths: [60, 10, 67],
                         dontBreakRows: true,
                         body:[
                         
