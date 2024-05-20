@@ -7,7 +7,7 @@
     <div id="modalEditFicha"></div>
     <div id="alertaResultado"></div> 
 <div class="container-fluid">
- <h3 class="text-center">Listado de Cotizaciónes</h3>
+ <h3 class="text-center">Listado de Cotizaciones</h3>
     <nav class="navbar navbar-light navbar-dark bg-white">
     
       <button type="button" class="btn btn-primary col-xs-12 btn-sm">
