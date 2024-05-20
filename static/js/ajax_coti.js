@@ -343,7 +343,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
             
         },
         {
-            absolutePosition: { x: 409, y: 50 },  // Ajusta las coordenadas
+            absolutePosition: { x: 419, y: 50 },  // Ajusta las coordenadas
             style: 'header',
             table: {
                 //headerRows: 1,
