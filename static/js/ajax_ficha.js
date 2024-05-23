@@ -1,4 +1,10 @@
 
+$(document).on('hidden.bs.modal', function (event) {
+    if ($('.modal:visible').length) {
+        $('body').addClass('modal-open');
+    }
+});
+
 //Script que crea el PDF de la ficha tecnica
 function generarFichaTec(arrayFicha){
     
@@ -646,6 +652,24 @@ function eliminarFicha(id_ficha){
 
 function cargarEdicionFicha(id_ficha, id_coti){
 
+    // Crear el botón dinámicamente
+    var button = document.createElement('button');
+    button.className = 'btn btn-primary';
+    button.setAttribute('data-bs-target', '#editFicha'+id_ficha);
+    button.setAttribute('data-bs-toggle', 'modal');
+    button.setAttribute('data-bs-dismiss', 'modal');
+    button.setAttribute('hidden', true);
+    button.innerText = 'Abrir Modal 2';
+
+    // Agregar el botón al footer de la Modal 1
+    var botonEditFichaSolved = document.getElementById('botonEditFichaSolved');
+    botonEditFichaSolved.appendChild(button);
+
+    /* // Simular un clic en el botón después de agregarlo
+    setTimeout(function() {
+        button.click();
+    }, 2000); // Espera 2 segundos antes de hacer clic */
+
     const resultado = document.getElementById("resultado");
 
     const url = "../control/cargaredicionficha.php";
@@ -661,7 +685,9 @@ function cargarEdicionFicha(id_ficha, id_coti){
             const modalEditFicha = document.getElementById("modalEditFicha");
             modalEditFicha.innerHTML = data.data;
 
-            //Cierre de la modal de la nueva ficha
+            button.click();
+
+            /* //Cierre de la modal de la nueva ficha
             $('#nuevaFicha'+id_coti).modal('hide');
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
@@ -669,7 +695,7 @@ function cargarEdicionFicha(id_ficha, id_coti){
             $('body').css('overflow', 'auto');
 
             //Activar la modal para editar la ficha
-            $('#editFicha'+id_ficha).modal('show');
+            $('#editFicha'+id_ficha).modal('show'); */
         })
         .catch(error => {
             mostrarAlerta('danger', "Error al cargar ficha");

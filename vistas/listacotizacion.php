@@ -4,6 +4,7 @@
 
 ?>
     <div id="resultado"></div>
+    <div id="botonEditFichaSolved"></div>
     <div id="modalEditFicha"></div>
     <div id="alertaResultado"></div> 
 <div class="container-fluid">
