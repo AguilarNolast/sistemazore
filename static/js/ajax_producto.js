@@ -65,9 +65,10 @@ function addItem(){
             </div>
         `;
         contItems.appendChild(newItems);
-        iniciarSelect2($('.product-list').last())
+        iniciarSelect2Prod($('.product-list').last())
     }catch (error) {
         mostrarAlerta('danger', "Error al añadir item");
+        console.log(error)
     }
 
 }

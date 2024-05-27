@@ -1,13 +1,4 @@
 
-
-
-// Cierra Select2 al hacer clic fuera de él
-$(document).on('click', function(e) {
-    if (!$(e.target).closest('.select2').length) {
-        $('.product-list').select2('close');
-    }
-});
-
 document.addEventListener("DOMContentLoaded", function(event) {
     calcular_total();
 });
@@ -121,6 +112,13 @@ function iniciarSelect2Prod(listaProd){
     listaProd.on('select2:select', function(e) {
         mostrarProducto(e);
     });
+
+    // Cierra Select2 al hacer clic fuera de él
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.select2').length) {
+            listaProd.select2('close');
+        }
+    });
 }
 
 function iniciarSelect2Edit(listaProd){
@@ -152,6 +150,13 @@ function iniciarSelect2Edit(listaProd){
     // Evento de selección de una opción en Select2
     listaProd.on('select2:select', function(e) {
         mostrarProducto(e);
+    });
+    
+    // Cierra Select2 al hacer clic fuera de él
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.select2').length) {
+            listaProd.select2('close');
+        }
     });
 }
 

@@ -308,7 +308,7 @@
     </form>
     <br>
 </div>
-<script src='../static/js/createCoti.js?v=2.0' async></script>
+<script src='../static/js/createCoti.js?v=2.1' async></script>
 <script>
     $(document).ready(function() {
         $('.product-list').each(function() {
