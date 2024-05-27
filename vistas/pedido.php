@@ -124,7 +124,7 @@
     </form>
 </div>
 
-<script src='../static/js/createPedido.js?v=1.9' async></script>
+<script src='../static/js/createPedido.js?v=2.0' async></script>
 <?php
 
     include 'footer.php';
