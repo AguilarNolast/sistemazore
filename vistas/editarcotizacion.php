@@ -223,29 +223,24 @@
             while($row2 = $resultado_prod->fetch_assoc()){
                 echo <<<HTML
 
-                    <div class="form-row" id="item{$items}">
-                        <!--<div class="form-group col-md-">
-                            <label  class="form-control num_item" for="">{$items}</label>
-                        </div>-->
+                    <div class="form-row">
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="{$row2['cantidad']}" id="cantidad{$items}" name="cantidad[]" placeholder="Cant" required>
+                            <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="{$row2['cantidad']}" name="cantidad[]" placeholder="Cant" required>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-3">
-                            <input type="text" class="prod form-control" onkeyup="getProducto(this)" value="{$row2['nombre_producto']}" onchange="getProducto(this)" id="pro{$items}" placeholder="Producto" autocomplete="off" required>
-                            <input type="hidden" value="{$row2['id_productos']}" class="idproducto" name="idproducto[]" id="idproducto{$items}">
-                            <div class="contenedor">
-                                <div class="producto_lista lista-overlayPro" id="producto_lista{$items}">
-                                </div>
-                            </div>
+                            <select class="form-control product-list">
+                                <option>Selecciona un producto</option>
+                            </select> 
+                            <input type="hidden" value="{$row2['id_productos']}" class="idproducto" name="idproducto[]">
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-4">
-                            <textarea class="descripcion form-control" id="descripcion{$items}" name="descripcion[]" rows="4" placeholder="Describa el producto" required>{$row2['descripcion']}</textarea>
+                            <textarea class="descripcion form-control" name="descripcion[]" rows="4" placeholder="Describa el producto" required>{$row2['descripcion']}</textarea>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <input type="number" class="precio form-control" onkeyup="totalP(this)" value="{$row2['precio']}" id="precio{$items}" name="precio[]" placeholder="Precio unitario" required>
+                            <input type="number" class="precio form-control" onkeyup="totalP(this)" value="{$row2['precio']}" name="precio[]" placeholder="Precio unitario" required>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <input type="number" class="descuento form-control" onkeyup="totalP(this)" value="{$row2['descuento']}" id="descuento{$items}" name="descuento[]" placeholder="Descuento">
+                            <input type="number" class="descuento form-control" onkeyup="totalP(this)" value="{$row2['descuento']}" name="descuento[]" placeholder="Descuento">
                         </div>
                         
                 HTML;
@@ -262,10 +257,10 @@
                 echo <<<HTML
 
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <input type="text" class="total_producto form-control" id="total_producto{$items}" value="{$total }" readonly placeholder="total" required>
+                            <input type="text" class="total_producto form-control" value="{$total}" readonly placeholder="total" required>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this.id)" id="btnitem{$items}">
+                            <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this.id)">
                                 X
                             </button>
                         </div>
@@ -314,7 +309,14 @@
     <br>
 </div>
 <script src='../static/js/createCoti.js?v=1.9' async></script>
-
+<script>
+    $(document).ready(function() {
+        $('.product-list').each(function() {
+            var listaProd = $(this);
+            iniciarSelect2Edit(listaProd);
+        });
+    });
+</script>
 <?php
 
     include 'footer.php';

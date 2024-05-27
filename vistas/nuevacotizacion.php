@@ -5,6 +5,10 @@
 ?> 
 <link rel="stylesheet" href='../static/css/coti.css' type="text/css">
 
+<style>
+    
+</style>
+
     <div id="resultado"></div>
     <div id="alertaResultado"></div> 
 
@@ -120,7 +124,9 @@
                 <div class="form-group">
                     <label for="ruc">RUC:</label>
                     <div class="input-group mb-3">
-                        <input type="text" id="input_cliente" class="form-control" id="ruc" placeholder="Ingrese el RUC o DNI del cliente" autocomplete="off" required>
+                        <select class="form-control client-list">
+                            <option>Seleccione un cliente</option>
+                        </select> 
                         <span class="input-group-text" id="basic-addon1"  data-bs-toggle="modal" data-bs-target="#nuevoCli">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -155,18 +161,6 @@
                     <label for="correoCliente">Correo del Cliente:</label>
                     <input type="email" id="correo" readonly class="form-control" placeholder="">
                 </div>
-
-                <!--<div class="form-group">
-                    <label for="tipocambio">Tipo de cambio:</label>
-                    <div class="input-group mb-3">
-                        <input type="number" id="tipocambio" readonly class="form-control" placeholder="" maxlength="4"> 
-                        <span class="input-group-text" id="spantc"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
-                            </svg>
-                        </span>
-                    </div>      
-                </div>-->
             </div>
 
             <!-- Información del Asesor (derecha) -->
@@ -271,12 +265,10 @@
                     <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-3">
-                    <input type="text" class="prod form-control" onkeyup="getProducto(this)" onchange="getProducto(this)" id="pro" placeholder="Producto" autocomplete="off" required>
-                    <input type="hidden" class="idproducto" name="idproducto[]" id="idproducto">
-                    <div class="contenedor row">
-                        <div class="producto_lista lista-overlayPro" id="producto_lista">
-                        </div>
-                    </div>
+                    <select class="form-control product-list">
+                        <option>Selecciona un producto</option>
+                    </select> 
+                    <input type="hidden" class="idproducto" name="idproducto[]">
                 </div>
                 <div class="form-group col-sm-12 col-md-12 col-lg-4">
                     <textarea class="descripcion form-control" id="descripcion" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
@@ -328,6 +320,12 @@
     <br>
 </div>
 <script src='../static/js/createCoti.js?v=1.0' async></script>
+<script>
+    $(document).ready(function() {
+        iniciarSelect2Prod($('.product-list'))
+        iniciarSelect2Client($('.client-list'))
+    });
+</script>
 <?php
 
     include 'footer.php';

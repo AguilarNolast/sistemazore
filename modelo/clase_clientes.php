@@ -9,31 +9,13 @@
             parent::__construct();
         }
 
-        public function buscar_clientes($input_cliente) {
+        public function buscar_clientes() {
             $columns = ["id_clientes", "ruc", "razon_social"];
-            $columnsWhere = ["ruc", "razon_social"];
             $tabla = "clientes";
-        
-            $where = '';
-        
-            if ($input_cliente != null) {
-                $input_cliente = $this->conexion->real_escape_string($input_cliente);
-        
-                // Construimos la cláusula WHERE
-                $where = "WHERE (";
-        
-                $conditions = array_map(function ($column) use ($input_cliente) {
-                    return "$column LIKE '%$input_cliente%'";
-                }, $columnsWhere);
-        
-                $where .= implode(" OR ", $conditions);
-                $where .= ")";
-            }
         
             // Consulta SQL 
             $sql = "SELECT " . implode(", ", $columns) . "
-                    FROM $tabla 
-                    $where";
+                    FROM $tabla ORDER BY razon_social";
         
             try {
                 $resultado = $this->conexion->query($sql);
@@ -41,8 +23,16 @@
                 if (!$resultado) {
                     throw new Exception("Error en la consulta: " . $this->conexion->error);
                 }
+
+                // Obtenemos los resultados en un array asociativo
+                $productos = [];
+                while ($row = $resultado->fetch_assoc()) {
+                    $productos[] = $row;
+                }
         
-                return $resultado;
+                // Devuelve los resultados en formato JSON
+                header('Content-Type: application/json');
+                echo json_encode($productos);
             } catch (Exception $e) {
                 // Manejo de errores
                 echo $e->getMessage();

@@ -12,7 +12,7 @@ function cleanInputCliente(){
     input_cliente.value = "";
 }
 
-async function getCliente() {
+/* async function getCliente() {
     try {
         const input_cliente = document.getElementById("input_cliente").value;
         const csrf_token = document.getElementById("csrf_token").value;
@@ -43,20 +43,24 @@ async function getCliente() {
     } catch (err) {
         mostrarAlerta('danger', 'Error al cargar cliente');
     }
-}
+} */
 
-function getContacto(id_cliente, nombre_entidad, ruc) {
+function getContacto(e) {
+    var dataClient = e.params.data;
+
+    var partes = dataClient.id.split(',');
+
+    // Asignar cada parte a una variable específica
+    var id_cliente = partes[0];
+    var razon_social = partes[1];
+    var ruc = partes[2];
+
     const contactoContainer = document.getElementById("contacto");
     const inputIdCliente = document.getElementById("idcliente");
     const razonSocial = document.getElementById("razonSocial");
-    const input_cliente = document.getElementById("input_cliente");
-
-    input_cliente.value = ruc + " - " + nombre_entidad;
 
     inputIdCliente.value = id_cliente;
-    razonSocial.value = nombre_entidad;
-
-    var listaOverlay = document.getElementById('lista-overlay');
+    razonSocial.value = razon_social;
     
     const url = "../control/ajax_contacto_cliente.php";
     const formData = new FormData();
@@ -73,12 +77,45 @@ function getContacto(id_cliente, nombre_entidad, ruc) {
         return response.json();
     })
     .then(data => {
-        listaOverlay.style.display = 'none';
         contactoContainer.innerHTML = data.data;
         mostrarContacto(data.id_contacto);
     })
     .catch(error => {
         mostrarAlerta('danger', 'Error al cargar cliente');
+        console.log(error)
+    });
+}
+
+function getContacto2(id_cliente, razon_social, ruc) {
+
+    const contactoContainer = document.getElementById("contacto");
+    const inputIdCliente = document.getElementById("idcliente");
+    const razonSocial = document.getElementById("razonSocial");
+
+    inputIdCliente.value = id_cliente;
+    razonSocial.value = razon_social;
+    
+    const url = "../control/ajax_contacto_cliente.php";
+    const formData = new FormData();
+    formData.append('id_cliente', id_cliente);
+
+    fetch(url, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error al realizar la solicitud: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        contactoContainer.innerHTML = data.data;
+        mostrarContacto(data.id_contacto);
+    })
+    .catch(error => {
+        mostrarAlerta('danger', 'Error al cargar cliente');
+        console.log(error)
     });
 }
 
@@ -116,6 +153,7 @@ function contactoEditarCoti(id_cliente, nombre_entidad) {
 }
 
 function mostrarContacto(id_contacto) {
+
     const telefonoInput = document.getElementById("telefono");
     const correoInput = document.getElementById("correo");
 
@@ -420,7 +458,7 @@ function registrarCliente2() {
             resultado.innerHTML = data.data;
 
             if(data.id_cliente!='' && data.nombre_entidad!='' && data.ruc!=''){
-                getContacto(data.id_cliente, data.nombre_entidad, data.ruc);
+                getContacto2(data.id_cliente, data.nombre_entidad, data.ruc);
 
                 document.getElementById("numero").value = "";
                 document.getElementById("entidad").value = "";
@@ -451,10 +489,13 @@ function registrarCliente2() {
                 for (var i = 0; i < ca.length; i++) {
                     ca[i].value = "";
                 }
+                
+                reiniciarSelect2Client() 
             }
         })
         .catch(error => {
             mostrarAlerta('danger', 'Error al cargar cliente');
+            console.log(error)
         });
             
         $('#nuevoCli').modal('hide');
@@ -621,50 +662,3 @@ function eliminarCliente(id_cliente) {
 
         removeAlert();
 }
-
-//Atender esta funcion
-/*
-function tipearPago(id_cliente){
-
-    if(id_cliente === undefined){
-        id_cliente = '';
-    }
-
-    inputpago = document.getElementById("inputpago"+id_cliente);
-
-    inputpago.innerHTML = `
-        <input placeholder="Tipo de pago" type="text" name="pagocliente" id="pagocliente${id_cliente}"  class="form-control">
-        <span class="input-group-text" onclick="selectPago(${id_cliente})">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-            </svg>
-        </span> 
-    `
-}
-
-function selectPago(id_cliente){
-
-    if(id_cliente === undefined){
-        id_cliente = '';
-    }
-
-    inputpago = document.getElementById("inputpago"+id_cliente);
-
-    inputpago.innerHTML = `
-        <select name="pagocliente" id="pagocliente${id_cliente}" class="form-select">
-            <option>Contado</option>
-            <option>Credito 30 dias</option>
-            <option>Credito 45 dias</option>
-            <option>Credito 60 dias</option>
-            <option>Credito 90 dias</option>
-            <option>Cheque 30 dias</option>
-            <option>Adelanto 50%, Saldo al finalizar</option>
-        </select>
-        <span class="input-group-text" onclick="tipearPago(${id_cliente})">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-        </svg>
-        </span> 
-    `
-}*/

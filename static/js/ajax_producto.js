@@ -41,12 +41,10 @@ function addItem(){
                 <input type="number" min="1" class="cantidad form-control" onkeyup="totalP(this)" value="1" id="cantidad" name="cantidad[]" placeholder="Cant" required>
             </div>
             <div class="form-group col-sm-12 col-md-12 col-lg-3">
-                <input type="text" class="prod form-control" onkeyup="getProducto(this)" id="pro" placeholder="Producto" autocomplete="off" required>
-                <input type="hidden" class="idproducto" name="idproducto[]" id="idproducto">
-                <div class="contenedor">
-                    <div class="producto_lista lista-overlayPro" id="producto_lista">
-                    </div>
-                </div>
+                <select class="form-control product-list" style="width: 100%; ">
+                    <option>Selecciona un producto</option>
+                </select> 
+                <input type="hidden" class="idproducto" name="idproducto[]">
             </div>
             <div class="form-group col-sm-12 col-md-12 col-lg-4">
                 <textarea class="descripcion form-control" id="descripcion" name="descripcion[]" rows="4" placeholder="Describa el producto" required></textarea>
@@ -67,6 +65,7 @@ function addItem(){
             </div>
         `;
         contItems.appendChild(newItems);
+        iniciarSelect2($('.product-list').last())
     }catch (error) {
         mostrarAlerta('danger', "Error al añadir item");
     }
@@ -83,7 +82,7 @@ function eliminar_Item(button){
     }
 }
 
-function getProducto(producto){
+/* function getProducto(producto){
     
     var div = producto.parentNode;
     let producto_lista = div.querySelector('.producto_lista');
@@ -104,7 +103,7 @@ function getProducto(producto){
     }).catch(error => {
         mostrarAlerta('danger', 'Error al cargar producto');
     });
-}
+} */
 
 function totalP(item){
     try{
@@ -129,36 +128,6 @@ function totalP(item){
         mostrarAlerta('danger', "Se ha producido un error" + error);
     }
     
-}
-
-function mostrarProducto(producto, item){
-    var divContainer = item.closest('.form-row');
-    
-    let inputProd = divContainer.querySelector('.prod');
-    let descripcion = divContainer.querySelector('.descripcion'); //Obtengo el contenedor donde estaran los datos de la BD
-    let precio = divContainer.querySelector('.precio'); //Obtengo el contenedor donde estaran los datos de la BD
-    let idproducto = divContainer.querySelector('.idproducto'); //Obtengo el contenedor donde estaran los datos de la BD
-    idproducto.value = producto
-
-    var producto_lista = divContainer.querySelector('.producto_lista');
-    let url = "../control/ajax_mostrar_productos.php" // Archivo donde se ejecutara la consulta a la BD
-    let formaData = new FormData() // Creamos un form data para poder enviar los datos
-    formaData.append('producto', producto) //Agregamos los datos del input del buscador al Formdata
-
-    fetch(url, { // Generamos la peticion con fetch
-        method: "POST",
-        body: formaData
-    }).then(response => response.json()) //Recibimos el JSON que viene desde el archivo PHP
-    .then(data => {
-        producto_lista.style.display = 'none'
-        descripcion.value = data.descripcion
-        inputProd.value = data.nombre
-        precio.value = data.precio;
-        totalP(divContainer);
-    }).catch(error => {
-        mostrarAlerta('danger', 'Se ha producido un error');
-    });
-
 }
 
 function calcular_total(){
@@ -213,6 +182,37 @@ function calcular_total(){
     }catch (error) {
         mostrarAlerta('danger', "Se ha producido un error" + error);
     }
+}
+
+function mostrarProducto(e) {
+    var dataProd = e.params.data;
+
+    var divContainer = dataProd.element.closest('.form-row');
+    
+    //let inputProd = divContainer.querySelector('.prod');
+    let descripcion = divContainer.querySelector('.descripcion'); //Obtengo el contenedor donde estaran los datos de la BD
+    let precio = divContainer.querySelector('.precio'); //Obtengo el contenedor donde estaran los datos de la BD
+    let idproducto = divContainer.querySelector('.idproducto'); //Obtengo el contenedor donde estaran los datos de la BD
+    idproducto.value = dataProd.id
+
+    //var producto_lista = divContainer.querySelector('.producto_lista');
+    let url = "../control/ajax_mostrar_productos.php" // Archivo donde se ejecutara la consulta a la BD
+    let formaData = new FormData() // Creamos un form data para poder enviar los datos
+    formaData.append('producto', dataProd.id) //Agregamos los datos del input del buscador al Formdata
+
+    fetch(url, { // Generamos la peticion con fetch
+        method: "POST",
+        body: formaData
+    }).then(response => response.json()) //Recibimos el JSON que viene desde el archivo PHP
+    .then(data => {
+        //producto_lista.style.display = 'none'
+        descripcion.value = data.descripcion
+        //inputProd.value = data.nombre
+        precio.value = data.precio;
+        totalP(divContainer);
+    }).catch(error => {
+        mostrarAlerta('danger', 'Se ha producido un error');
+    });
 }
 
 function registrarProducto() {

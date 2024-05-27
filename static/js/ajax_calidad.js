@@ -320,7 +320,7 @@ function generarPdfCalidad(arrayCalidad){
 				//headerRows: 1,
 				body: [
 					//[{text: 'Header 1'}, {text: 'Header 2'}],
-                    ['o '+ tipoequipo +' - '+arrayCalidad['potencia']+arrayCalidad['potencia']+' - '+arrayCalidad['factor']],
+                    ['o '+ tipoequipo +' - '+arrayCalidad['potencia']+arrayCalidad['unipotencia']+' - '+arrayCalidad['factor']],
 				]
 			},
 			layout: 'headerLineOnly',
