@@ -119,7 +119,7 @@
     </div>
 
    </div>
-   <script src='../static/js/ajax_listado_productos.js?v=1.9' async></script>
+   <script src='../static/js/ajax_listado_productos.js?v=2.0' async></script>
 
     <?php
 
