@@ -1,4 +1,13 @@
 
+
+
+// Cierra Select2 al hacer clic fuera de él
+$(document).on('click', function(e) {
+    if (!$(e.target).closest('.select2').length) {
+        $('.product-list').select2('close');
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function(event) {
     calcular_total();
 });
@@ -88,4 +97,97 @@ function selectEntrega(){
             </span>
         </div>
     `;
+}
+
+function iniciarSelect2Prod(listaProd){
+    // Inicializa Select2
+    listaProd.select2({
+        closeOnSelect: true
+    });
+
+    // Cargar datos de la API
+    $.ajax({
+        type: 'GET',
+        url: '../control/ajax_cargar_productos.php',
+        success: function(response) {
+            $.each(response, function(indice, row) {
+                listaProd.append("<option value='" + row.id_productos + "'>" + row.nombre + "</option>");
+            });
+            listaProd.trigger('change'); // Para actualizar Select2 con los nuevos datos
+        }
+    });
+
+    // Evento de selección de una opción en Select2
+    listaProd.on('select2:select', function(e) {
+        mostrarProducto(e);
+    });
+}
+
+function iniciarSelect2Edit(listaProd){
+
+    // Encuentra el input asociado a este select
+    var inputElement = listaProd.closest('.form-group').find('.idproducto');
+    var idSeleccionado = inputElement.val();
+
+    // Inicializa Select2
+    listaProd.select2({
+        closeOnSelect: true
+    });
+
+    // Cargar datos de la API
+    $.ajax({
+        type: 'GET',
+        url: '../control/ajax_cargar_productos.php',
+        success: function(response) {
+            $.each(response, function(indice, row) {
+                listaProd.append("<option value='" + row.id_productos + "'>" + row.nombre + "</option>");
+            });
+            listaProd.trigger('change'); // Para actualizar Select2 con los nuevos datos
+             
+            // Marcar la opción seleccionada
+            listaProd.val(idSeleccionado).trigger('change');
+        }
+    });
+
+    // Evento de selección de una opción en Select2
+    listaProd.on('select2:select', function(e) {
+        mostrarProducto(e);
+    });
+}
+
+function iniciarSelect2Client(listaClient){
+    // Inicializa Select2
+    listaClient.select2({
+        closeOnSelect: true
+    });
+
+    // Cargar datos de la API
+    $.ajax({
+        type: 'GET',
+        url: '../control/ajax_cargar_clientes.php',
+        success: function(response) {
+            $.each(response, function(indice, row) {
+                listaClient.append("<option value='" + row.id_clientes + "," + row.razon_social + "," + row.ruc +"'>" + row.ruc + " - " + row.razon_social +"</option>");
+            });
+            listaClient.trigger('change'); // Para actualizar Select2 con los nuevos datos
+        }
+    });
+
+    // Evento de selección de una opción en Select2
+    listaClient.on('select2:select', function(e) {
+        getContacto(e);
+    });
+}
+
+function reiniciarSelect2Client() {
+    listaProd = $('.client-list')
+    
+    // Elimina todas las opciones menos la primera
+    listaProd.find('option').not(':first').remove();
+
+    // Destruye la instancia actual de Select2
+    listaProd.select2('destroy');
+
+    // Inicializa Select2 de nuevo
+    iniciarSelect2Client(listaProd);
 }

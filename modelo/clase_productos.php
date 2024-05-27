@@ -9,7 +9,7 @@
             parent::__construct();
         }
 
-        public function getOneProducto($input_producto) {
+        public function getOneProducto() {
             $columns = ["id_productos", "nombre"]; // Array con todas las columnas de la tabla
             $columnsWhere = ["id_productos"]; // Array con todas las columnas donde quiero hacer mi búsqueda
             $tabla = "productos";
@@ -58,48 +58,34 @@
             }
         }
 
-        public function buscar_productos($input_producto) {
+        public function buscar_productos() {
             $columns = ["id_productos", "nombre"]; // Array con todas las columnas de la tabla
-            $columnsWhere = ["id_productos", "nombre", "descripcion"]; // Array con todas las columnas donde quiero hacer mi búsqueda
             $tabla = "productos";
-        
-            $where = '';
-        
-            if ($input_producto !== null) {
-                // Armamos la cláusula WHERE
-                $where = "WHERE (";
-        
-                $cont = count($columnsWhere); // Contamos cuántas columnas hay
-                for ($i = 0; $i < $cont; $i++) {
-                    // Concatenamos las diferentes columnas a la consulta WHERE
-                    $where .= $columnsWhere[$i] . " LIKE ? OR ";
-                }
-                $where = substr_replace($where, "", -3); // Eliminamos el último OR de la cadena ya que no lo necesitamos
-                $where .= ")";
-            }
         
             // Consulta SQL
             $sql = "SELECT " . implode(", ", $columns) . "
-                    FROM $tabla 
-                    $where"; // Construcción de la consulta
+                    FROM $tabla ORDER BY nombre"; // Construcción de la consulta
         
             try {
                 $stmt = $this->conexion->prepare($sql);
         
                 if ($stmt) {
-                    if ($input_producto !== null) {
-                        // Asignamos valores a los marcadores de posición en la consulta preparada
-                        $input_producto_like = '%' . $input_producto . '%';
-                        $stmt->bind_param(str_repeat('s', $cont), ...array_fill(0, $cont, $input_producto_like));
-                    }
         
                     $stmt->execute();
                     $resultado = $stmt->get_result();
-                    
+
+                    // Obtenemos los resultados en un array asociativo
+                    $productos = [];
+                    while ($row = $resultado->fetch_assoc()) {
+                        $productos[] = $row;
+                    }
+
                     // Cierra la conexión
                     $this->conexion->close();
-        
-                    return $resultado; // Devuelve el resultado
+
+                    // Devuelve los resultados en formato JSON
+                    header('Content-Type: application/json');
+                    echo json_encode($productos);
                 } else {
                     throw new Exception("Error al preparar la consulta SQL.");
                 }
