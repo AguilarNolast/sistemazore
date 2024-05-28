@@ -1,11 +1,11 @@
     <script src="../pdfmake/build/pdfmake.min.js"></script>
     <script src="../pdfmake/build/vfs_fonts.js"></script>
-    <script src='../static/js/general.js?v=2.4' async></script>
+    <script src='../static/js/general.js?v=2.5' async></script>
     <script src='../static/js/ajax_cliente.js?v=2.4' async></script>
     <script src='../static/js/ajax_usuario.js?v=2.4' async></script>
     <script src='../static/js/ajax_coti.js?v=2.4' async></script>
     <script src='../static/js/ajax_pedido.js?v=2.4' async></script>
-    <script src='../static/js/ajax_producto.js?v=2.5' async></script>
+    <script src='../static/js/ajax_producto.js?v=2.6' async></script>
     <script src='../static/js/ajax_ficha.js?v=2.4' async></script>
     <script src='../static/js/ajax_garantia.js?v=2.4' async></script>
     <script src='../static/js/ajax_calidad.js?v=2.4' async></script>
