@@ -74,12 +74,14 @@ function addItem(){
 }
 
 function eliminar_Item(button){
+    console.log(button)
     try{
         var divContainer = button.closest('.form-row');
         divContainer.remove();
         calcular_total();
     }catch (error) {
         mostrarAlerta('danger', "Error al eliminar item");
+        console.log(error)
     }
 }
 
@@ -188,7 +190,7 @@ function calcular_total(){
 function mostrarProducto(e) {
     var dataProd = e.params.data;
 
-    var divContainer = dataProd.element.closest('.form-row');
+    var divContainer = e.target.closest('.form-row');
     
     //let inputProd = divContainer.querySelector('.prod');
     let descripcion = divContainer.querySelector('.descripcion'); //Obtengo el contenedor donde estaran los datos de la BD

@@ -260,7 +260,7 @@
                             <input type="text" class="total_producto form-control" value="{$total}" readonly placeholder="total" required>
                         </div>
                         <div class="form-group col-sm-12 col-md-12 col-lg-1">
-                            <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this.id)">
+                            <button type="button" class="btn btn-primary btn-block" onclick="eliminar_Item(this)">
                                 X
                             </button>
                         </div>
@@ -308,7 +308,7 @@
     </form>
     <br>
 </div>
-<script src='../static/js/createCoti.js?v=2.1' async></script>
+<script src='../static/js/createCoti.js?v=2.2' async></script>
 <script>
     $(document).ready(function() {
         $('.product-list').each(function() {

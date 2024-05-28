@@ -90,58 +90,123 @@ function selectEntrega(){
     `;
 }
 
-function iniciarSelect2Prod(listaProd){
-    // Inicializa Select2
-    listaProd.select2({
-        closeOnSelect: true
-    });
-
-    // Cargar datos de la API
+function iniciarSelect2Prod(listaProd) {
+    // Petición AJAX inicial para cargar todos los productos
     $.ajax({
         type: 'GET',
         url: '../control/ajax_cargar_productos.php',
         success: function(response) {
+            var options = [];
             $.each(response, function(indice, row) {
-                listaProd.append("<option value='" + row.id_productos + "'>" + row.nombre + "</option>");
+                options.push({ id: row.id_productos, text: row.nombre });
             });
-            listaProd.trigger('change'); // Para actualizar Select2 con los nuevos datos
-        }
-    });
 
-    // Evento de selección de una opción en Select2
-    listaProd.on('select2:select', function(e) {
-        mostrarProducto(e);
-    });
+            // Inicializa Select2 con los datos cargados y soporte para AJAX
+            listaProd.select2({
+                data: options,
+                closeOnSelect: true,
+                ajax: {
+                    url: '../control/ajax_cargar_productos.php',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            input_producto: params.term // Término de búsqueda ingresado por el usuario
+                        };
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    id: item.id_productos,
+                                    text: item.nombre
+                                };
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 0, // Permite que la lista se muestre sin necesidad de escribir
+                language: {
+                    noResults: function() {
+                        return 'No se encontraron resultados';
+                    },
+                    searching: function() {
+                        return 'Buscando...';
+                    }
+                }
+            });
 
-    // Cierra Select2 al hacer clic fuera de él
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.select2').length) {
-            listaProd.select2('close');
+            // Evento de selección de una opción en Select2
+            listaProd.on('select2:select', function(e) {
+                mostrarProducto(e);
+            });
+
+            // Cierra Select2 al hacer clic fuera de él
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.select2').length) {
+                    listaProd.select2('close');
+                }
+            });
         }
     });
 }
 
-function iniciarSelect2Edit(listaProd){
-
+function iniciarSelect2Edit(listaProd) {
     // Encuentra el input asociado a este select
     var inputElement = listaProd.closest('.form-group').find('.idproducto');
     var idSeleccionado = inputElement.val();
 
     // Inicializa Select2
     listaProd.select2({
-        closeOnSelect: true
+        closeOnSelect: true,
+        ajax: {
+            url: '../control/ajax_cargar_productos.php',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    search: params.term // Término de búsqueda ingresado por el usuario
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: $.map(data, function(item) {
+                        return {
+                            id: item.id_productos,
+                            text: item.nombre
+                        };
+                    })
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 0, // Permite que la lista se muestre sin necesidad de escribir
+        language: {
+            noResults: function() {
+                return 'No se encontraron resultados';
+            },
+            searching: function() {
+                return 'Buscando...';
+            }
+        }
     });
 
-    // Cargar datos de la API
+    // Cargar datos de la API y establecer la opción seleccionada
     $.ajax({
         type: 'GET',
         url: '../control/ajax_cargar_productos.php',
         success: function(response) {
+            var options = [];
             $.each(response, function(indice, row) {
-                listaProd.append("<option value='" + row.id_productos + "'>" + row.nombre + "</option>");
+                options.push({ id: row.id_productos, text: row.nombre });
             });
-            listaProd.trigger('change'); // Para actualizar Select2 con los nuevos datos
-             
+
+            // Agregar opciones al select
+            listaProd.select2({
+                data: options
+            });
+
             // Marcar la opción seleccionada
             listaProd.val(idSeleccionado).trigger('change');
         }
@@ -151,7 +216,7 @@ function iniciarSelect2Edit(listaProd){
     listaProd.on('select2:select', function(e) {
         mostrarProducto(e);
     });
-    
+
     // Cierra Select2 al hacer clic fuera de él
     $(document).on('click', function(e) {
         if (!$(e.target).closest('.select2').length) {
@@ -163,7 +228,16 @@ function iniciarSelect2Edit(listaProd){
 function iniciarSelect2Client(listaClient){
     // Inicializa Select2
     listaClient.select2({
-        closeOnSelect: true
+        closeOnSelect: true,
+        minimumInputLength: 0, // Permite que la lista se muestre sin necesidad de escribir
+        language: {
+            noResults: function() {
+                return 'No se encontraron resultados';
+            },
+            searching: function() {
+                return 'Buscando...';
+            }
+        }
     });
 
     // Cargar datos de la API

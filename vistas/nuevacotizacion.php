@@ -319,7 +319,7 @@
     </form>
     <br>
 </div>
-<script src='../static/js/createCoti.js?v=2.1' async></script>
+<script src='../static/js/createCoti.js?v=2.2' async></script>
 <script>
     $(document).ready(function() {
         iniciarSelect2Prod($('.product-list'))
