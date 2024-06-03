@@ -547,27 +547,3 @@ document.addEventListener("DOMContentLoaded", function() {
         form.submit();
     });
 });
-
-/*document.addEventListener("DOMContentLoaded", function() {
-    // Obtener el formulario
-    var buttonExcel = document.getElementById("excelAsist");
-    
-    // Agregar un event listener para el evento 'submit' del formulario
-    buttonExcel.addEventListener("click", function(event) {
-
-        let dateIn = new Date(document.getElementById("dateIn").value);//Fecha de inicio para el filtro
-        let dateOut = new Date(document.getElementById("dateOut").value);//Fecha final para el filtro
-        let selectUser = document.getElementById("selectUser").value;//Fecha final para el filtro
-
-        const formExcel = new FormData();
-        formExcel.action = '../control/excelasistencia.php';
-        formExcel.method = 'POST';
-
-        formExcel.append("dateIn", dateIn);
-        formExcel.append("dateOut", dateOut);
-        formExcel.append("selectUser", selectUser);
-
-        // Enviar el formulario manualmente
-        formExcel.submit();
-    });
-  });*/

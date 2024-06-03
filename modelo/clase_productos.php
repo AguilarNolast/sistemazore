@@ -62,13 +62,13 @@
             $columns = ["id_productos", "nombre", "descripcion"]; // Array con todas las columnas de la tabla
             $columnsWhere = ["id_productos", "nombre", "descripcion"]; // Array con todas las columnas donde quiero hacer mi búsqueda
             $tabla = "productos";
-
-            $where = '';
         
+            $where = 'WHERE estado = "activo"'; // Condición para filtrar productos activos
+            
             if ($input_producto !== null) {
                 // Armamos la cláusula WHERE
-                $where = "WHERE (";
-        
+                $where .= " AND ("; // Agregar "AND" para concatenar con la condición de estado
+                
                 $cont = count($columnsWhere); // Contamos cuántas columnas hay
                 for ($i = 0; $i < $cont; $i++) {
                     // Concatenamos las diferentes columnas a la consulta WHERE
@@ -85,11 +85,9 @@
                     ORDER BY nombre"; // Construcción de la consulta
         
             try {
-                
                 $stmt = $this->conexion->prepare($sql);
         
                 if ($stmt) {
-
                     if ($input_producto !== null) {
                         // Asignamos valores a los marcadores de posición en la consulta preparada
                         $input_producto_like = '%' . $input_producto . '%';
@@ -98,16 +96,16 @@
         
                     $stmt->execute();
                     $resultado = $stmt->get_result();
-
+        
                     // Obtenemos los resultados en un array asociativo
                     $productos = [];
                     while ($row = $resultado->fetch_assoc()) {
                         $productos[] = $row;
                     }
-
+        
                     // Cierra la conexión
                     $this->conexion->close();
-
+        
                     // Devuelve los resultados en formato JSON
                     header('Content-Type: application/json');
                     echo json_encode($productos);
@@ -120,6 +118,7 @@
                 return false;
             }
         }
+        
         
         public function mostrar_producto($id_producto) {
             $columns = ["id_productos", "nombre", "descripcion", "precio"]; // Array con todas las columnas de la tabla
@@ -179,7 +178,7 @@
             $columnsWhere = ["nombre", "descripcion", "precio", "alto", "ancho", "largo", "peso"];
             $tabla = "productos";
         
-            $where = '';
+            $where = ' WHERE estado = "activo"';
             $sqlParams = [];
         
             if (!empty($campo)) {
@@ -188,7 +187,7 @@
                     return "$column LIKE ?";
                 }, $columnsWhere);
         
-                $where = "WHERE " . implode(" OR ", $conditions);
+                $where .= " AND (" . implode(" OR ", $conditions) . ")";
             }
         
             $pagina = max(1, (int) $pagina);
@@ -213,8 +212,9 @@
         
                 if ($stmt) {
                     // Asignar los parámetros necesarios
-                    $stmt->bind_param(str_repeat('s', count($sqlParams)), ...$sqlParams);
-        
+                    $types = str_repeat('s', count($sqlParams) - 2) . 'ii';
+                    $stmt->bind_param($types, ...$sqlParams);
+                    
                     $stmt->execute();
                     $resultado = $stmt->get_result();
         
@@ -351,16 +351,14 @@
             $this->conexion->begin_transaction();
 
             try {
-
-                // Query para eliminar el usuario
-                $sql_producto = "DELETE FROM productos WHERE id_productos = '$id_producto'";
-                $this->conexion->query($sql_producto);
+                // Query preparada para actualizar el estado del usuario a 'inactivo'
+                $sql_producto = "UPDATE productos SET estado = 'inactivo' WHERE id_productos = ?";
+                $stmt_producto = $this->conexion->prepare($sql_producto);
+                $stmt_producto->bind_param("s", $id_producto);
+                $stmt_producto->execute();
 
                 // Confirma la transacción
                 $this->conexion->commit();
-                
-                // Cierra la conexión
-                $this->conexion->close();
 
                 return '
 
@@ -379,6 +377,9 @@
                     </div>
                 
                 ';
+            } finally {
+                // Cierra la conexión
+                $this->conexion->close();
             }
 
             // Cierra la conexión

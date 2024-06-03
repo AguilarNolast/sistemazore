@@ -53,9 +53,8 @@
 
             ];
 
-            //$datosUser = $usuario->getUser($row[6]);
-            //$arrayUser = $datosUser->fetch_assoc();
-
+            list($datosUser, $nouse1, $nouse2, $nouse3) = $usuario->listado_usuarios(null, 10, 0, '', '');
+           
             $output['data'] .= <<<HTML
 
                 <tr>
@@ -161,6 +160,22 @@
                                         <input type="text" id="departamento{$row['id_clientes']}" value="{$row['departamento']}" class="form-control col-4" placeholder="Departamento" required="">
                                     </div>
                                     <div class="md-form mb-2">
+                                        <i class="grey-text">Asesor</i>
+                                        <select name="usercliente" id="usercliente{$row['id_clientes']}" class="form-select">
+                HTML;                         
+
+                $userCliente = $row['id_usuario'];
+                while($arrayUser = $datosUser->fetch_assoc()){
+                    $selected = ($userCliente == $arrayUser['id_usuario']) ? 'selected' : '';
+                    $output['data'] .= <<<HTML
+                                            <option value="{$arrayUser['id_usuario']}" {$selected}>{$arrayUser['nombres']} {$arrayUser['apellidos']}</option>
+                    HTML;
+                }
+
+                $output['data'] .= <<<HTML
+                                        </select>
+                                    </div><br><br>
+                                    <div class="md-form mb-2">
                                         <i class="grey-text">Tipo de cliente</i>
                                         <select name="tipocliente" id="tipocliente{$row['id_clientes']}" class="form-select">
                 HTML;                         
@@ -219,20 +234,20 @@
                                         <div class="row" id="cont{$item}{$row['id_clientes']}">
                                             <div class="md-form mb-2">
                                                 <i class="grey-text">Nombre</i>
-                                                <input type="text" class="form-control nombre{$row['id_clientes']}" placeholder="Nombre y apellido" value="{$contacto[1]}" id="nombre{$row['id_clientes']}">
+                                                <input type="text" class="form-control nombre{$row['id_clientes']}" placeholder="Nombre y apellido" value="{$contacto[1]}">
                                                 <input class="id_contacto{$row['id_clientes']}" type="hidden" value="{$contacto[0]}">
                                             </div>
                                             <div class="md-form mb-2">
                                                 <i class="grey-text">Telefono</i>
-                                                <input type="text" class="form-control telefono{$row['id_clientes']}"  value="{$contacto[2]}" id="telefono{$row['id_clientes']}" placeholder="Telefono">
+                                                <input type="text" class="form-control telefono{$row['id_clientes']}"  value="{$contacto[2]}" placeholder="Telefono">
                                             </div>
                                             <div class="md-form mb-2">
                                                 <i class="grey-text">Correo electronico</i>
-                                                <input type="text" class="form-control correo{$row['id_clientes']}"  value="{$contacto[3]}" id="correo{$row['id_clientes']}" placeholder="Correo electronico">
+                                                <input type="text" class="form-control correo{$row['id_clientes']}"  value="{$contacto[3]}" placeholder="Correo electronico">
                                             </div>                                 
                                             <div class="md-form mb-2">
                                                 <i class="grey-text">Cargo</i>
-                                                <input type="text" class="form-control cargo{$row['id_clientes']}"  value="{$contacto[4]}" id="cargo{$row['id_clientes']}" placeholder="Cargo">
+                                                <input type="text" class="form-control cargo{$row['id_clientes']}"  value="{$contacto[4]}" placeholder="Cargo">
                                             </div> 
                                             <div class="col-lg-2 col-md-2 col-xs-12" id="divButton{$contacto[0]}">
                                                 <button type="button" class="btn btn-danger" style="margin-left: 10px" onclick="getButtonDelete({$contacto[0]},{$item},{$row['id_clientes']})"><i class="far fa-trash-can"></i></button>
@@ -248,7 +263,7 @@
                             
                                 </div>
 
-                                <button type="button" class="btn btn-primary" onclick="añadirContacto2({$item}, {$row['id_clientes']})" id="addcontacto">Agregar contacto</button>
+                                <button type="button" class="btn btn-primary" onclick="añadirContacto2({$item}, {$row['id_clientes']})">Agregar contacto</button>
 
                                 <div class="modal-footer justify-content-center">
                                     <button  type="button" onclick="editarCliente({$row['id_clientes']})" class="btn btn-primary">Guardar</button>

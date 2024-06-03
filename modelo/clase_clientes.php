@@ -125,9 +125,9 @@
         }
         
 
-        public function listado_clientes($campo, $limit, $pagina, $orderCol, $orderType){
+        public function listado_clientes($campo, $limit, $pagina, $orderCol, $orderType) {
 
-            // Crear la tabla temporal
+            // Crear la tabla temporal con la condición de estado activo
             $sql_tabla_temporal = "CREATE TEMPORARY TABLE lista_clientes_tmp AS
             SELECT
                 cli.id_clientes,
@@ -139,57 +139,62 @@
                 cli.id_usuario,
                 cli.tipocliente,
                 cli.pagocliente,
+                cli.estado,
                 usr.nombres,
                 usr.apellidos
             FROM
                 clientes cli
-            JOIN usuarios usr ON usr.id_usuario = cli.id_usuario";
-
+            JOIN usuarios usr ON usr.id_usuario = cli.id_usuario
+            WHERE
+                cli.estado = 'activo'";
+        
             $tabla_temporal = $this->conexion->query($sql_tabla_temporal);
-
-            $columns = ["id_clientes", "ruc", "razon_social", "direccion", "distrito", "departamento", "id_usuario", "tipocliente", "pagocliente", "nombres", "apellidos"];
+        
+            $columns = ["id_clientes", "ruc", "razon_social", "direccion", "distrito", "departamento", "id_usuario", "tipocliente", "pagocliente", "estado", "nombres", "apellidos"];
             $columnsOrder = ["ruc", "razon_social", "direccion", "id_usuario"];
             $id = 'id_clientes';
             $columnsWhere = ["ruc", "razon_social", "direccion", "distrito", "departamento", "nombres", "apellidos"];
             $tabla = "lista_clientes_tmp";
-        
-            $where = '';
-        
+            
+            $where = ' WHERE estado = "activo"';
+            $sqlParams = [];
+            
             if (!empty($campo)) {
-                $conditions = array_map(function ($column) use ($campo) {
-                    return "$column LIKE '%" . $this->conexion->real_escape_string($campo) . "%'";
+                $conditions = array_map(function ($column) use ($campo, &$sqlParams) {
+                    $sqlParams[] = "%$campo%";
+                    return "$column LIKE ?";
                 }, $columnsWhere);
-        
-                $where = "WHERE " . implode(" OR ", $conditions);
+            
+                $where .= " AND (" . implode(" OR ", $conditions) . ")";
             }
-
+        
             //Limite        
             $pagina = max(1, (int)$pagina);
             $inicio = ($pagina - 1) * $limit;
-        
+            
             $sqlLimit = "LIMIT $inicio, $limit";
-
+        
             //Ordenamiento
             $sqlOrder = "ORDER BY " . $columnsOrder[intval($orderCol)] . ' ' . $orderType;
-        
+            
             // Consulta SQL 
             $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
                     FROM $tabla 
                     $where 
                     $sqlOrder
                     $sqlLimit";
-        
+            
             try {
                 $resultado = $this->conexion->query($sql);
-        
+            
                 // Consulta de cantidad de registros filtrados
                 $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
                 $totalFiltro = $resFiltro->fetch_array()[0];
-        
+            
                 // Consulta para total de registros filtrados
                 $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
                 $totalRegistros = $resTotal->fetch_array()[0];
-        
+            
                 return [$resultado, $totalFiltro, $totalRegistros, $columns];
             } catch (Exception $e) {
                 // Manejo de errores
@@ -197,6 +202,7 @@
                 return false;
             }
         }
+        
         
 
         public function registrar_cliente(
@@ -391,6 +397,7 @@
             $cargos,
             $tipocliente,
             $pagocliente,   
+            $usercliente,   
             $nombrenuevos,
             $telefononuevos,
             $correonuevos,
@@ -408,11 +415,12 @@
                     distrito = ?,
                     departamento = ?,
                     tipocliente = ?,
-                    pagocliente = ?
+                    pagocliente = ?,
+                    id_usuario = ?
                 WHERE id_clientes = ?";
         
                 $stmt1 = $this->conexion->prepare($sql1);
-                $stmt1->bind_param("sssssssi", $numero, $entidad, $direccion, $distrito, $departamento, $tipocliente, $pagocliente, $id_cliente);
+                $stmt1->bind_param("ssssssssi", $numero, $entidad, $direccion, $distrito, $departamento, $tipocliente, $pagocliente,$usercliente, $id_cliente);
                 $stmt1->execute();
         
                 // Actualizar datos de los contactos
@@ -469,7 +477,7 @@
                 return '
 
                     <div class="alert alert-danger" id="miAlert" role="alert">
-                        Error al editar al cliente
+                        Error al editar al cliente '.$e.'
                     </div>
                 
                 ';
@@ -481,24 +489,23 @@
             $this->conexion->begin_transaction();
 
             try {
-                // Query para eliminar contactos vinculados al cliente
-                $sql_contactos = "DELETE FROM contacto_cliente WHERE id_cliente = '$id_cliente'";
-                $this->conexion->query($sql_contactos);
 
-                // Query para eliminar el cliente
-                $sql_cliente = "DELETE FROM clientes WHERE id_clientes = '$id_cliente'";
-                $this->conexion->query($sql_cliente);
+                // Query preparada para actualizar el estado del usuario a 'inactivo'
+                $sql_cliente = "UPDATE clientes SET estado = 'inactivo' WHERE id_clientes = ?";
+                $stmt_cliente = $this->conexion->prepare($sql_cliente);
+                $stmt_cliente->bind_param("s", $id_cliente);
+                $stmt_cliente->execute();
 
                 // Confirma la transacción
                 $this->conexion->commit();
                 
-                return '
+                return <<<HTML
 
                     <div class="alert alert-success" id="miAlert" role="alert">
                         Cliente eliminado correctamente
                     </div>
                 
-                ';
+                HTML;
             } catch (Exception $e) {
                 // En caso de error, revierte la transacción
                 $this->conexion->rollback();

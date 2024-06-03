@@ -518,6 +518,7 @@ function editarCliente(id_cliente) {
     const departamento = obtenerValoresInput("departamento" + id_cliente);
     const tipocliente = obtenerValoresInput("tipocliente" + id_cliente);
     const pagocliente = obtenerValoresInput("pagocliente" + id_cliente);
+    const usercliente = obtenerValoresInput("usercliente" + id_cliente);
 
     const id_contacto = obtenerValoresInputsClaseById("id_contacto", id_cliente);
     const nombre = obtenerValoresInputsClaseById("nombre", id_cliente);
@@ -540,6 +541,7 @@ function editarCliente(id_cliente) {
     formaData.append("departamentoedit", departamento);
     formaData.append("tipoclienteedit", tipocliente);
     formaData.append("pagoclienteedit", pagocliente);
+    formaData.append("userclienteedit", usercliente);
 
     formaData.append("id_contactoedit", JSON.stringify(id_contacto));
     formaData.append("nombreedit", JSON.stringify(nombre));
@@ -564,6 +566,7 @@ function editarCliente(id_cliente) {
         })
         .catch(error => {
             mostrarAlerta('danger', 'Error al editar cliente');
+            console.log(error);
         });
             
         $('#nuevoCli'+ id_cliente).modal('hide');

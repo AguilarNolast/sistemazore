@@ -698,6 +698,101 @@
             }
         }
 
+        /* public function eliminar_coti($id_coti){
+            // Inicia una transacción para garantizar la integridad referencial
+            $this->conexion->begin_transaction();
+
+            try {
+                // Query preparada para actualizar el estado del usuario a 'inactivo'
+                $sql_coti = "UPDATE cotis SET estado = 'inactivo' WHERE id_cotis = ?";
+                $stmt_coti = $this->conexion->prepare($sql_coti);
+                $stmt_coti->bind_param("s", $id_coti);
+                $stmt_coti->execute();
+
+                // Confirma la transacción
+                $this->conexion->commit();
+
+                return '
+
+                    <div class="alert alert-success" id="miAlert" role="alert">
+                        Producto eliminado correctamente.
+                    </div>
+                
+                ';
+            } catch (Exception $e) {
+                // En caso de error, revierte la transacción
+                $this->conexion->rollback();
+                return '
+
+                    <div class="alert alert-danger" id="miAlert" role="alert">
+                        Error al eliminar el producto
+                    </div>
+                
+                ';
+            } finally {
+                // Cierra la conexión
+                $this->conexion->close();
+            }
+
+            // Cierra la conexión
+            $this->conexion->close();
+        } */
+
+        public function eliminar_coti($id_coti) {
+            // Inicia una transacción para garantizar la integridad referencial
+            $this->conexion->begin_transaction();
+        
+            try {
+                // Verifica si existen pedidos con la cotización
+                $sql_verificar_pedidos = "SELECT COUNT(*) AS count FROM pedidos WHERE id_coti = ?";
+                $stmt_verificar = $this->conexion->prepare($sql_verificar_pedidos);
+                $stmt_verificar->bind_param("s", $id_coti);
+                $stmt_verificar->execute();
+                $resultado = $stmt_verificar->get_result();
+                $row = $resultado->fetch_assoc();
+        
+                if ($row['count'] > 0) {
+                    // Si existen pedidos, no eliminar la cotización y devolver un mensaje de error
+                    $this->conexion->rollback();
+                    return '
+                        <div class="alert alert-danger" id="miAlert" role="alert">
+                            No se puede eliminar la cotización porque tiene pedidos asociados.
+                        </div>
+                    ';
+                }
+        
+                // Query para eliminar productos de la cotización
+                $sql_coti_prod = "DELETE FROM coti_producto WHERE id_coti = ?";
+                $stmt_coti_prod = $this->conexion->prepare($sql_coti_prod);
+                $stmt_coti_prod->bind_param("s", $id_coti);
+                $stmt_coti_prod->execute();
+        
+                // Query para eliminar cotización
+                $sql_coti = "DELETE FROM cotizaciones WHERE id_coti = ?";
+                $stmt_coti = $this->conexion->prepare($sql_coti);
+                $stmt_coti->bind_param("s", $id_coti);
+                $stmt_coti->execute();
+        
+                // Confirma la transacción
+                $this->conexion->commit();
+                
+                return '
+                    <div class="alert alert-success" id="miAlert" role="alert">
+                        Cotización eliminada correctamente.
+                    </div>
+                ';
+            } catch (Exception $e) {
+                // En caso de error, revierte la transacción
+                $this->conexion->rollback();
+                return '
+                    <div class="alert alert-danger" id="miAlert" role="alert">
+                        Error al eliminar la cotización: ' . $e->getMessage() . '
+                    </div>
+                ';
+            }
+        }
+        
+
     }
 
 ?>
