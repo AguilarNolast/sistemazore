@@ -1,6 +1,8 @@
 
 function eliminarCoti(id_coti) {
-    const url = "../control/eliminarCoti.php";
+    const resultado = document.getElementById("resultado");
+
+    const url = "../control/eliminarcoti.php";
     const formaData = new FormData();
     formaData.append("id_coti", id_coti);
 
@@ -10,15 +12,21 @@ function eliminarCoti(id_coti) {
     })
         .then(response => response.json())
         .then(data => {
-            eliminacion.innerHTML = data.data;
-            // Cierra la ventana modal actual sin jQuery
-            document.querySelector(".modal").classList.remove("show");
-            document.querySelector(".modal-backdrop").remove();
+            resultado.innerHTML = data.data;
+        })
+        .then(() => {
+            getListadoCoti();
+            
+            $('#eliminarCoti'+id_coti).modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
 
-            location.reload();
+            $('body').css('overflow', 'auto');
+
+            removeAlert();
         })
         .catch(err => {
-            mostrarAlerta('danger', 'Error al eliminar el cliente');
+            mostrarAlerta('danger', 'Error al eliminar la cotizacion' + err);
         });
 }
 

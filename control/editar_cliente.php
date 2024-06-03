@@ -11,6 +11,7 @@
     $departamento = $_POST["departamentoedit"]  ?? null;
     $tipocliente = $_POST["tipoclienteedit"]  ?? null;
     $pagocliente = $_POST["pagoclienteedit"]  ?? null;
+    $usercliente = $_POST["userclienteedit"]  ?? null;
 
     $id_contacto = json_decode($_POST["id_contactoedit"])  ?? null;
     $nombre = json_decode($_POST["nombreedit"])  ?? null;
@@ -41,6 +42,7 @@
         $cargo,
         $tipocliente,
         $pagocliente,
+        $usercliente,
         $nombrenuevo,
         $telefononuevo,
         $correonuevo,

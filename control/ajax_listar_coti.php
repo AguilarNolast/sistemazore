@@ -103,24 +103,24 @@
                     <td>
                         <input type="hidden" name="id_coti" value="{$row[0]}">
                         <div class="d-flex flex-row justify-content-center">
-                        <button type="button" class="btn btn-primary" onclick="linkCoti({$row[0]})">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <!--<button type="button" class="btn btn-danger"">
-                            <i class="far fa-trash-can"></i>
-                        </button>-->
-                        <button type="button" class="getpdf btn btn-danger" id="{$row[0]}">
-                            <i class="fas fa-file-pdf"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger" onclick="pedidoCoti({$row[0]})">
-                            <i class="fas fa-share-from-square"></i>
-                        </button>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#nuevaFicha{$row[0]}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2-check-fill" viewBox="0 0 16 16">
-                                <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
-                                <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5m6.769 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
-                            </svg>
-                        </button>
+                            <button type="button" class="btn btn-primary" onclick="linkCoti({$row[0]})">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button type="button" class="getpdf btn btn-primary" id="{$row[0]}">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="pedidoCoti({$row[0]})">
+                                <i class="fas fa-share-from-square"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaFicha{$row[0]}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2-check-fill" viewBox="0 0 16 16">
+                                    <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
+                                    <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5m6.769 6.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
+                                </svg>
+                            </button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarCoti{$row[0]}">
+                                <i class="far fa-trash-can"></i>
+                            </button>
 
                         <div class="modal fade" id="nuevaFicha{$row[0]}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl" role="document">
@@ -441,6 +441,22 @@
                                 </form>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="eliminarCoti{$row[0]}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header text-center">
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <input type="hidden" value="{$row[0]}">
+                                    <h4 class="modal-title">¿Estas seguro?</h4>
+                                    <div class="modal-footer justify-content-center">
+                                        <button  type="button" onclick="eliminarCoti({$row[0]})" class="btn btn-danger">Ok</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         </div>
                     </td>
                 </tr>

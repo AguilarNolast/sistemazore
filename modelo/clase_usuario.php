@@ -41,64 +41,61 @@
         }
         
 
-        public function listado_usuarios($campo, $limit, $pagina, $orderCol, $orderType){
+        public function listado_usuarios($campo, $limit, $pagina, $orderCol, $orderType) {
             $columns = ["id_usuario", "usuario", "nombres", "apellidos", "telefono", "correo"];
             $columnsOrder = ["nombres", "apellidos", "usuario", "correo", "telefono"];
             $id = 'id_usuario';
             $columnsWhere = ["usuario", "nombres", "apellidos", "telefono", "correo"];
             $tabla = "usuarios"; 
-          
-            $where = '';
+            
+            $where = ' WHERE estado = "activo"';
             $sqlParams = [];
-        
+            
             if (!empty($campo)) {
                 $conditions = array_map(function ($column) use ($campo, &$sqlParams) {
                     $sqlParams[] = "%$campo%";
                     return "$column LIKE ?";
                 }, $columnsWhere);
-        
-                $where = "WHERE " . implode(" OR ", $conditions);
+                
+                $where .= " AND (" . implode(" OR ", $conditions) . ")";
             }
-        
+            
             $pagina = max(1, (int) $pagina);
             $inicio = ($pagina - 1) * $limit;
-        
+            
             $sqlLimit = "LIMIT ?, ?";
             $sqlParams[] = $inicio;
             $sqlParams[] = $limit;
-        
-           
-            //Ordenamiento
+            
+            // Ordenamiento
             $sqlOrder = "ORDER BY " . $columnsOrder[intval($orderCol)] . ' ' . $orderType;
-        
+            
             // Consulta SQL 
             $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
                     FROM $tabla 
                     $where 
                     $sqlOrder
                     $sqlLimit";
-        
+            
             try {
                 $stmt = $this->conexion->prepare($sql);
-        
+                
                 if ($stmt) {
                     // Asignar los parámetros necesarios
-                    $stmt->bind_param(str_repeat('s', count($sqlParams)), ...$sqlParams);
-        
+                    $types = str_repeat('s', count($sqlParams) - 2) . 'ii';
+                    $stmt->bind_param($types, ...$sqlParams);
+                    
                     $stmt->execute();
                     $resultado = $stmt->get_result();
-        
+                    
                     // Consulta de cantidad de registros filtrados
                     $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
                     $totalFiltro = $resFiltro->fetch_array()[0];
-        
-                    // Consulta para total de registros filtrados
-                    $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
+                    
+                    // Consulta para total de registros
+                    $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla WHERE estado = 'activo'");
                     $totalRegistros = $resTotal->fetch_array()[0];
-
-                    // Cierra la conexión
-                    $this->conexion->close();
-        
+                    
                     return [$resultado, $totalFiltro, $totalRegistros, $columns];
                 } else {
                     throw new Exception("Error al preparar la consulta SQL.");
@@ -108,7 +105,7 @@
                 echo "Error en la consulta: " . $e->getMessage();
                 return false;
             }
-        }
+        }        
         
         //Añadir proteccion con consultas preparadas y hash para las claves
         public function registrar_usuario(
@@ -241,8 +238,8 @@
             $this->conexion->begin_transaction();
         
             try {
-                // Query preparada para eliminar el usuario
-                $sql_usuario = "DELETE FROM usuarios WHERE id_usuario = ?";
+                // Query preparada para actualizar el estado del usuario a 'inactivo'
+                $sql_usuario = "UPDATE usuarios SET estado = 'inactivo' WHERE id_usuario = ?";
                 $stmt_usuario = $this->conexion->prepare($sql_usuario);
                 $stmt_usuario->bind_param("s", $id_usuario);
                 $stmt_usuario->execute();
@@ -251,21 +248,17 @@
                 $this->conexion->commit();
         
                 return '
-
                     <div class="alert alert-success" id="miAlert" role="alert">
-                        Usuario eliminado correctamente
+                        Usuario eliminado
                     </div>
-                
                 ';
             } catch (Exception $e) {
                 // En caso de error, revierte la transacción
                 $this->conexion->rollback();
                 return '
-
                     <div class="alert alert-danger" id="miAlert" role="alert">
-                        Error al eliminar el usuario '.$e.'
+                        Error al eliminar usuario: '.$e.'
                     </div>
-                
                 ';
             } finally {
                 // Cierra la conexión
