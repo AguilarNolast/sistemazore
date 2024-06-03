@@ -113,7 +113,7 @@
         <input type="hidden" id="queListado" value="productos">
     </div>
    </div>
-    <script src='../static/js/ajax_listado_pedidos.js?v=2.0' async></script>
+    <script src='../static/js/ajax_listado_pedidos.js?v=2.2' async></script>
 
     <?php
 
