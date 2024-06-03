@@ -118,7 +118,7 @@
     </div>
    </div>
    
-   <script src='../static/js/ajax_listado_usuario.js?v=2.0' async></script>
+   <script src='../static/js/ajax_listado_usuario.js?v=2.2' async></script>
 
 <?php
 
