@@ -150,51 +150,75 @@
         
             $tabla_temporal = $this->conexion->query($sql_tabla_temporal);
         
+            if (!$tabla_temporal) {
+                die('Error al crear la tabla temporal: ' . $this->conexion->error);
+            }
+        
             $columns = ["id_clientes", "ruc", "razon_social", "direccion", "distrito", "departamento", "id_usuario", "tipocliente", "pagocliente", "estado", "nombres", "apellidos"];
             $columnsOrder = ["ruc", "razon_social", "direccion", "id_usuario"];
             $id = 'id_clientes';
             $columnsWhere = ["ruc", "razon_social", "direccion", "distrito", "departamento", "nombres", "apellidos"];
             $tabla = "lista_clientes_tmp";
-            
-            $where = ' WHERE estado = "activo"';
+        
+            // Condiciones iniciales
+            $where = ' WHERE 1=1';
             $sqlParams = [];
-            
+        
+            // Si hay un campo de búsqueda
             if (!empty($campo)) {
                 $conditions = array_map(function ($column) use ($campo, &$sqlParams) {
                     $sqlParams[] = "%$campo%";
                     return "$column LIKE ?";
                 }, $columnsWhere);
-            
+        
                 $where .= " AND (" . implode(" OR ", $conditions) . ")";
             }
         
-            //Limite        
+            // Limite
             $pagina = max(1, (int)$pagina);
             $inicio = ($pagina - 1) * $limit;
-            
+        
             $sqlLimit = "LIMIT $inicio, $limit";
         
-            //Ordenamiento
-            $sqlOrder = "ORDER BY " . $columnsOrder[intval($orderCol)] . ' ' . $orderType;
-            
-            // Consulta SQL 
+            // Ordenamiento
+            if (isset($columnsOrder[intval($orderCol)])) {
+                $orderColumn = $columnsOrder[intval($orderCol)];
+            } else {
+                $orderColumn = $columnsOrder[0];
+            }
+        
+            $sqlOrder = "ORDER BY " . $orderColumn . ' ' . $orderType;
+        
+            // Consulta SQL
             $sql = "SELECT SQL_CALC_FOUND_ROWS " . implode(", ", $columns) . "
                     FROM $tabla 
                     $where 
                     $sqlOrder
                     $sqlLimit";
-            
+        
             try {
-                $resultado = $this->conexion->query($sql);
-            
+                $stmt = $this->conexion->prepare($sql);
+        
+                if ($stmt === false) {
+                    throw new Exception('Error en la preparación de la consulta: ' . $this->conexion->error);
+                }
+        
+                if (!empty($sqlParams)) {
+                    $types = str_repeat('s', count($sqlParams));
+                    $stmt->bind_param($types, ...$sqlParams);
+                }
+        
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+        
                 // Consulta de cantidad de registros filtrados
                 $resFiltro = $this->conexion->query("SELECT FOUND_ROWS()");
                 $totalFiltro = $resFiltro->fetch_array()[0];
-            
+        
                 // Consulta para total de registros filtrados
                 $resTotal = $this->conexion->query("SELECT COUNT($id) FROM $tabla");
                 $totalRegistros = $resTotal->fetch_array()[0];
-            
+        
                 return [$resultado, $totalFiltro, $totalRegistros, $columns];
             } catch (Exception $e) {
                 // Manejo de errores
@@ -202,6 +226,7 @@
                 return false;
             }
         }
+        
         
         
 
