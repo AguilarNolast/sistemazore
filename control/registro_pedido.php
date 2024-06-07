@@ -26,7 +26,6 @@
     $id_coti = $_POST["id_coti"] ?? null;
     $elementos = $_POST["elementos"] ?? array();
     $id_productos = $_POST["id_productos"] ?? array();
-    echo  $mensaje;
 
     try {
 
