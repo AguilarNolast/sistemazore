@@ -27,7 +27,7 @@
     $elementos = $_POST["elementos"] ?? array();
     $id_productos = $_POST["id_productos"] ?? array();
     echo  $mensaje;
-/* 
+
     try {
 
         //Obtener datos de configuracion y envio de correos
@@ -189,5 +189,5 @@
             'mensaje' => 'Error al enviar correo de pedido' . $e,
         );
         echo json_encode($output, JSON_UNESCAPED_UNICODE);
-    } */
+    }
 ?>
