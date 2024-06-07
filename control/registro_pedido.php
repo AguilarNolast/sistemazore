@@ -20,6 +20,7 @@
 
     //Variables recibidas por POST
     $mensaje = $_POST["mensaje"] ?? '';
+    $mensaje = nl2br(htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'));//Convertir los caracteres de salto de lines a formato HTML
     $correlativo = $_POST["correlativo"] ?? null;
     $nombrecliente = $_POST["nombrecliente"] ?? null;
     $id_coti = $_POST["id_coti"] ?? null;
