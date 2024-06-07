@@ -20,12 +20,14 @@
 
     //Variables recibidas por POST
     $mensaje = $_POST["mensaje"] ?? '';
+    $mensaje = nl2br(htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'));//Convertir los caracteres de salto de lines a formato HTML
     $correlativo = $_POST["correlativo"] ?? null;
     $nombrecliente = $_POST["nombrecliente"] ?? null;
     $id_coti = $_POST["id_coti"] ?? null;
     $elementos = $_POST["elementos"] ?? array();
     $id_productos = $_POST["id_productos"] ?? array();
-
+    echo  $mensaje;
+/* 
     try {
 
         //Obtener datos de configuracion y envio de correos
@@ -187,5 +189,5 @@
             'mensaje' => 'Error al enviar correo de pedido' . $e,
         );
         echo json_encode($output, JSON_UNESCAPED_UNICODE);
-    }
+    } */
 ?>
