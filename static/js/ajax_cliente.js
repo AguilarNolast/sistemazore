@@ -272,7 +272,7 @@ function obtenerValoresInputsClase(clase) {
     return Array.from(elementos).map(elemento => elemento.value);
 }
 
-function registrarCliente() {
+/* function registrarCliente() {
     const resultado = document.getElementById("resultado");
 
     const requiredInputs = document.querySelectorAll('#nuevoCli [required]');
@@ -603,7 +603,7 @@ function deleteContacto(id_contacto,item,id_cliente) {
         });
 
         removeAlert();
-}
+} */
 
 function getButtonDelete(id_contacto,item,id_cliente){
     let divButton = document.getElementById("divButton"+id_contacto);
@@ -636,7 +636,7 @@ function notDeleteContact(id_contacto,item,id_cliente){
     `
 }
 
-function eliminarCliente(id_cliente) {
+/* function eliminarCliente(id_cliente) {
     const resultado = document.getElementById("resultado");
 
     const url = "../control/eliminarcliente.php";
@@ -664,4 +664,4 @@ function eliminarCliente(id_cliente) {
         $('body').css('overflow', 'auto');
 
         removeAlert();
-}
+} */

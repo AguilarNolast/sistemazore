@@ -19,9 +19,6 @@
         <input class="form-control mr-sm-2" type="text" placeholder="Buscar" aria-label="Search"  name="campo" id="campo">
       </form>
     </nav>
-    <?php
-      if($_SESSION["tipo"] == 'admin'){
-        echo <<<HTML
           <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
               <a class="navbar-brand" href="#">Filtrar</a>
@@ -71,9 +68,6 @@
               </div>
             </div>
           </nav>
-        HTML;
-      }
-    ?>
       
         
   <div id="progressContainer">

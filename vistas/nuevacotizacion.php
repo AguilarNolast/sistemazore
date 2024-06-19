@@ -5,10 +5,6 @@
 ?> 
 <link rel="stylesheet" href='../static/css/coti.css' type="text/css">
 
-<style>
-    
-</style>
-
     <div id="resultado"></div>
     <div id="alertaResultado"></div> 
 
