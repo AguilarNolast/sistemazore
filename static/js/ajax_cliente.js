@@ -12,7 +12,7 @@ function cleanInputCliente(){
     input_cliente.value = "";
 }
 
-/* async function getCliente() {
+async function getCliente() {
     try {
         const input_cliente = document.getElementById("input_cliente").value;
         const csrf_token = document.getElementById("csrf_token").value;
@@ -43,7 +43,7 @@ function cleanInputCliente(){
     } catch (err) {
         mostrarAlerta('danger', 'Error al cargar cliente');
     }
-} */
+} 
 
 function getContacto(e) {
     var dataClient = e.params.data;
@@ -272,7 +272,7 @@ function obtenerValoresInputsClase(clase) {
     return Array.from(elementos).map(elemento => elemento.value);
 }
 
-/* function registrarCliente() {
+function registrarCliente() {
     const resultado = document.getElementById("resultado");
 
     const requiredInputs = document.querySelectorAll('#nuevoCli [required]');
@@ -603,7 +603,7 @@ function deleteContacto(id_contacto,item,id_cliente) {
         });
 
         removeAlert();
-} */
+}
 
 function getButtonDelete(id_contacto,item,id_cliente){
     let divButton = document.getElementById("divButton"+id_contacto);
@@ -636,7 +636,7 @@ function notDeleteContact(id_contacto,item,id_cliente){
     `
 }
 
-/* function eliminarCliente(id_cliente) {
+function eliminarCliente(id_cliente) {
     const resultado = document.getElementById("resultado");
 
     const url = "../control/eliminarcliente.php";
@@ -664,4 +664,4 @@ function notDeleteContact(id_contacto,item,id_cliente){
         $('body').css('overflow', 'auto');
 
         removeAlert();
-} */
+} 
