@@ -103,7 +103,7 @@ function registrarPedido(id_coti, generatePdfCoti){
             });
         })
         .catch(err => {
-            mostrarAlerta('danger', "Error al registrar pedido");
+            mostrarAlerta('danger', err);
 
             // Volver a habilitar el botón de enviar después de la consulta
             document.getElementById('btnEnviar').disabled = false;
