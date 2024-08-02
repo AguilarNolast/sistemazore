@@ -98,7 +98,7 @@ function registrarPedido(id_coti, generatePdfCoti){
                     }
                 })
                 .catch(error => {
-                    mostrarAlerta('danger', "Error al registrar pedido");
+                    mostrarAlerta('danger', error);
                 });
             });
         })
