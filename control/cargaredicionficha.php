@@ -30,6 +30,8 @@
         'estabiautomonorack' => 'Estabilizador con autotransformador monofasico rack',
         'estabiautotrifatorre' => 'Estabilizador con autotransformador trifásico torre',
         'estabiautotrifarack' => 'Estabilizador con autotransformador trifásico rack',
+        'estabiferromono' => 'Estabilizador ferroresonante monofasico',
+        'estabiferrotri' => 'Estabilizador ferroresonante trifasico',
 
     ];
 

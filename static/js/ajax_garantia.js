@@ -259,6 +259,12 @@ function generarPdfGarantia(arrayGarantia){
         case "upstrirack":
             tipoequipo = 'UPS trifasico rack';
             break;
+        case "estabiferromono":
+            $tipoequipo = 'Estabilizador ferroresonante monofasico';
+            break;
+        case "estabiferrotri":
+            $tipoequipo = 'Estabilizador ferroresonante trifasico';
+            break;
     }
 
     if(arrayGarantia['tvss'] == 1){

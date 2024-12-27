@@ -133,6 +133,8 @@
                                                     <option value="estabiautomonorack">Estabilizador con autotransformador monofasico rack</option>
                                                     <option value="estabiautotrifatorre">Estabilizador con autotransformador trifásico torre</option>
                                                     <option value="estabiautotrifarack">Estabilizador con autotransformador trifásico rack</option>
+                                                    <option value="estabiferromono">Estabilizador ferroresonante monofasico</option>
+                                                    <option value="estabiferrotri">Estabilizador ferroresonante trifasico</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-12 col-lg-4">
@@ -378,6 +380,12 @@
                                                                             break;
                                                                         case "estabiautotrifarack":
                                                                             $tipoequipo = 'Estabilizador con autotransformador trifasico rack';
+                                                                            break;
+                                                                        case "estabiferromono":
+                                                                            $tipoequipo = 'Estabilizador ferroresonante monofasico';
+                                                                            break;
+                                                                        case "estabiferrotri":
+                                                                            $tipoequipo = 'Estabilizador ferroresonante trifasico';
                                                                             break;
                                                                         }
             $output['data'] .= <<<HTML
