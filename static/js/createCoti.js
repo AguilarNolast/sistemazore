@@ -1,15 +1,15 @@
 
 document.addEventListener("DOMContentLoaded", function(event) {
     calcular_total();
+    
+    document.getElementById("input_cliente").addEventListener("keyup", function(){
+        getCliente()
+    },false)
+    
+    document.getElementById("input_cliente").addEventListener("focus", function(){
+        getCliente()
+    },false)
 });
-
-document.getElementById("input_cliente").addEventListener("keyup", function(){
-    getCliente()
-},false)
-
-document.getElementById("input_cliente").addEventListener("focus", function(){
-    getCliente()
-},false)
 
 function tipingPago(){
     const divPago = document.getElementById("divPago");

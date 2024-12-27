@@ -226,7 +226,18 @@ function editarCoti(){
         method: document.getElementById('formCoti').method,
         body: formaData,
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // Si el servidor devuelve un estado de error
+                return response.json().then(errorData => {
+                    throw new Error(
+                        `Error del servidor: ${response.status} ${response.statusText} - ${JSON.stringify(errorData)}`
+                    );
+                });
+            }
+            console.log(response)
+            return response.json();
+        })
         .then(data => {
             mostrarAlerta(data.tipo, data.mensaje);
 
@@ -241,6 +252,7 @@ function editarCoti(){
         })
         .catch(error => {
             mostrarAlerta('danger', 'Error al editar la cotizacion');
+            console.log(error);
         });
         
         removeAlert();
@@ -251,6 +263,7 @@ function generatePdfCoti(arrayCoti,arrayCont,arrayProd,arrayUser){
 
     // Crear un objeto Date con la fecha original
     let fecha = new Date(`${arrayCoti['fecha']}T00:00:00`);
+    console.log(fecha);
 
     // Crear un objeto Intl.DateTimeFormat para formatear la fecha
     let formatoFecha = new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });

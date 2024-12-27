@@ -72,11 +72,12 @@ function logIn(){//Funcion que realiza el inicio de sesion
     })
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             mostrarAlerta(data.tipo, data.mensaje);
 
             if(data.redir == true){
-                //window.location.href = "../vistas/inicio.php";
-                window.location.href = "https://grupozore.com/sistemazore/vistas/inicio.php";
+                window.location.href = "../vistas/inicio.php";
+                //window.location.href = "https://grupozore.com/sistemazore/vistas/inicio.php";
             }else{
                 // Volver a habilitar el botón de enviar después de la consulta
                 document.getElementById('btnEnviar').disabled = false;
@@ -84,6 +85,7 @@ function logIn(){//Funcion que realiza el inicio de sesion
 
         })
         .catch(error => {
+            console.log(error);
             mostrarAlerta('danger', 'Error al iniciar sesion');
         });
 }

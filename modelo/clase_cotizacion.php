@@ -487,14 +487,48 @@
             }
         }
 
-        public function prox_id(){
-
-             // Consulta para obtener el último ID autoincrementable sin realizar una inserción
-            $resultado = $this->conexion->query("SELECT MAX(id_coti) + 1 as ultimoID FROM cotizaciones");
-
-            return $resultado;
-
+        public function prox_id() {
+            $añoActual = date('Y');
+        
+            // Inicia la transacción
+            $this->conexion->begin_transaction();
+        
+            try {
+                // Verifica si el año actual ya está registrado en la tabla `correlativos`
+                $stmt = $this->conexion->prepare("SELECT ultimo_id FROM correlativos WHERE año = ?");
+                $stmt->bind_param("i", $añoActual);
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+        
+                if ($resultado->num_rows > 0) {
+                    // Si existe, incrementa el último ID
+                    $row = $resultado->fetch_assoc();
+                    $proxID = $row['ultimo_id'] + 1;
+        
+                    // Actualiza el último ID en la tabla
+                    $stmtUpdate = $this->conexion->prepare("UPDATE correlativos SET ultimo_id = ? WHERE año = ?");
+                    $stmtUpdate->bind_param("ii", $proxID, $añoActual);
+                    $stmtUpdate->execute();
+                } else {
+                    // Si no existe, crea un registro para el año actual
+                    $proxID = 1;
+        
+                    $stmtInsert = $this->conexion->prepare("INSERT INTO correlativos (año, ultimo_id) VALUES (?, ?)");
+                    $stmtInsert->bind_param("ii", $añoActual, $proxID);
+                    $stmtInsert->execute();
+                }
+        
+                // Confirma la transacción
+                $this->conexion->commit();
+        
+                return $proxID;
+            } catch (Exception $e) {
+                // Revierte la transacción en caso de error
+                $this->conexion->rollback();
+                throw new Exception("Error al generar el próximo ID: " . $e->getMessage());
+            }
         }
+        
 
         public function editar_coti(
             $idcoti,
