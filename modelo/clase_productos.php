@@ -16,7 +16,7 @@
         
             $where = '';
         
-            if ($input_producto !== null) {
+            /* if ($input_producto != null) {
                 // Armamos la cláusula WHERE
                 $where = "WHERE (";
         
@@ -27,7 +27,7 @@
                 }
                 $where = substr_replace($where, "", -3); // Eliminamos el último OR de la cadena ya que no lo necesitamos
                 $where .= ")";
-            }
+            } */
         
             // Consulta SQL
             $sql = "SELECT " . implode(", ", $columns) . "
@@ -38,11 +38,11 @@
                 $stmt = $this->conexion->prepare($sql);
         
                 if ($stmt) {
-                    if ($input_producto !== null) {
+                    /* if ($input_producto != null) {
                         // Asignamos valores a los marcadores de posición en la consulta preparada
                         $input_producto_like = '%' . $input_producto . '%';
                         $stmt->bind_param(str_repeat('s', $cont), ...array_fill(0, $cont, $input_producto_like));
-                    }
+                    } */
         
                     $stmt->execute();
                     $resultado = $stmt->get_result();
@@ -63,11 +63,11 @@
             $columnsWhere = ["id_productos", "nombre", "descripcion"]; // Array con todas las columnas donde quiero hacer mi búsqueda
             $tabla = "productos";
         
-            $where = 'WHERE estado = "activo"'; // Condición para filtrar productos activos
+            $where = ''; // Condición para filtrar productos activos
             
             if ($input_producto !== null) {
                 // Armamos la cláusula WHERE
-                $where .= " AND ("; // Agregar "AND" para concatenar con la condición de estado
+                $where .= " WHERE ("; // Agregar "AND" para concatenar con la condición de estado
                 
                 $cont = count($columnsWhere); // Contamos cuántas columnas hay
                 for ($i = 0; $i < $cont; $i++) {

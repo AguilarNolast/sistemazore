@@ -36,11 +36,7 @@
     
         $coti_obj = new Cotizacion();
 
-        $resultado = $coti_obj->prox_id();
-
-        while ($id = $resultado->fetch_array()){
-            $prox_id = $id[0];
-        }
+        $prox_id = $coti_obj->prox_id();
 
         function obtenerIniciales($frase) {
             // Dividir la frase en palabras

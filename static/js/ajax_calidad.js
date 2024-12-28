@@ -254,6 +254,12 @@ function generarPdfCalidad(arrayCalidad){
         case "estabiautotrifarack":
             tipoequipo = 'Estabilizador con autotransformador trifásico rack';
             break;
+        case "estabiferromono":
+            $tipoequipo = 'Estabilizador ferroresonante monofasico';
+            break;
+        case "estabiferrotri":
+            $tipoequipo = 'Estabilizador ferroresonante trifasico';
+            break;
     }      
      
     //colors variables

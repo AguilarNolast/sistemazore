@@ -34,6 +34,7 @@
 
             $hashed_password = $usuario_res['clave'];
 
+            //if(true){
             if(password_verify($clave, $hashed_password)){
 
                 session_destroy();

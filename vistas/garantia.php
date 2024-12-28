@@ -75,6 +75,8 @@
                     <option value="upstri">UPS trifasico</option>
                     <option value="upsmonorack">UPS monofasico rack</option>
                     <option value="upstrirack">UPS trifasico rack</option>
+                    <option value="estabiferromono">Estabilizador ferroresonante monofasico</option>
+                    <option value="estabiferrotri">Estabilizador ferroresonante trifasico</option>
                 </select>
                 </div>
                 <div class="md-form mb-2">

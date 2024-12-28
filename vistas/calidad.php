@@ -68,6 +68,8 @@
                       <option value="estabiautomonorack">Estabilizador con autotransformador monofasico rack</option>
                       <option value="estabiautotrifatorre">Estabilizador con autotransformador trifásico torre</option>
                       <option value="estabiautotrifarack">Estabilizador con autotransformador trifásico rack</option>
+                      <option value="estabiferromono">Estabilizador ferroresonante monofasico</option>
+                      <option value="estabiferrotri">Estabilizador ferroresonante trifasico</option>
                     </select>
                 </div>
                 <div class="md-form mb-2">
