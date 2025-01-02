@@ -310,15 +310,15 @@ function registrarEntrada(id_usuario){
     .then(response => response.json())
     .then(data => {
         resultado.innerHTML = data.data;
+        getListadoAsistencia();
+        removeAlert();
 
     })
     .catch(error => {
         mostrarAlerta('danger', 'Error al registrar entrada');
     });
 
-    getListadoAsistencia();
 
-    removeAlert();
 }
 
 function registrarSalida(id_usuario){

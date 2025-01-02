@@ -10,10 +10,10 @@
     <div id="alertaResultado"></div> 
   
 <nav class="navbar navbar-light navbar-dark bg-white">
-    <button type="button" onclick="registrarEntrada(<?php echo $_SESSION['id_usuario']; ?>)" class="btn btn-success" data-bs-toggle="modal" data-bs-target="">
+    <button type="button" onclick="registrarEntrada(<?php echo $_SESSION['id_usuario']; ?>)" class="btn btn-success">
       Registrar entrada
     </button>
-    <button type="button" onclick="registrarSalida(<?php echo $_SESSION['id_usuario']; ?>)" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="">
+    <button type="button" onclick="registrarSalida(<?php echo $_SESSION['id_usuario']; ?>)" class="btn btn-danger">
       Registrar salida
     </button>
     <form class="form-inline">
