@@ -85,7 +85,6 @@ function logIn(){//Funcion que realiza el inicio de sesion
 
         })
         .catch(error => {
-            console.log(error);
             mostrarAlerta('danger', 'Error al iniciar sesion');
         });
 }
